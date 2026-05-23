@@ -62,6 +62,14 @@ Llamado Misa Ferial	ID 352: Distesa 60s	Duración breve para días ordinarios.
 Llamado Misa Dominical	ID 354: Distesa 120s	Duración media para el Día del Señor.
 Llamado Solemnidades	ID 360 o ID 370: Distesa 300s	Máxima solemnidad (5 minutos de volteo).
 
+### ⚙️ Reglas de Programación Dominical y Horarios Especiales
+
+* **Horario de Llamados (Domingos):** Todos los domingos hay tres llamados programados a las **12:00**, **12:15** y **12:30**.
+* **Llamado en Tiempo Ordinario:** Para el llamado a misa durante el Tiempo Ordinario, se deben configurar los códigos **285** (Angelus 3-3-3) o **282** (33 Tocchi di III).
+* **Llamado en Pentecostés:** Para el Domingo de Pentecostés, se deben cambiar los llamados de las **12:15** y **12:30** para que ejecuten el himno de Pentecostés (**ID 153**: Veni Creatore Gregoriano).
+* **Prueba de Funcionamiento (Monitoreo):** En caso de requerir pruebas de programación o si hay problemas con la emisión de sonido, se recomienda probar moviendo el interruptor de salida física del equipo (switch) a la posición **Inside** (interno / monitoreo local).
+* **Detener Ejecución:** Para detener inmediatamente una ejecución de campanas o toque en curso, presione el botón **NO** dos veces seguidas en el panel frontal del dispositivo.
+
 6. Especificaciones Técnicas de Melodías Seleccionadas
 
 Listado de referencia rápida para el operador del sistema:
@@ -86,11 +94,9 @@ Para garantizar que la programación litúrgica aquí detallada se ejecute con e
 
 Para programar o ejecutar los códigos del sistema directamente en el panel físico del equipo, sigue estos pasos:
 
-1. **Acceso al Menú:** Presiona la tecla de programación o introduce el código técnico en el panel alfanumérico. La pantalla mostrará la señal de `PROGRAMACIÓN`.
+1. **Acceso al Menú:** Presiona la tecla de programación o introduce el código técnico / password (**1111**) en el panel alfanumérico. La pantalla mostrará la señal de `PROGRAMACIÓN`.
 2. **Selección de Melodía:** Introduce el número de código correspondiente a la melodía o toque deseado (obtenido de las tablas de abajo).
 3. **Asignación de Horarios:** Define la hora de ejecución y los días de la semana mediante el calendario interno del Belltron 250A. Confirma para almacenar en la memoria del dispositivo.
-
-> ⚠️ **Nota sobre Códigos Especiales:** Las melodías fijadas con el prefijo asterisco (como el código `*50`) corresponden a ejecuciones principales o solemnidades mayores en la configuración maestra de los relojes Belltron.
 
 ---
 
@@ -102,7 +108,7 @@ A continuación se detalla la base de datos de melodías indexadas por su númer
 
 | Num | Título (Mnemónico) | Descripción / Nombre Completo | Uso / Tiempo Litúrgico Sugerido |
 | :--- | :--- | :--- | :--- |
-| **\*50** | [cite_start]CRISTUS VINCIT [cite: 1] | [cite_start]CHRISTUS VINCIT [cite: 1] | [cite_start]Cristo Rey [cite: 1] |
+| **50** | [cite_start]CRISTUS VINCIT [cite: 1] | [cite_start]CHRISTUS VINCIT [cite: 1] | [cite_start]Cristo Rey [cite: 1] |
 | **51** | [cite_start]PIE SIGNOR [cite: 1] | [cite_start]PIETA' SIGNORE [cite: 1] | Cuaresma / Penitencial |
 | **52** | [cite_start]VOGL DIO [cite: 1] | [cite_start]NOI VOGLIAM DIO [cite: 1] | Devocional General |
 | **53** | [cite_start]RISUSCITO [cite: 1] | [cite_start]RISUSCITI [cite: 1] | [cite_start]Pascua [cite: 1] |
@@ -116,7 +122,7 @@ A continuación se detalla la base de datos de melodías indexadas por su númer
 | **61** | [cite_start]AM LOURDES [cite: 1] | [cite_start]AVE MARIA DI LOURDES CON VARIAZIONE [cite: 1] | Mariano |
 | **62** | [cite_start]AM SHUBERT [cite: 1] | [cite_start]AVE MARIA DI SCHUBERT [cite: 1] | Mariano (Bodas / Solemnidades) |
 | **63** | [cite_start]AM GOUNOD [cite: 1] | [cite_start]AVE MARIA DI GOUNOD [cite: 1] | Mariano (Bodas / Solemnidades) |
-| **164** | [cite_start]AM FATIMA [cite: 1] | [cite_start]AVE MARIA DI FATIMA [cite: 1] | Mariano |
+| **64** | [cite_start]AM FATIMA [cite: 1] | [cite_start]AVE MARIA DI FATIMA [cite: 1] | Mariano |
 | **65** | [cite_start]MAD CAMMIN [cite: 1] | [cite_start]MADONNA DEL CAMMINO [cite: 1] | Mariano |
 | **66** | [cite_start]MIR POPOLO [cite: 1] | [cite_start]MIRA IL TUO POPOLO [cite: 1] | Mariano / Cuaresma |
 | **67** | [cite_start]NOM DOLCIS [cite: 1] | [cite_start]NOME DOLCISSIMO [cite: 1] | Devocional |

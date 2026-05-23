@@ -6,6 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestor de Campanario & Melodías</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        /* Ajuste para visualizar el icono del calendario en modo oscuro */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            cursor: pointer;
+            border-radius: 4px;
+            padding: 2px;
+            transition: all 0.2s ease;
+        }
+        input[type="date"]::-webkit-calendar-picker-indicator:hover {
+            filter: invert(0.8) sepia(1) saturate(5) hue-rotate(15deg); /* Efecto ámbar al pasar el cursor */
+        }
+    </style>
 </head>
 
 <body class="bg-gray-900 text-gray-100 min-h-screen font-sans antialiased">
@@ -174,8 +187,8 @@
                         <h3 class="font-semibold text-gray-200 mb-2">Acceso al Menú</h3>
                         <p class="text-xs text-gray-400 leading-relaxed">
                             En el panel frontal, presiona la tecla de menú o introduce el código de programación
-                            técnica. Pantalla mostrará <code
-                                class="bg-gray-950 text-amber-400 px-1 rounded font-mono">PROGRAMACIÓN</code>.
+                            técnica (password: <code class="bg-gray-950 text-amber-400 px-1 rounded font-mono">1111</code>).
+                            La pantalla mostrará <code class="bg-gray-950 text-amber-400 px-1 rounded font-mono">PROGRAMACIÓN</code>.
                         </p>
                     </div>
                     <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">
@@ -220,17 +233,18 @@
                 </div>
             </div>
 
-            <div class="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 text-sm text-gray-300">
-                <h4 class="font-semibold text-amber-400 flex items-center gap-1.5 mb-2">
-                    ⚠️ Nota Importante sobre Códigos con Asterisco (*)
+            <div class="bg-gray-800 border border-gray-700 rounded-xl p-6 text-sm text-gray-300">
+                <h4 class="font-semibold text-amber-400 flex items-center gap-1.5 mb-3 text-base">
+                    ⚙️ Reglas de Programación y Horarios Especiales
                 </h4>
-                <p class="text-xs text-gray-400 leading-relaxed">
-                    Melodías fijadas con el prefijo asterisco (como <code
-                        class="bg-gray-950 text-amber-300 px-1 rounded font-mono">*50 - CRISTUS VINCIT</code>)
-                    corresponden a ejecuciones principales o solemnidades mayores en la configuración maestra de los
-                    relojes Belltron. Asegúrate de verificar los interruptores de salida si el campanario no emite
-                    sonido en pruebas manuales.
-                </p>
+                <ul class="text-xs text-gray-400 space-y-2 leading-relaxed list-disc pl-4">
+                    <li><strong>Contraseña de Acceso:</strong> Usar la clave <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> para ingresar a la programación técnica del equipo.</li>
+                    <li><strong>Llamados Dominicales:</strong> Todos los domingos hay llamados programados a las <strong>12:00</strong>, <strong>12:15</strong> y <strong>12:30</strong>.</li>
+                    <li><strong>Tiempo Ordinario:</strong> Configurar el llamado a misa con los códigos <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">285</code> o <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">282</code>.</li>
+                    <li><strong>Pentecostés:</strong> En la solemnidad de Pentecostés, cambiar los llamados de las <strong>12:15</strong> y <strong>12:30</strong> por el himno de Pentecostés (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">153</code> - Veni Creatore).</li>
+                    <li><strong>Pruebas y Diagnóstico:</strong> Si se requiere realizar pruebas o verificar si hay algún problema de salida, probar cambiando el selector físico (switch) del equipo a la posición <strong>Inside</strong> (interno / monitoreo local).</li>
+                    <li><strong>Detener Toques:</strong> Para cancelar o detener inmediatamente cualquier toque o ejecución de campanas en curso, se debe presionar el botón <strong>NO</strong> dos veces seguidas en el panel del equipo.</li>
+                </ul>
             </div>
         </section>
 
@@ -244,7 +258,7 @@
         // Base de datos de melodías extraídas de tu registro litúrgico
         const melodias = [
     {
-        "num":  "*50",
+        "num":  "50",
         "titulo":  "CRISTUS VINCIT",
         "desc":  "CHRISTUS VINCIT",
         "tiempo":  "Cristo Rey",
@@ -342,7 +356,7 @@
         "cat":  "MARIA"
     },
     {
-        "num":  "164",
+        "num":  "64",
         "titulo":  "AM FATIMA",
         "desc":  "AVE MARIA DI FATIMA",
         "tiempo":  "Mariano",
