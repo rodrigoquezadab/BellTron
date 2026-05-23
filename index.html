@@ -1,0 +1,2485 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Campanario & Melodías</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-900 text-gray-100 min-h-screen font-sans antialiased">
+
+    <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="text-2xl">🔔</span>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-amber-400">Belltron 250A</h1>
+                    <p class="text-xs text-gray-400">Sistema de Gestión de Melodías Litúrgicas</p>
+                </div>
+            </div>
+            <nav class="flex space-x-2">
+                <a href="#buscador"
+                    class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 transition">Buscador</a>
+                <a href="#manual"
+                    class="px-3 py-1.5 text-sm font-medium rounded-md text-amber-400 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 transition">Manual
+                    Técnico</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-12">
+
+        <section id="buscador" class="scroll-mt-24 space-y-6">
+            <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-sm">
+                <h2 class="text-lg font-semibold text-gray-200 mb-2 flex items-center gap-2">
+                    📅 Calendario Litúrgico & Sugerencia de Melodías
+                </h2>
+                <p class="text-sm text-gray-400 mb-6">
+                    Selecciona una fecha para descubrir qué tiempo litúrgico o festividad corresponde y qué códigos de
+                    melodía debes programar en el Belltron.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <span class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Rango de Fechas</span>
+                        <div class="grid grid-cols-2 gap-2">
+                            <input type="date" id="fecha-desde"
+                                class="w-full bg-gray-950 border border-gray-700 rounded-lg px-3 py-2.5 text-gray-200 text-xs focus:outline-none focus:border-amber-500 transition">
+                            <input type="date" id="fecha-hasta"
+                                class="w-full bg-gray-950 border border-gray-700 rounded-lg px-3 py-2.5 text-gray-200 text-xs focus:outline-none focus:border-amber-500 transition">
+                        </div>
+                    </div>
+                    <div>
+                        <label for="filtro-tiempo"
+                            class="block text-xs font-medium text-gray-400 uppercase tracking-wider mb-2">Filtrar por
+                            Categoría</label>
+                        <select id="filtro-tiempo"
+                            class="w-full bg-gray-950 border border-gray-700 rounded-lg px-4 py-2.5 text-gray-200 focus:outline-none focus:border-amber-500 transition">
+                            <option value="TODOS">Todas las melodías</option>
+                            <option value="Ordinario">Tiempo Ordinario (Verde)</option>
+                            <option value="Pascua">Pascua</option>
+                            <option value="Navidad">Navidad / Nochebuena</option>
+                            <option value="MARIA">Dedicadas a la Virgen María</option>
+                            <option value="Aleluya">Aleluya</option>
+                            <option value="Otros">Otros Tiempos (Cristo Rey, Matrimonio, etc.)</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="btn-hoy"
+                            class="w-1/2 md:w-auto flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-sm font-medium rounded-lg text-gray-200 transition cursor-pointer">
+                            📅 Ir a Hoy
+                        </button>
+                        <button id="btn-limpiar"
+                            class="w-1/2 md:w-auto flex-1 px-4 py-2.5 bg-gray-700 hover:bg-gray-600 text-sm font-medium rounded-lg text-gray-200 transition cursor-pointer">
+                            🧹 Limpiar
+                        </button>
+                    </div>
+                </div>
+
+                <div id="banner-liturgico"
+                    class="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg hidden">
+                    <p class="text-sm text-amber-300 font-medium">
+                        ✨ Festividad / Tiempo detectado: <span id="nombre-festividad"
+                            class="underline font-bold">Ninguno</span>
+                    </p>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 rounded-xl border border-gray-700 overflow-hidden shadow-sm">
+                <!-- Navigation Tabs -->
+                <div class="px-6 pt-4 border-b border-gray-700 bg-gray-800/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                    <div class="flex space-x-4">
+                        <button id="tab-calendario" class="pb-3 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 focus:outline-none transition-all cursor-pointer">
+                            📅 Calendario Litúrgico 2026
+                        </button>
+                        <button id="tab-catalogo" class="pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer">
+                            🎵 Catálogo de Melodías
+                        </button>
+                    </div>
+                    <span id="contador-items"
+                        class="text-xs bg-gray-950 px-2.5 py-1 rounded-full text-gray-400 font-mono mb-3">0 celebraciones</span>
+                </div>
+
+                <!-- Tab 1: Calendario Litúrgico -->
+                <div id="panel-calendario" class="overflow-x-auto">
+                    <!-- Barra de Filtros Activos -->
+                    <div id="barra-filtros-activos" class="px-6 py-3 bg-gray-950 border-b border-gray-800 text-xs flex flex-wrap gap-2 items-center hidden">
+                        <span class="text-gray-400 font-medium">Filtros activos:</span>
+                        <span id="filtro-activo-tipo" class="bg-gray-800 border border-gray-700 px-2 py-1 rounded flex items-center gap-1.5 text-gray-200">
+                            <span id="texto-filtro-tipo"></span>
+                            <button onclick="removerFiltro('tipo')" class="hover:text-amber-400 font-bold ml-1 cursor-pointer text-sm">×</button>
+                        </span>
+                        <span id="filtro-activo-tiempo" class="bg-gray-800 border border-gray-700 px-2 py-1 rounded flex items-center gap-1.5 text-gray-200">
+                            <span id="texto-filtro-tiempo"></span>
+                            <button onclick="removerFiltro('tiempo')" class="hover:text-amber-400 font-bold ml-1 cursor-pointer text-sm">×</button>
+                        </span>
+                    </div>
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead class="bg-gray-950 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-800">
+                            <tr>
+                                <th class="px-6 py-3.5 font-semibold">Fecha</th>
+                                <th class="px-6 py-3.5 font-semibold">Celebración / Festividad</th>
+                                <th class="px-6 py-3.5 font-semibold">Tipo</th>
+                                <th class="px-6 py-3.5 font-semibold">Tiempo Litúrgico</th>
+                                <th class="px-6 py-3.5 font-semibold">Cód. Melodía Sugerida</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-calendario-cuerpo" class="divide-y divide-gray-800">
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Tab 2: Catálogo de Melodías -->
+                <div id="panel-catalogo" class="overflow-x-auto hidden">
+                    <table class="w-full text-left text-sm text-gray-300">
+                        <thead
+                            class="bg-gray-950 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-800">
+                            <tr>
+                                <th class="px-6 py-3.5 font-semibold">Cód. Num</th>
+                                <th class="px-6 py-3.5 font-semibold">Título</th>
+                                <th class="px-6 py-3.5 font-semibold">Descripción Técnica</th>
+                                <th class="px-6 py-3.5 font-semibold">Tiempo / Uso Recomendado</th>
+                                <th class="px-6 py-3.5 font-semibold">Fechas Recomendadas (2026)</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cuerpo" class="divide-y divide-gray-800">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <hr class="border-gray-800">
+
+        <section id="manual" class="scroll-mt-24 space-y-6">
+            <div class="max-w-3xl">
+                <h2 class="text-2xl font-bold text-gray-100 flex items-center gap-2">
+                    🛠️ Manual de Configuración Rápida: Belltron 250A
+                </h2>
+                <p class="text-sm text-gray-400 mt-1">
+                    Sigue estos pasos directamente en el teclado alfanumérico del equipo para programar las melodías
+                    seleccionadas.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col justify-between">
+                    <div>
+                        <div
+                            class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">
+                            01
+                        </div>
+                        <h3 class="font-semibold text-gray-200 mb-2">Acceso al Menú</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            En el panel frontal, presiona la tecla de menú o introduce el código de programación
+                            técnica. Pantalla mostrará <code
+                                class="bg-gray-950 text-amber-400 px-1 rounded font-mono">PROGRAMACIÓN</code>.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">
+                        Botón: MENU / ENTER
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col justify-between">
+                    <div>
+                        <div
+                            class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">
+                            02
+                        </div>
+                        <h3 class="font-semibold text-gray-200 mb-2">Selección de Código</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Introduce el número de la melodía deseada obtenido en el buscador de arriba (ej. <code
+                                class="bg-gray-950 text-amber-400 px-1 rounded font-mono">53</code> para Risucito o
+                            <code class="bg-gray-950 text-amber-400 px-1 rounded font-mono">74</code> para Astro del
+                            Ciel).
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">
+                        Teclado: Numérico [0-9]
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col justify-between">
+                    <div>
+                        <div
+                            class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">
+                            03
+                        </div>
+                        <h3 class="font-semibold text-gray-200 mb-2">Asignación de Horarios</h3>
+                        <p class="text-xs text-gray-400 leading-relaxed">
+                            Asigna la hora de ejecución del toque y los días de la semana correspondientes utilizando el
+                            calendario interno del Belltron 250A. Confirma para guardar en memoria.
+                        </p>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">
+                        Botón: ENTER / GUARDAR
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-amber-500/5 border border-amber-500/20 rounded-xl p-5 text-sm text-gray-300">
+                <h4 class="font-semibold text-amber-400 flex items-center gap-1.5 mb-2">
+                    ⚠️ Nota Importante sobre Códigos con Asterisco (*)
+                </h4>
+                <p class="text-xs text-gray-400 leading-relaxed">
+                    Melodías fijadas con el prefijo asterisco (como <code
+                        class="bg-gray-950 text-amber-300 px-1 rounded font-mono">*50 - CRISTUS VINCIT</code>)
+                    corresponden a ejecuciones principales o solemnidades mayores en la configuración maestra de los
+                    relojes Belltron. Asegúrate de verificar los interruptores de salida si el campanario no emite
+                    sonido en pruebas manuales.
+                </p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-950 border-t border-gray-800 text-center py-6 mt-12 text-xs text-gray-500">
+        <p>© 2026 Sistema Integral de Campanarios Digitales • Optimizado para Belltron</p>
+    </footer>
+
+    <script>
+        // Base de datos de melodías extraídas de tu registro litúrgico
+        const melodias = [
+    {
+        "num":  "*50",
+        "titulo":  "CRISTUS VINCIT",
+        "desc":  "CHRISTUS VINCIT",
+        "tiempo":  "Cristo Rey",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "51",
+        "titulo":  "PIE SIGNOR",
+        "desc":  "PIETA\u0027 SIGNORE",
+        "tiempo":  "Cuaresma / Penitencial",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "52",
+        "titulo":  "VOGL DIO",
+        "desc":  "NOI VOGLIAM DIO",
+        "tiempo":  "Devocional General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "53",
+        "titulo":  "RISUSCITO",
+        "desc":  "RISUSCITI",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "54",
+        "titulo":  "CRI_RISUS",
+        "desc":  "CRISTO RISUSCITI",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "55",
+        "titulo":  "NEI CIELI",
+        "desc":  "NEI CIELI S\u0027ODA RISUONAR",
+        "tiempo":  "Pascua / Alabanza",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "56",
+        "titulo":  "O DEL CIEL",
+        "desc":  "O DEL CIELO GRAN REGINA",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "57",
+        "titulo":  "ODO SUONAR",
+        "desc":  "ODO SUONAR",
+        "tiempo":  "General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "58",
+        "titulo":  "AND VED DI",
+        "desc":  "ANDRO\u0027 A VEDERLA UN DI\u0027",
+        "tiempo":  "Devocional / Difuntos",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "59",
+        "titulo":  "AM LOURDES",
+        "desc":  "AVE MARIA DI LOURDES RIDOTTA",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "60",
+        "titulo":  "AM LOURDES",
+        "desc":  "AVE MARIA DI LOURDES SEMPLICE",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "61",
+        "titulo":  "AM LOURDES",
+        "desc":  "AVE MARIA DI LOURDES CON VARIAZIONE",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "62",
+        "titulo":  "AM SHUBERT",
+        "desc":  "AVE MARIA DI SCHUBERT",
+        "tiempo":  "Mariano (Bodas / Solemnidades)",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "63",
+        "titulo":  "AM GOUNOD",
+        "desc":  "AVE MARIA DI GOUNOD",
+        "tiempo":  "Mariano (Bodas / Solemnidades)",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "164",
+        "titulo":  "AM FATIMA",
+        "desc":  "AVE MARIA DI FATIMA",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "65",
+        "titulo":  "MAD CAMMIN",
+        "desc":  "MADONNA DEL CAMMINO",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "66",
+        "titulo":  "MIR POPOLO",
+        "desc":  "MIRA IL TUO POPOLO",
+        "tiempo":  "Mariano / Cuaresma",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "67",
+        "titulo":  "NOM DOLCIS",
+        "desc":  "NOME DOLCISSIMO",
+        "tiempo":  "Devocional",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "68",
+        "titulo":  "SANTISSIMA",
+        "desc":  "O SANTISSIMA",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "69",
+        "titulo":  "DELL AUROR",
+        "desc":  "DELL\u0027AURORA TU SORGI",
+        "tiempo":  "Mariano / Adviento",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "70",
+        "titulo":  "DIO CO NOI",
+        "desc":  "DIO S\u0027E\u0027 FATTO COME NOI",
+        "tiempo":  "Navidad / Encarnación",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "71",
+        "titulo":  "OSANNA DAV",
+        "desc":  "OSANNA FIGLIO DI DAVIDE",
+        "tiempo":  "Domingo de Ramos",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "72",
+        "titulo":  "GLORIA EXC",
+        "desc":  "GLORIA IN EXCELSIS DEO",
+        "tiempo":  "Alabanza / Solemnidades",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "73",
+        "titulo":  "TU SCENDI",
+        "desc":  "TU SCENDI DALLE STELLE",
+        "tiempo":  "Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "74",
+        "titulo":  "ASTRO DEL CIEL",
+        "desc":  "ASTRO CIEL",
+        "tiempo":  "Nochebuena / Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "75",
+        "titulo":  "ADESTE F.",
+        "desc":  "ADESTE FIDELES",
+        "tiempo":  "Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "76",
+        "titulo":  "MARC NUZ.",
+        "desc":  "MARCIA NUZIALE",
+        "tiempo":  "Matrimonios",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "77",
+        "titulo":  "FRAT SOLE",
+        "desc":  "FRATELLO SOLE SORELLA LUNA",
+        "tiempo":  "Tiempo Ordinario / San Francisco",
+        "cat":  "Ordinario"
+    },
+    {
+        "num":  "78",
+        "titulo":  "LA PACE",
+        "desc":  "LA PACE DEI SANTI",
+        "tiempo":  "General / Santos",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "79",
+        "titulo":  "GLORIA",
+        "desc":  "GLORIA",
+        "tiempo":  "Ordinario / Misa",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "80",
+        "titulo":  "IO CREDO",
+        "desc":  "IO CREDO RISORGERO\u0027",
+        "tiempo":  "Exequias / Difuntos",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "81",
+        "titulo":  "MARCIA PON",
+        "desc":  "MARCIA PONTIFICIA",
+        "tiempo":  "Solemnidades / Fiestas del Papa",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "82",
+        "titulo":  "ALLELULIA1",
+        "desc":  "ALLELULIA 1",
+        "tiempo":  "Aleluya / Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "83",
+        "titulo":  "ALLELULIA II",
+        "desc":  "ALLELULIA2",
+        "tiempo":  "Aleluya / Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "84",
+        "titulo":  "SANTO",
+        "desc":  "SANTO",
+        "tiempo":  "Ordinario / Misa",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "85",
+        "titulo":  "NEI CIELI",
+        "desc":  "NEI CIELI",
+        "tiempo":  "Alabanza",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "86",
+        "titulo":  "TU SEI VIT",
+        "desc":  "TU SEI LA MIA VITA (SIMBOLUM)",
+        "tiempo":  "General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "87",
+        "titulo":  "MI ALZERO",
+        "desc":  "MI ALZERO\u0027 E ANDRO\u0027",
+        "tiempo":  "Cuaresma / Penitencial",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "88",
+        "titulo":  "NOEL NOEL",
+        "desc":  "NOEL NOEL",
+        "tiempo":  "Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "89",
+        "titulo":  "PADRE NOST",
+        "desc":  "PADRE NOSTRO",
+        "tiempo":  "Ordinario / Misa",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "90",
+        "titulo":  "NOI CANTER",
+        "desc":  "NOI CANTEREMO GLORIA A TE",
+        "tiempo":  "Alabanza",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "91",
+        "titulo":  "TU SOLE VI",
+        "desc":  "TU SOLE VIVO",
+        "tiempo":  "General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "92",
+        "titulo":  "REGINA COELI",
+        "desc":  "REG COELI",
+        "tiempo":  "Pascua (Tiempo de Pascua)",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "94",
+        "titulo":  "PANGE LIN",
+        "desc":  "PANGE LINGUA",
+        "tiempo":  "Corpus Christi",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "95",
+        "titulo":  "PIU PRESS.",
+        "desc":  "PIU\u0027 PRESSO A TE SIGNORE",
+        "tiempo":  "Devocional / Difuntos",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "96",
+        "titulo":  "INNI CANTI",
+        "desc":  "INNE E CANTI / T ADORIAM",
+        "tiempo":  "Adoración Eucarística",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "97",
+        "titulo":  "LAUDA SION",
+        "desc":  "LAUDA SION",
+        "tiempo":  "Corpus Christi",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "99",
+        "titulo":  "SAL REGINA",
+        "desc":  "SALVE REGINA",
+        "tiempo":  "Virgen María",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "100",
+        "titulo":  "LODATE DIO",
+        "desc":  "LODATE DIO",
+        "tiempo":  "Alabanza",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "101",
+        "titulo":  "RESTA NOI",
+        "desc":  "RESTA CON NOI",
+        "tiempo":  "Eucaristía / Emaús",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "102",
+        "titulo":  "CANTO PER",
+        "desc":  "CANTO PER CRISTO",
+        "tiempo":  "General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "103",
+        "titulo":  "CR VINCIT2",
+        "desc":  "CHRISTUS VINCIT SEMPLICE",
+        "tiempo":  "Cristo Rey / Solemnidades",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "104",
+        "titulo":  "ALEGRES PR",
+        "desc":  "ALEGRES PREGONAN",
+        "tiempo":  "General / Adviento",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "105",
+        "titulo":  "EL ANGEL",
+        "desc":  "EL ANGEL GABRIEL",
+        "tiempo":  "Anunciación / Adviento",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "106",
+        "titulo":  "AL LIEGAR",
+        "desc":  "AL LIEGAR AQUI / DEO",
+        "tiempo":  "General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "107",
+        "titulo":  "AY MI NOCH",
+        "desc":  "AY,MI NOCHE BUENA / ESTA NOCHE",
+        "tiempo":  "Villancico / Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "108",
+        "titulo":  "GLORIA EXC",
+        "desc":  "GLORIA IN EXCELSIS",
+        "tiempo":  "Navidad / Alabanza",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "109",
+        "titulo":  "ESTA NOCHE",
+        "desc":  "ESTA NOCHE",
+        "tiempo":  "Villancico / Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "110",
+        "titulo":  "NAVIDAD NE",
+        "desc":  "NAVIDAD NEGRA",
+        "tiempo":  "Navidad Folclórica",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "111",
+        "titulo":  "EL NINO CR",
+        "desc":  "EL NINO CRIOLO",
+        "tiempo":  "Villancico Latinoamericano",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "112",
+        "titulo":  "H.COROMOTO",
+        "desc":  "HIMNO A LA VIRGEN DE COROMOTO",
+        "tiempo":  "Festividad Mariana",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "113",
+        "titulo":  "DON BOSCO",
+        "desc":  "SALVE DON BOSCO",
+        "tiempo":  "Festividad de San Juan Bosco",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "114",
+        "titulo":  "PESCADOR",
+        "desc":  "PESCADOR DE HOMBRES",
+        "tiempo":  "Tiempo Ordinario / Vocacional",
+        "cat":  "Ordinario"
+    },
+    {
+        "num":  "115",
+        "titulo":  "ALABARÈ",
+        "desc":  "ALABARE\u0027",
+        "tiempo":  "Tiempo Ordinario / Alabanza",
+        "cat":  "Ordinario"
+    },
+    {
+        "num":  "116",
+        "titulo":  "VE.VA",
+        "desc":  "VENID Y VAMOS TODOS / TODO",
+        "tiempo":  "Mes de María",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "117",
+        "titulo":  "VIRGEN DEL",
+        "desc":  "VIRGEN DEL CARMEN",
+        "tiempo":  "Fiesta de la Virgen del Carmen",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "118",
+        "titulo":  "S.MAR.CAMM",
+        "desc":  "SANTA MARIA DEL CAMMINO",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "119",
+        "titulo":  "J.COMO HER",
+        "desc":  "JUNTOS COMO HERMANOS",
+        "tiempo":  "Tiempo Ordinario / Entrada",
+        "cat":  "Ordinario"
+    },
+    {
+        "num":  "120",
+        "titulo":  "GLOR.ALELU",
+        "desc":  "GLORIA GLORIA ALELUJA",
+        "tiempo":  "Pascua / Alabanza",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "121",
+        "titulo":  "HIMNO ALEG",
+        "desc":  "HIMNO A LA ALEGRIA",
+        "tiempo":  "Tiempo Ordinario / General",
+        "cat":  "Ordinario"
+    },
+    {
+        "num":  "122",
+        "titulo":  "SI ACCENDE",
+        "desc":  "ACCENDE UNA LUCE (Nov. Nat.- Fiore-Venturi)",
+        "tiempo":  "Novena de Navidad / Adviento",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "123",
+        "titulo":  "SIGN.VICIN",
+        "desc":  "IL SIGNORE E\u0027 VICINO (Avvento - Galliano)",
+        "tiempo":  "Tiempo de Adviento",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "124",
+        "titulo":  "N.REDENTOR",
+        "desc":  "O NOSTRO REDENTORE (Nov. Nat.-Gregoriano)",
+        "tiempo":  "Novena de Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "125",
+        "titulo":  "TI PREGHIA",
+        "desc":  "TI PREGHIAMO CON VIVA FEDE (Avv. Maestri)",
+        "tiempo":  "Tiempo de Adviento",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "126",
+        "titulo":  "TU SEI AVV",
+        "desc":  "TU SEI L\u0027AVVENTO (Galliano-Semprini)",
+        "tiempo":  "Tiempo de Adviento",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "127",
+        "titulo":  "M.P.AVVENT",
+        "desc":  "Maria Tu Porta dell\u0027Avvento (Gal-Sempr.)",
+        "tiempo":  "Adviento / Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "128",
+        "titulo":  "BIMBO BETH",
+        "desc":  "E\u0027 NATO UN BIMBO IN BETHLEM (trad.Nat.)",
+        "tiempo":  "Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "129",
+        "titulo":  "PASTORALE",
+        "desc":  "PASTORALE (Tradizionale)",
+        "tiempo":  "Tiempo de Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "130",
+        "titulo":  "PIVA",
+        "desc":  "PIVA (Tradizionale)",
+        "tiempo":  "Tradicional Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "131",
+        "titulo":  "TEMPO RIN.",
+        "desc":  "TEMPO DI RINASCERE (Natale Gall.-Semp.)",
+        "tiempo":  "Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "132",
+        "titulo":  "NOEL NOEL",
+        "desc":  "NOEL NOEL (Tradizionale)",
+        "tiempo":  "Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "133",
+        "titulo":  "QUANNO RIN",
+        "desc":  "QUANNO NASCETTE NINNO (Trad. S.Alfonso)",
+        "tiempo":  "Navidad",
+        "cat":  "Navidad"
+    },
+    {
+        "num":  "134",
+        "titulo":  "SAL. CROCE",
+        "desc":  "TI SALUTO O CROCE SANTA (Cant S. Croce)",
+        "tiempo":  "Cuaresma / Viernes Santo",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "135",
+        "titulo":  "ATT.DOMINE",
+        "desc":  "ATTENDE DOMINE (Quaresimale-Gregoriano)",
+        "tiempo":  "Tiempo de Cuaresma",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "136",
+        "titulo":  "STABAT MAT",
+        "desc":  "STABAT MATER DOLOROSA (B.V.Addolorata)",
+        "tiempo":  "Cuaresma / Virgen de los Dolores",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "137",
+        "titulo":  "CRISTO REG",
+        "desc":  "O CRISTO TU REGNERAI (Quares.-Trad.Slavo)",
+        "tiempo":  "Cuaresma",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "138",
+        "titulo":  "CAPO INS.",
+        "desc":  "O CAPO INSANGUINATO (Quares.Hassler-Bach)",
+        "tiempo":  "Semana Santa / Pasión",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "139",
+        "titulo":  "COME PADRE",
+        "desc":  "COME UN PADRE (Penitenziale-E.Bosio)",
+        "tiempo":  "Cuaresma / Penitencial",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "140",
+        "titulo":  "OSAN.F.DAV",
+        "desc":  "OSANNA AL FIGLIO DI DAVID (P.Damilano)",
+        "tiempo":  "Domingo de Ramos",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "141",
+        "titulo":  "QUANDO VER",
+        "desc":  "TU QUANDO VERRAI (Avvento - Croft)",
+        "tiempo":  "Tiempo de Adviento",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "142",
+        "titulo":  "NEI CIELI",
+        "desc":  "NEI CIELI UN GRIDO RISUONO\u0027 (Pasquale)",
+        "tiempo":  "Tiempo de Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "143",
+        "titulo":  "REG. COELI",
+        "desc":  "REGINA COELI + CARRILLON (Ferro)",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "144",
+        "titulo":  "XSTO RISOR",
+        "desc":  "IL CRISTO SIGNORE E\u0027 RISORTO (V.Bellone)",
+        "tiempo":  "Tiempo de Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "145",
+        "titulo":  "ALLEL.LIB",
+        "desc":  "ALLELUYA, ORA SIAMO LIBERI (Pasquale)",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "146",
+        "titulo":  "XR.RIS.TR.",
+        "desc":  "CRISTO RISORGE CRISTO TRIONFA (Damilano)",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "147",
+        "titulo":  "A.RIS.RED.",
+        "desc":  "ALLELUYA, E\u0027 RISORTO IL REDENTORE (Gnoto)",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "148",
+        "titulo":  "A.COL.RIS.",
+        "desc":  "ALLELUYA A COLUI CHE RISUSCITO\u0027",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "149",
+        "titulo":  "C.R.HANDEL",
+        "desc":  "CRISTO E\u0027 RISORTO (G.F.Handel)",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "150",
+        "titulo":  "ALL.PASQUA",
+        "desc":  "ALLELUYA PASQUALE (Tradizionale)",
+        "tiempo":  "Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "151",
+        "titulo":  "PASS.BACH",
+        "desc":  "SIGNORE DOLCE VOLTO (\"Passione\" di Bach)",
+        "tiempo":  "Semana Santa / Pasión",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "152",
+        "titulo":  "RE GLORIA",
+        "desc":  "IL RE DI GLORIA FATE ENTRAR",
+        "tiempo":  "Domingo de Ramos / Cristo Rey",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "153",
+        "titulo":  "VIENI CREA",
+        "desc":  "VENI CREATORE (Gregoriano)",
+        "tiempo":  "Pentecostés",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "154",
+        "titulo":  "V.S.SPIRIT",
+        "desc":  "VIENI SANTO SPIRITO (M.Piatti)",
+        "tiempo":  "Pentecostés",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "155",
+        "titulo":  "SPIRITO S.",
+        "desc":  "SPIRITO SANTO (Recalcati)",
+        "tiempo":  "Pentecostés",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "156",
+        "titulo":  "TE LODIAMO",
+        "desc":  "TE LODIAMO TRINITA\u0027 (Vienna 1776)",
+        "tiempo":  "Santísima Trinidad",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "157",
+        "titulo":  "INNO TRIN.",
+        "desc":  "INNO ALLA TRINITA\u0027 (M. Frisina)",
+        "tiempo":  "Santísima Trinidad",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "158",
+        "titulo":  "TRIN.BEATA",
+        "desc":  "O TRINITA\u0027 BEATA (Inno Vespri Dom.)",
+        "tiempo":  "Santísima Trinidad",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "159",
+        "titulo":  "IMM.CREAT.",
+        "desc":  "O CLEMENTE CREATORE (D.Stefani)",
+        "tiempo":  "Tiempos Fuertes / Cuaresma",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "160",
+        "titulo":  "VICTIME P.",
+        "desc":  "VICTIME PASCHALIS LAUDES (Seq. Pasqua)",
+        "tiempo":  "Domingo de Pascua",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "161",
+        "titulo":  "ADORO TE D",
+        "desc":  "ADORO TE DEVOTE (Gregoriano)",
+        "tiempo":  "Corpus Christi / Eucaristía",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "162",
+        "titulo":  "TANTUM E.G",
+        "desc":  "TANTUM ERGO (Gregoriano)",
+        "tiempo":  "Eucaristía / Reserva",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "163",
+        "titulo":  "TANTUM E.P",
+        "desc":  "TANTUM ERGO (Perosi)",
+        "tiempo":  "Eucaristía / Reserva",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "164",
+        "titulo":  "GENTI TUT.",
+        "desc":  "GENTI TUTTE PROCLAMATE",
+        "tiempo":  "Alabanza General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "165",
+        "titulo":  "LAUDA SION",
+        "desc":  "LAUDA SION",
+        "tiempo":  "Corpus Christi",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "166",
+        "titulo":  "LAUDA JER.",
+        "desc":  "LAUDA SION (Gregoriano) / LAUDA JERUSALEM",
+        "tiempo":  "Corpus Christi",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "167",
+        "titulo":  "DATO CIBO",
+        "desc":  "HAI DATO UN CIBO (Sec. XVII)",
+        "tiempo":  "Comunión / Eucaristía",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "168",
+        "titulo":  "OSTIA DIV.",
+        "desc":  "T\u0027ADORIAM OSTIA DIVINA",
+        "tiempo":  "Adoración Eucarística",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "169",
+        "titulo":  "INNI CANTI",
+        "desc":  "INNI E CANTI",
+        "tiempo":  "Alabanza",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "170",
+        "titulo":  "FONTE VIVA",
+        "desc":  "TU FONTE VIVA (Parigi, sec. XVII)",
+        "tiempo":  "General / Eucaristía",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "171",
+        "titulo":  "PANE VITA",
+        "desc":  "SONO IL PANE DI VITA",
+        "tiempo":  "Comunión",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "172",
+        "titulo":  "T.CANTIDIO",
+        "desc":  "TUTTA LA TERRA CANTI A DIO (L.Bourgeois)",
+        "tiempo":  "Alabanza General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "173",
+        "titulo":  "Q.SETE C.",
+        "desc":  "QUANTA SETE NEL MIO CUORE",
+        "tiempo":  "Devocional / Retiros",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "174",
+        "titulo":  "CREAZ.GIU.",
+        "desc":  "LA CREAZIONE GIUBILI (Ehrembreitstein)",
+        "tiempo":  "Alabanza Universal",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "175",
+        "titulo":  "PANEMVIVUM",
+        "desc":  "PANEM VIVUM (Bonnal)",
+        "tiempo":  "Corpus Christi",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "176",
+        "titulo":  "SS.CUORI",
+        "desc":  "SS. CUORI",
+        "tiempo":  "Sagrado Corazón de Jesús",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "177",
+        "titulo":  "OSTIA VIVA",
+        "desc":  "OSTIA VIVA (Inno Eucaristico)",
+        "tiempo":  "Adoración Eucarística",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "178",
+        "titulo":  "FONTEGIOIA",
+        "desc":  "O FONTE DELLA GIOIA (J.S. Bach)",
+        "tiempo":  "Meditación / General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "179",
+        "titulo":  "VIVO FUOCO",
+        "desc":  "TU SEI VIVO FUOCO (J.Neander 1680)",
+        "tiempo":  "Espíritu Santo / Alabanza",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "180",
+        "titulo":  "SOLE VIVO",
+        "desc":  "TU SOLE VIVO",
+        "tiempo":  "General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "181",
+        "titulo":  "A.LOD.SIGN",
+        "desc":  "ALLELUYA, LODATE IL SIGNORE (M.Frisina)",
+        "tiempo":  "Alabanza de Frisina",
+        "cat":  "Aleluya"
+    },
+    {
+        "num":  "182",
+        "titulo":  "CIELI NARR",
+        "desc":  "I CIELI NARRANO (M. Frisina)",
+        "tiempo":  "Solemnidades / Cantos de Frisina",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "183",
+        "titulo":  "ACCL.SIGN",
+        "desc":  "ACCLAMATE AL SIGNORE (M.Frisina)",
+        "tiempo":  "Alabanza",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "184",
+        "titulo":  "REGNO DIO",
+        "desc":  "IL REGNO DI DIO (M.Frisina)",
+        "tiempo":  "General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "185",
+        "titulo":  "SALVE REG.",
+        "desc":  "SALVE REGINA (Gregoriano)",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "186",
+        "titulo":  "AVE MARIA",
+        "desc":  "AVE MARIA (Gregoriano)",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "187",
+        "titulo":  "REG.COELOR",
+        "desc":  "AVE REGINA COELORUM (Gregoriano)",
+        "tiempo":  "Mariano (Antífona de Cuaresma)",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "188",
+        "titulo":  "REDEMPT.MA",
+        "desc":  "ALMA REDEMPTORIS MATER (Gregoriano)",
+        "tiempo":  "Mariano (Antífona de Adviento)",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "189",
+        "titulo":  "AVEFATIMA",
+        "desc":  "AVE FATIMA 13 MAGGIO",
+        "tiempo":  "Fiesta de la Virgen de Fátima",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "190",
+        "titulo":  "IMMACOLATA",
+        "desc":  "IMMACOLATA",
+        "tiempo":  "Inmaculada Concepción (8 Dic)",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "191",
+        "titulo":  "MIRA POPOL",
+        "desc":  "MIRA IL TUO POPOLO",
+        "tiempo":  "Devocional Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "192",
+        "titulo":  "O SANTISS.",
+        "desc":  "O SANTISSIMA (scuola siciliana XVIII sec.)",
+        "tiempo":  "Mariano Tradicional",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "193",
+        "titulo":  "MADRE SANT",
+        "desc":  "MADRE SANTA (P.Decha-L.Thielleux)",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "194",
+        "titulo":  "MAR.SANTIS",
+        "desc":  "O MARIA SANTISSIMA (tradizionale)",
+        "tiempo":  "Mariano Tradicional",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "195",
+        "titulo":  "MARIS STEL",
+        "desc":  "AVE MARIS STELLA (tradizionale)",
+        "tiempo":  "Mariano / Fiestas del Mar",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "196",
+        "titulo":  "MARIS STEL",
+        "desc":  "AVE MARIS STELLA (gregoriano)",
+        "tiempo":  "Mariano Solemnidades",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "197",
+        "titulo":  "SALVEMATER",
+        "desc":  "SALVE MATER",
+        "tiempo":  "Antífona Mariana",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "198",
+        "titulo":  "SALUT.VERG",
+        "desc":  "TI SALUTIAMO O VERGINE",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "199",
+        "titulo":  "ACQUAFONTE",
+        "desc":  "ACQUA DI FONTE (D. Stefani)",
+        "tiempo":  "Pascua / Bautismo",
+        "cat":  "Pascua"
+    },
+    {
+        "num":  "200",
+        "titulo":  "AVE MARIA",
+        "desc":  "AVE MARIA",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "201",
+        "titulo":  "VERG.PURIS",
+        "desc":  "O VERGINE PURISSIMA (Tradizionale)",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "202",
+        "titulo":  "LIETA ARM.",
+        "desc":  "LIETA ARMONIA",
+        "tiempo":  "General / Fiestas",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "203",
+        "titulo":  "SANTACASA",
+        "desc":  "NELLA TUA SANTA CASA (Canto Madonna Loreto)",
+        "tiempo":  "Virgen de Loreto",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "204",
+        "titulo":  "MADO. NERA",
+        "desc":  "MADONNA NERA (Sant. Cezstocowa-Polonia)",
+        "tiempo":  "Virgen de Czestochowa",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "205",
+        "titulo":  "AM.ISERNIA",
+        "desc":  "AVE MARIA DI ISERNIA (Mons. A. Gemma)",
+        "tiempo":  "Mariano Local / Devocional",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "206",
+        "titulo":  "FIORECARM.",
+        "desc":  "FIORE DEL CARMELO (L. Zappatore)",
+        "tiempo":  "Fiesta de la Virgen del Carmen",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "207",
+        "titulo":  "FIORCARMEL",
+        "desc":  "FIORE DEL CARMELO Sequenza (L. Zappatore)",
+        "tiempo":  "Virgen del Carmen (Solemne)",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "208",
+        "titulo":  "EVV. MARIA",
+        "desc":  "EVVIVA MARIA",
+        "tiempo":  "Festividades Populares Marianas",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "209",
+        "titulo":  "AM.MREGINA",
+        "desc":  "AVE MARIA MADRE E REGINA",
+        "tiempo":  "María Reina",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "210",
+        "titulo":  "REG.APOST.",
+        "desc":  "ALLA REGINA DEGLI APOSTOLI (Figlia Sion)",
+        "tiempo":  "Tiempos apostólicos / Pentecostés",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "211",
+        "titulo":  "APOST.PREG",
+        "desc":  "GLI APOSTOLI UNITI IN PREGHIERA - F.Sion",
+        "tiempo":  "Cenáculo / Pentecostés",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "212",
+        "titulo":  "SPE.N.SALV",
+        "desc":  "SPERANZA NOSTRA SALVE",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "213",
+        "titulo":  "AM.FATIMA",
+        "desc":  "MARIA DI FATIMA (Sant.N.S.Fatima)",
+        "tiempo":  "Virgen de Fátima",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "214",
+        "titulo":  "VER.ROSAR.",
+        "desc":  "O VERGIN DEL ROSARIO (Canto di Fatima)",
+        "tiempo":  "Virgen del Rosario (7 Oct)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "215",
+        "titulo":  "MERAVIGLIE",
+        "desc":  "MERAVIGLIE IN TE",
+        "tiempo":  "Magnificat / Alabanza",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "216",
+        "titulo":  "S.REGINA2",
+        "desc":  "SALVE REGINA (F.Brun 1911)",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "217",
+        "titulo":  "VER.SANTA",
+        "desc":  "VERGIN SANTA CHE ACCOGLI BENIGNA (Trad.)",
+        "tiempo":  "Mariano Devocional",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "218",
+        "titulo":  "TOTA PULC.",
+        "desc":  "TOTA PULCHRA (Gregoriano)",
+        "tiempo":  "Inmaculada Concepción / Purísima",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "219",
+        "titulo":  "S.DOLCE V.",
+        "desc":  "SALVE DOLCE VERGINE (M. Frisina)",
+        "tiempo":  "Mariano (Frisina)",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "220",
+        "titulo":  "MAGNIFICAT",
+        "desc":  "MAGNIFICAT (M. Frisina)",
+        "tiempo":  "Cántico de la Virgen",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "221",
+        "titulo":  "MIA MADRE",
+        "desc":  "CHI E\u0027 MIA MADRE (D. Machetta)",
+        "tiempo":  "General Litúrgico",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "222",
+        "titulo":  "IN S.CHI-1",
+        "desc":  "INNO S. CHIARA - 1",
+        "tiempo":  "Festividad de Santa Clara (11 Ago)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "223",
+        "titulo":  "IN S.CHI-4",
+        "desc":  "INNO S. CHIARA - 4",
+        "tiempo":  "Santa Clara",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "224",
+        "titulo":  "S.NICANDRO",
+        "desc":  "INNO A SAN NICANDRO",
+        "tiempo":  "San Nicandro Mártir",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "225",
+        "titulo":  "RITE VOS C",
+        "desc":  "RITE VOS CIVES (Resp. lit. SS Nicandro M.)",
+        "tiempo":  "San Nicandro (Solemne)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "226",
+        "titulo":  "S.VINC.PAL",
+        "desc":  "INNO A SAN VINCENZO DE PAOLI",
+        "tiempo":  "San Vicente de Paúl (27 Sept)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "227",
+        "titulo":  "IN S.FRA-1",
+        "desc":  "INNO S. FRANCESCO -1",
+        "tiempo":  "San Francisco de Asís (4 Oct)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "228",
+        "titulo":  "IN S.ANT-1",
+        "desc":  "INNO S. ANTONIO -1",
+        "tiempo":  "San Antonio de Padua (13 Jun)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "229",
+        "titulo":  "S.GIUSEPPE",
+        "desc":  "S. GIUSEPPE",
+        "tiempo":  "San José (19 Mar / 1 May)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "230",
+        "titulo":  "S.SEBAST.",
+        "desc":  "S. SEBASTIANO",
+        "tiempo":  "San Sebastián (20 Ene)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "231",
+        "titulo":  "S.BENEDET.",
+        "desc":  "S. BENEDETTO",
+        "tiempo":  "San Benito Abad (11 Jul)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "232",
+        "titulo":  "S.GIUSTA",
+        "desc":  "S. GIUSTA",
+        "tiempo":  "Santa Justa",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "233",
+        "titulo":  "S.G.BOSCO",
+        "desc":  "S. GIOVANNI BOSCO",
+        "tiempo":  "San Juan Bosco (31 Ene)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "234",
+        "titulo":  "S.RITA - 1",
+        "desc":  "S. RITA - 1",
+        "tiempo":  "Santa Rita de Casia (22 May)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "236",
+        "titulo":  "AVE CROCE",
+        "desc":  "AVE CROCE (Canto Venerdì Santo)",
+        "tiempo":  "Semana Santa / Viernes Santo",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "237",
+        "titulo":  "REDEMPTOR",
+        "desc":  "O REDEMPTOR (Gregoriano)",
+        "tiempo":  "Jueves Santo (Misa Crismal)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "238",
+        "titulo":  "REQUIEM / ETERNO RIP",
+        "desc":  "REQUIEM (Gregoriano) / L\u0027ETERNO RIPOSO",
+        "tiempo":  "Exequias / Día de los Difuntos",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "239",
+        "titulo":  "GERUSALEM.",
+        "desc":  "GERUSALEMME",
+        "tiempo":  "General Escatológico",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "240",
+        "titulo":  "SPLEN.GESU",
+        "desc":  "SPLENDI GESU\u0027",
+        "tiempo":  "Alabanza / Oración",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "241",
+        "titulo":  "CANT.INSI.",
+        "desc":  "CANTIAMO INSIEME A GESU\u0027 IL SIGNORE",
+        "tiempo":  "Comunión / Asamblea",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "242",
+        "titulo":  "SPLEND.PAD",
+        "desc":  "CRISTO SPLENDORE DEL PADRE",
+        "tiempo":  "Himno de Laudes / General",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "243",
+        "titulo":  "S.VERONICA",
+        "desc":  "INNO A S. VERONICA GIULIANI (F.Ferro)",
+        "tiempo":  "Santa Verónica Giuliani",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "244",
+        "titulo":  "CHIESA DIO",
+        "desc":  "CHIESA DI DIO, POPOLO IN FESTA",
+        "tiempo":  "Entrada / Aniversario de Dedicación",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "245",
+        "titulo":  "TEMPIO AD.",
+        "desc":  "IL TEMPIO TUO ADORABILE",
+        "tiempo":  "Dedicación del Templo",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "246",
+        "titulo":  "NOB.S.CHIE",
+        "desc":  "NOBILE SANTA CHIESA",
+        "tiempo":  "Himno eclesial",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "247",
+        "titulo":  "SEI TU SIG",
+        "desc":  "SEI TU SIGNORE IL PANE",
+        "tiempo":  "Eucaristía / Comunión",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "248",
+        "titulo":  "CREDIAMO",
+        "desc":  "NOI CREDIAMO IN TE",
+        "tiempo":  "Acto de Fe / Ofertorio",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "249",
+        "titulo":  "TI RINGRAZ",
+        "desc":  "TI RINGRAZIO O MIO SIGNORE",
+        "tiempo":  "Acción de gracias",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "250",
+        "titulo":  "RACCOGLI",
+        "desc":  "O SIGNORE RACCOGLI I TUOI FIGLI",
+        "tiempo":  "Ofertorio / Unidad",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "251",
+        "titulo":  "SALMO 22",
+        "desc":  "IL SIGNORE E\u0027 MIO PASTORE",
+        "tiempo":  "Tiempo Ordinario / Salmo 22",
+        "cat":  "Ordinario"
+    },
+    {
+        "num":  "252",
+        "titulo":  "CANT DN.3",
+        "desc":  "BENEDICIAMO IL SIGNORE",
+        "tiempo":  "Cántico de Daniel (Laudes)",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "253",
+        "titulo":  "GESU SALV.",
+        "desc":  "GESU\u0027 SALVEZZA NOSTRA (Galliano-Semprini)",
+        "tiempo":  "General Litúrgico",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "254",
+        "titulo":  "PANE CAMMI",
+        "desc":  "IL TUO POPOLO IN CAMMINO",
+        "tiempo":  "Comunión / Corpus Christi",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "255",
+        "titulo":  "TI ESALTO",
+        "desc":  "TI ESALTO DIO MIO RE",
+        "tiempo":  "Alabanza / Salmo",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "256",
+        "titulo":  "MISTERO CE",
+        "desc":  "MISTERO DELLA CENA",
+        "tiempo":  "Jueves Santo / Eucaristía",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "257",
+        "titulo":  "COM E BELL",
+        "desc":  "COME E\u0027 BELLO SIGNORE STARE INSIEME",
+        "tiempo":  "Encuentros / Fraternidad",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "258",
+        "titulo":  "DOVECARITA",
+        "desc":  "DOV\u0027E\u0027 CARITA\u0027 E AMORE",
+        "tiempo":  "Jueves Santo / Ubi Caritas",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "259",
+        "titulo":  "GLORIA LOU",
+        "desc":  "GLORIA DI LOURDES",
+        "tiempo":  "Procesión de Antorchas",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "260",
+        "titulo":  "SANTO OSAN",
+        "desc":  "SANTO-OSANNA",
+        "tiempo":  "Ordinario de la Misa",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "261",
+        "titulo":  "SPLENDI VE",
+        "desc":  "TU SPLENDI O VERGINE",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "262",
+        "titulo":  "DONO SUBL.",
+        "desc":  "MARIA, DONO SUBLIME DEL PADRE",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "263",
+        "titulo":  "SONOSERVA",
+        "desc":  "ECCO IO SONO LA SERVA DEL SIGNORE",
+        "tiempo":  "Anunciación / Adviento",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "264",
+        "titulo":  "MADRE AMOR",
+        "desc":  "SALVE MADRE DELL\u0027AMORE",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "265",
+        "titulo":  "A. LOURDES",
+        "desc":  "AVE MARIA DI LOURDES",
+        "tiempo":  "Mariano",
+        "cat":  "MARIA"
+    },
+    {
+        "num":  "356",
+        "titulo":  "DIS.-32/29/27 (Módulo Estándar de 3 Campanas)",
+        "desc":  "Escalonado en: 60s, 90s, 120s, 180s y 300s",
+        "tiempo":  "",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "361",
+        "titulo":  "DIS.-32/29/D1-27 (Variante de 3 Campanas con D1)",
+        "desc":  "Escalonado en: 60s, 90s, 120s, 180s y 300s",
+        "tiempo":  "",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "366",
+        "titulo":  "DIS.-D1-23/28/32/35 (Módulo de 4 Campanas Tipo A)",
+        "desc":  "Escalonado en: 60s, 90s, 120s, 180s y 300s",
+        "tiempo":  "",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "371",
+        "titulo":  "DIS.-27/29/32/D1-25 (Módulo de 4 Campanas Tipo B)",
+        "desc":  "Escalonado en: 60s, 90s, 120s, 180s y 300s",
+        "tiempo":  "",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "376",
+        "titulo":  "DIS.-D1-25/29 (Módulo de 2 Campanas de Volteo)",
+        "desc":  "Escalonado en: 60s, 90s, 120s, 180s y 300s",
+        "tiempo":  "",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "381",
+        "titulo":  "DIS.-D1-24/27/29/32 (Módulo de 4 Campanas Tipo C)",
+        "desc":  "Escalonado en: 60s, 90s, 120s, 180s y 300s [cite: 7, 8]",
+        "tiempo":  "",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "386",
+        "titulo":  "DIS.-24/28/31 (Módulo de 3 Campanas Tipo C)",
+        "desc":  "Escalonado en: 60s, 90s, 120s, 180s y 300s [cite: 14, 18, 21, 24, 27]",
+        "tiempo":  "",
+        "cat":  "Otros"
+    },
+    {
+        "num":  "391",
+        "titulo":  "DIS.D1-24/28/24 (Módulo de 3 Campanas con Retorno)",
+        "desc":  "Escalonado en: 60s, 90s, 120s, 180s y 300s [cite: 30, 33, 36, 39, 43]",
+        "tiempo":  "",
+        "cat":  "Otros"
+    }
+]
+;
+
+        // Calendario Litúrgico 2026 de Chile consolidado y enriquecido
+        const calendarioLiturgico = [
+            { fecha: "2026-01-01", festividad: "Santa María, Madre de Dios", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Navidad", colorLiturgico: "blanco", idMelodia: "62", notas: "AVE MARIA DI SCHUBERT" },
+            { fecha: "2026-01-04", festividad: "La Epifanía del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Navidad", colorLiturgico: "blanco", idMelodia: "75", notas: "ADESTE FIDELES" },
+            { fecha: "2026-01-22", festividad: "Beata Laura Vicuña", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "233", notas: "Melodía de Santos - Uso facultativo" },
+            { fecha: "2026-02-11", festividad: "Nuestra Señora de Lourdes", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "59", notas: "AVE MARIA DI LOURDES" },
+            { fecha: "2026-02-18", festividad: "Miércoles de Ceniza (Inicio Cuaresma)", tipoCeleb: "Conmemoración", tiempoLiturgico: "Cuaresma", colorLiturgico: "morado", idMelodia: "137", notas: "ATTENDE DOMINE" },
+            { fecha: "2026-03-19", festividad: "San José, Esposo de la B.V.M.", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Cuaresma", colorLiturgico: "blanco", idMelodia: "229", notas: "S. GIUSEPPE" },
+            { fecha: "2026-03-25", festividad: "La Anunciación del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Cuaresma", colorLiturgico: "blanco", idMelodia: "105", notas: "EL ANGEL GABRIEL" },
+            { fecha: "2026-03-29", festividad: "Domingo de Ramos", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Cuaresma / Semana Santa", colorLiturgico: "rojo", idMelodia: "71", notas: "OSANNA FIGLIO DI DAVIDE" },
+            { fecha: "2026-04-02", festividad: "Jueves Santo en la Cena del Señor", tipoCeleb: "Triduo Pascual", tiempoLiturgico: "Triduo Pascual", colorLiturgico: "blanco", idMelodia: "162", notas: "TANTUM ERGO GREGORIANO" },
+            { fecha: "2026-04-03", festividad: "Viernes Santo en la Pasión del Señor", tipoCeleb: "Triduo Pascual", tiempoLiturgico: "Triduo Pascual", colorLiturgico: "rojo", idMelodia: "138", notas: "STABAT MATER DOLOROSA" },
+            { fecha: "2026-04-05", festividad: "Domingo de Pascua de Resurrección", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "blanco", idMelodia: "53 / 92", notas: "RISUCITO / REGINA COELI" },
+            { fecha: "2026-05-13", festividad: "Nuestra Señora de Fátima", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Pascua", colorLiturgico: "blanco", idMelodia: "64", notas: "AVE MARIA DI FATIMA" },
+            { fecha: "2026-05-17", festividad: "La Ascensión del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "blanco", idMelodia: "148 / 54", notas: "Cristo è Risorto / Cristo Risusciti" },
+            { fecha: "2026-05-24", festividad: "Domingo de Pentecostés", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "rojo", idMelodia: "153", notas: "VENI CREATORE GREGORIANO" },
+            { fecha: "2026-05-31", festividad: "La Santísima Trinidad", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "156", notas: "TE LODIAMO TRINITA'" },
+            { fecha: "2026-06-07", festividad: "Corpus Christi", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "94 / 161", notas: "PANGE LINGUA / ADORO TE DEVOTE" },
+            { fecha: "2026-06-12", festividad: "Sagrado Corazón de Jesús", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "176", notas: "SS. CUORI" },
+            { fecha: "2026-06-29", festividad: "Santos Pedro y Pablo", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "rojo", idMelodia: "114", notas: "PESCADOR DE HOMBRES" },
+            { fecha: "2026-07-13", festividad: "Santa Teresa de Los Andes (Patrona)", tipoCeleb: "Fiesta (F)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "119", notas: "JUNTOS COMO HERMANOS" },
+            { fecha: "2026-07-16", festividad: "Virgen del Carmen, Reina de Chile", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "117", notas: "VIRGEN DEL CARMEN" },
+            { fecha: "2026-08-15", festividad: "La Asunción de la Virgen María", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "196", notas: "AVE MARIS STELLA" },
+            { fecha: "2026-08-18", festividad: "San Alberto Hurtado", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "102", notas: "CANTO PER CRISTO" },
+            { fecha: "2026-09-18", festividad: "Fiestas Patrias de Chile (Día 1)", tipoCeleb: "Civil / Nacional", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "117", notas: "VIRGEN DEL CARMEN" },
+            { fecha: "2026-09-19", festividad: "Fiestas Patrias de Chile (Día 2)", tipoCeleb: "Civil / Nacional", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "117", notas: "VIRGEN DEL CARMEN" },
+            { fecha: "2026-11-01", festividad: "Todos los Santos", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "78", notas: "LA PACE DEI SANTI" },
+            { fecha: "2026-11-02", festividad: "Todos los Fieles Difuntos", tipoCeleb: "Conmemoración", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "morado", idMelodia: "237", notas: "REQUIEM GREGORIANO" },
+            { fecha: "2026-11-22", festividad: "Cristo Rey del Universo", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "50", notas: "CHRISTUS VINCIT" },
+            { fecha: "2026-11-29", festividad: "I Domingo de Adviento", tipoCeleb: "Domingo de Adviento", tiempoLiturgico: "Adviento", colorLiturgico: "morado", idMelodia: "123", notas: "IL SIGNORE E' VICINO" },
+            { fecha: "2026-12-08", festividad: "La Inmaculada Concepción", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Adviento", colorLiturgico: "blanco", idMelodia: "190 / 218", notas: "IMMACOLATA / TOTA PULCHRA" },
+            { fecha: "2026-12-25", festividad: "La Natividad del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Navidad", colorLiturgico: "blanco", idMelodia: "74 / 88", notas: "ASTRO DEL CIEL / NOEL NOEL" }
+        ];
+
+        // Rellenar dinámicamente el día y mes para búsquedas feriales
+        calendarioLiturgico.forEach(item => {
+            const partes = item.fecha.split('-');
+            item.dia = parseInt(partes[2]);
+            item.mes = parseInt(partes[1]) - 1; // 0-indexed
+        });
+
+        // Determina el tiempo litúrgico y color para cualquier fecha de 2026 (lógica de fallback)
+        function obtenerTiempoYColorPorFecha(fechaStr) {
+            const partes = fechaStr.split('-');
+            const anio = parseInt(partes[0]);
+            const mes = parseInt(partes[1]) - 1; // 0-indexed
+            const dia = parseInt(partes[2]);
+            const fecha = new Date(anio, mes, dia);
+            const timeMs = fecha.getTime();
+
+            const tJan11 = new Date(2026, 0, 11).getTime();
+            const tFeb17 = new Date(2026, 1, 17).getTime();
+            const tFeb18 = new Date(2026, 1, 18).getTime();
+            const tApr02 = new Date(2026, 3, 2).getTime();
+            const tApr05 = new Date(2026, 3, 5).getTime();
+            const tMay24 = new Date(2026, 4, 24).getTime();
+            const tNov28 = new Date(2026, 10, 28).getTime();
+            const tNov29 = new Date(2026, 10, 29).getTime();
+            const tDec24 = new Date(2026, 11, 24).getTime();
+
+            if (timeMs <= tJan11) {
+                return { tiempo: 'Navidad', color: 'blanco', festividad: 'Tiempo de Navidad' };
+            } else if (timeMs <= tFeb17) {
+                return { tiempo: 'Tiempo Ordinario', color: 'verde', festividad: 'Feria de Tiempo Ordinario' };
+            } else if (timeMs < tApr02) {
+                return { tiempo: 'Cuaresma', color: 'morado', festividad: 'Feria de Cuaresma' };
+            } else if (timeMs < tApr05) {
+                return { tiempo: 'Triduo Pascual', color: 'morado', festividad: 'Triduo Pascual' };
+            } else if (timeMs <= tMay24) {
+                return { tiempo: 'Pascua', color: 'blanco', festividad: 'Tiempo de Pascua' };
+            } else if (timeMs <= tNov28) {
+                return { tiempo: 'Tiempo Ordinario', color: 'verde', festividad: 'Feria de Tiempo Ordinario' };
+            } else if (timeMs <= tDec24) {
+                return { tiempo: 'Adviento', color: 'morado', festividad: 'Tiempo de Adviento' };
+            } else {
+                return { tiempo: 'Navidad', color: 'blanco', festividad: 'Tiempo de Navidad' };
+            }
+        }
+
+        // Obtiene las clases y emojis correspondientes a cada color litúrgico oficial
+        function obtenerEstiloColorLiturgico(color) {
+            switch (color) {
+                case 'blanco':
+                    return {
+                        badgeClass: "border border-amber-500/40 bg-amber-500/10 text-amber-300",
+                        emoji: "⬜"
+                    };
+                case 'morado':
+                    return {
+                        badgeClass: "border border-purple-500/40 bg-purple-500/10 text-purple-300",
+                        emoji: "🟪"
+                    };
+                case 'verde':
+                    return {
+                        badgeClass: "border border-emerald-500/40 bg-emerald-500/10 text-emerald-300",
+                        emoji: "🟩"
+                    };
+                case 'rojo':
+                    return {
+                        badgeClass: "border border-red-500/40 bg-red-500/10 text-red-300",
+                        emoji: "🟥"
+                    };
+                default:
+                    return {
+                        badgeClass: "border border-gray-700 bg-gray-950 text-gray-300",
+                        emoji: "⬜"
+                    };
+            }
+        }
+
+        // Obtiene el color de fondo oficial para el tiempo litúrgico (season)
+        function obtenerColorDelTiempo(tiempo, colorCelebracion) {
+            const t = tiempo.toLowerCase();
+            if (t.includes('navidad')) return 'blanco';
+            if (t.includes('pascua') && !t.includes('triduo')) return 'blanco';
+            if (t.includes('cuaresma')) return 'morado';
+            if (t.includes('adviento')) return 'morado';
+            if (t.includes('ordinario')) return 'verde';
+            if (t.includes('triduo')) return colorCelebracion;
+            return 'verde';
+        }
+
+        // Referencias al DOM
+        const fechaDesde = document.getElementById('fecha-desde');
+        const fechaHasta = document.getElementById('fecha-hasta');
+        const filtroTiempo = document.getElementById('filtro-tiempo');
+        const btnHoy = document.getElementById('btn-hoy');
+        const btnLimpiar = document.getElementById('btn-limpiar');
+        const bannerLiturgico = document.getElementById('banner-liturgico');
+        const nombreFestividad = document.getElementById('nombre-festividad');
+        const tablaCuerpo = document.getElementById('tabla-cuerpo');
+        const tablaCalendarioCuerpo = document.getElementById('tabla-calendario-cuerpo');
+        const contadorItems = document.getElementById('contador-items');
+        
+        const tabCalendario = document.getElementById('tab-calendario');
+        const tabCatalogo = document.getElementById('tab-catalogo');
+        const panelCalendario = document.getElementById('panel-calendario');
+        const panelCatalogo = document.getElementById('panel-catalogo');
+
+        let pestañaActiva = 'calendario'; // 'calendario' | 'catalogo'
+        let filtroTipoCelebActivo = null;
+        let filtroTiempoLiturgicoActivo = null;
+
+        // Inicialización
+        window.addEventListener('DOMContentLoaded', () => {
+            // Inicializar vacío para que muestre todas las melodías por defecto ordenadas por fecha
+            fechaDesde.value = '';
+            fechaHasta.value = '';
+            filtroTipoCelebActivo = null;
+            filtroTiempoLiturgicoActivo = null;
+            actualizarBarraFiltros();
+            evaluarFechaYLiturgia();
+            cambiarPestana('calendario');
+        });
+
+        // Eventos
+        fechaDesde.addEventListener('change', evaluarFechaYLiturgia);
+        fechaHasta.addEventListener('change', evaluarFechaYLiturgia);
+        
+        filtroTiempo.addEventListener('change', () => {
+            renderizarMelodias();
+            renderizarCalendario();
+            cambiarPestana(pestañaActiva);
+        });
+
+        btnHoy.addEventListener('click', () => {
+            establecerFechaHoy();
+            evaluarFechaYLiturgia();
+        });
+
+        btnLimpiar.addEventListener('click', () => {
+            fechaDesde.value = '';
+            fechaHasta.value = '';
+            filtroTiempo.value = 'TODOS';
+            filtroTipoCelebActivo = null;
+            filtroTiempoLiturgicoActivo = null;
+            actualizarBarraFiltros();
+            evaluarFechaYLiturgia();
+        });
+
+        tabCalendario.addEventListener('click', () => cambiarPestana('calendario'));
+        tabCatalogo.addEventListener('click', () => cambiarPestana('catalogo'));
+
+        // Establecer el input de fecha al día actual
+        function establecerFechaHoy() {
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dd = String(hoy.getDate()).padStart(2, '0');
+            fechaDesde.value = `${yyyy}-${mm}-${dd}`;
+            fechaHasta.value = `${yyyy}-${mm}-${dd}`;
+        }
+
+        // Formatea la fecha para mostrar en formato corto chileno ej. "Dom, 04-01-2026"
+        function formatearFechaBonita(fechaStr) {
+            if (!fechaStr) return '';
+            const partes = fechaStr.split('-');
+            const anio = parseInt(partes[0]);
+            const mes = parseInt(partes[1]) - 1;
+            const dia = parseInt(partes[2]);
+            const fecha = new Date(anio, mes, dia);
+            const diasSemana = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            
+            const diaSemana = diasSemana[fecha.getDay()];
+            const diaMes = String(dia).padStart(2, '0');
+            const mesNum = String(mes + 1).padStart(2, '0');
+            
+            return `${diaSemana}, ${diaMes}-${mesNum}-${anio}`;
+        }
+
+        // Formatea la fecha para mostrar en formato largo chileno ej. "Domingo, 04-01-2026"
+        function formatearFechaCompleta(fechaStr) {
+            if (!fechaStr) return '';
+            const partes = fechaStr.split('-');
+            const anio = parseInt(partes[0]);
+            const mes = parseInt(partes[1]) - 1;
+            const dia = parseInt(partes[2]);
+            const fecha = new Date(anio, mes, dia);
+            const diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+            
+            const diaSemana = diasSemana[fecha.getDay()];
+            const diaMes = String(dia).padStart(2, '0');
+            const mesNum = String(mes + 1).padStart(2, '0');
+            
+            return `${diaSemana}, ${diaMes}-${mesNum}-${anio}`;
+        }
+
+        // Formatea la fecha en formato chileno básico dd-mm-aaaa
+        function formatearFechaCorta(fechaStr) {
+            if (!fechaStr) return '';
+            const partes = fechaStr.split('-');
+            return `${partes[2]}-${partes[1]}-${partes[0]}`;
+        }
+
+        // Obtiene la lista del calendario filtrado por rango de fecha, categoría y filtros interactivos, ordenada cronológicamente
+        function obtenerCalendarioFiltrado() {
+            const desdeVal = fechaDesde.value;
+            const hastaVal = fechaHasta.value;
+            const categoriaFiltrada = filtroTiempo.value;
+
+            return calendarioLiturgico.filter(item => {
+                // 1. Filtrado por fecha (rango inclusivo)
+                if (desdeVal && item.fecha < desdeVal) return false;
+                if (hastaVal && item.fecha > hastaVal) return false;
+
+                // 2. Filtrado por categoría de melodía
+                if (categoriaFiltrada !== 'TODOS') {
+                    if (categoriaFiltrada === 'Navidad') {
+                        const esNavidad = item.tiempoLiturgico === 'Navidad' || item.tiempoLiturgico === 'Adviento' || item.festividad.toLowerCase().includes('navidad') || item.festividad.toLowerCase().includes('nochebuena') || item.festividad.toLowerCase().includes('adviento') || item.festividad.toLowerCase().includes('epifanía');
+                        if (!esNavidad) return false;
+                    } else if (categoriaFiltrada === 'Pascua') {
+                        const esPascua = item.tiempoLiturgico === 'Pascua' || item.tiempoLiturgico === 'Triduo Pascual' || item.festividad.toLowerCase().includes('pascua') || item.festividad.toLowerCase().includes('resurrección') || item.festividad.toLowerCase().includes('ascensión') || item.festividad.toLowerCase().includes('pentecostés');
+                        if (!esPascua) return false;
+                    } else if (categoriaFiltrada === 'MARIA') {
+                        const esMaria = item.festividad.toLowerCase().includes('virgen') || item.festividad.toLowerCase().includes('maría') || item.festividad.toLowerCase().includes('lourdes') || item.festividad.toLowerCase().includes('fátima') || item.festividad.toLowerCase().includes('inmaculada') || item.festividad.toLowerCase().includes('anunciación') || item.festividad.toLowerCase().includes('teresa de los andes');
+                        if (!esMaria) return false;
+                    } else if (categoriaFiltrada === 'Aleluya') {
+                        const esAleluya = item.idMelodia.includes('82') || item.idMelodia.includes('83') || item.idMelodia.includes('120') || item.idMelodia.includes('145') || item.idMelodia.includes('147') || item.idMelodia.includes('150') || item.festividad.toLowerCase().includes('resurrección');
+                        if (!esAleluya) return false;
+                    } else if (categoriaFiltrada === 'Ordinario') {
+                        const esOrdinario = item.tiempoLiturgico === 'Tiempo Ordinario';
+                        if (!esOrdinario) return false;
+                    } else if (categoriaFiltrada === 'Otros') {
+                        const esNavidad = item.tiempoLiturgico === 'Navidad' || item.tiempoLiturgico === 'Adviento' || item.festividad.toLowerCase().includes('navidad') || item.festividad.toLowerCase().includes('nochebuena') || item.festividad.toLowerCase().includes('adviento') || item.festividad.toLowerCase().includes('epifanía');
+                        const esPascua = item.tiempoLiturgico === 'Pascua' || item.tiempoLiturgico === 'Triduo Pascual' || item.festividad.toLowerCase().includes('pascua') || item.festividad.toLowerCase().includes('resurrección') || item.festividad.toLowerCase().includes('ascensión') || item.festividad.toLowerCase().includes('pentecostés');
+                        const esMaria = item.festividad.toLowerCase().includes('virgen') || item.festividad.toLowerCase().includes('maría') || item.festividad.toLowerCase().includes('lourdes') || item.festividad.toLowerCase().includes('fátima') || item.festividad.toLowerCase().includes('inmaculada') || item.festividad.toLowerCase().includes('anunciación') || item.festividad.toLowerCase().includes('teresa de los andes');
+                        const esOrdinario = item.tiempoLiturgico === 'Tiempo Ordinario';
+                        if (esNavidad || esPascua || esMaria || esOrdinario) return false;
+                    }
+                }
+
+                // 3. Filtrado interactivo por clic en Tipo de Celebración
+                if (filtroTipoCelebActivo && item.tipoCeleb !== filtroTipoCelebActivo) return false;
+
+                // 4. Filtrado interactivo por clic en Tiempo Litúrgico
+                if (filtroTiempoLiturgicoActivo && item.tiempoLiturgico !== filtroTiempoLiturgicoActivo) return false;
+
+                return true;
+            }).sort((a, b) => a.fecha.localeCompare(b.fecha));
+        }
+
+        // Evalúa el rango de fechas para sugerir categorías e interactuar con el banner
+        function evaluarFechaYLiturgia() {
+            const desdeStr = fechaDesde.value;
+            const hastaStr = fechaHasta.value;
+
+            // Si ambas están vacías (Limpio / Mostrar todo)
+            if (!desdeStr && !hastaStr) {
+                bannerLiturgico.classList.add('hidden');
+                renderizarMelodias();
+                renderizarCalendario();
+                return;
+            }
+
+            const esFechaUnica = desdeStr === hastaStr || (desdeStr && !hastaStr) || (!desdeStr && hastaStr);
+            const fechaSeleccionadaStr = desdeStr || hastaStr;
+
+            if (esFechaUnica) {
+                const partes = fechaSeleccionadaStr.split('-');
+                const mes = parseInt(partes[1]) - 1; // 0-indexed
+                const dia = parseInt(partes[2]);
+
+                // Buscar coincidencia exacta en el calendario de 2026
+                const coincidencia = calendarioLiturgico.find(item => {
+                    if (item.fecha === fechaSeleccionadaStr) return true;
+                    return item.dia === dia && item.mes === mes;
+                });
+
+                if (coincidencia) {
+                    // Encontró una solemnidad o festividad del calendario
+                    const estiloCelebracion = obtenerEstiloColorLiturgico(coincidencia.colorLiturgico);
+                    const colorTiempo = obtenerColorDelTiempo(coincidencia.tiempoLiturgico, coincidencia.colorLiturgico);
+                    const estiloTiempo = obtenerEstiloColorLiturgico(colorTiempo);
+                    const fechaLegible = formatearFechaCompleta(fechaSeleccionadaStr);
+                    nombreFestividad.innerHTML = `
+                        <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
+                            <span class="text-amber-300 font-bold">${estiloCelebracion.emoji} ${coincidencia.festividad}</span>
+                            <span class="text-xs bg-amber-500/20 text-amber-300 px-2.5 py-0.5 rounded border border-amber-500/30">${coincidencia.tipoCeleb}</span>
+                            <span class="text-xs px-2.5 py-0.5 rounded ${estiloTiempo.badgeClass}">${estiloTiempo.emoji} ${coincidencia.tiempoLiturgico}</span>
+                            <span class="text-xs text-gray-300 font-normal">(${fechaLegible})</span>
+                        </div>
+                        <div class="mt-2 text-xs text-gray-400">
+                            Código recomendado para Belltron: <span class="font-mono text-amber-400 font-bold bg-gray-950 px-1.5 py-0.5 rounded">${coincidencia.idMelodia}</span> (${coincidencia.notas})
+                        </div>
+                    `;
+                    
+                    // Mapear automáticamente la categoría en el filtro
+                    if (coincidencia.tiempoLiturgico === 'Navidad' || coincidencia.tiempoLiturgico === 'Adviento') {
+                        filtroTiempo.value = "Navidad";
+                    } else if (coincidencia.tiempoLiturgico === 'Pascua' || coincidencia.tiempoLiturgico === 'Triduo Pascual') {
+                        filtroTiempo.value = "Pascua";
+                    } else if (coincidencia.festividad.toLowerCase().includes('virgen') || coincidencia.festividad.toLowerCase().includes('maría') || coincidencia.festividad.toLowerCase().includes('lourdes') || coincidencia.festividad.toLowerCase().includes('fátima') || coincidencia.festividad.toLowerCase().includes('inmaculada')) {
+                        filtroTiempo.value = "MARIA";
+                    } else if (coincidencia.tiempoLiturgico === 'Tiempo Ordinario') {
+                        filtroTiempo.value = "Ordinario";
+                    } else {
+                        filtroTiempo.value = "TODOS";
+                    }
+                    
+                    bannerLiturgico.classList.remove('hidden');
+                    
+                    // Resaltar la fila en la tabla del calendario
+                    setTimeout(() => resaltarFila(coincidencia.fecha), 50);
+                } else {
+                    // Lógica de fallback para días sin festividades específicas (días feriales genéricos)
+                    const infoFallback = obtenerTiempoYColorPorFecha(fechaSeleccionadaStr);
+                    const estiloFallback = obtenerEstiloColorLiturgico(infoFallback.color);
+                    const fechaLegible = formatearFechaCompleta(fechaSeleccionadaStr);
+
+                    let recomendacionHtml = '';
+                    if (infoFallback.tiempo === 'Tiempo Ordinario') {
+                        recomendacionHtml = `
+                            <div class="mt-2 text-xs text-gray-400">
+                                Código recomendado para Belltron: <span class="font-mono text-amber-400 font-bold bg-gray-950 px-1.5 py-0.5 rounded">352 - 354</span> (Llamado Misa Ferial/Dominical Ordinario)
+                            </div>
+                        `;
+                        filtroTiempo.value = "Ordinario";
+                    } else if (infoFallback.tiempo === 'Navidad' || infoFallback.tiempo === 'Adviento') {
+                        filtroTiempo.value = "Navidad";
+                    } else if (infoFallback.tiempo === 'Pascua' || infoFallback.tiempo === 'Triduo Pascual') {
+                        filtroTiempo.value = "Pascua";
+                    } else {
+                        filtroTiempo.value = "TODOS";
+                    }
+
+                    nombreFestividad.innerHTML = `
+                        <div class="flex flex-col gap-2 md:flex-row md:items-center md:gap-3">
+                            <span class="text-amber-300 font-bold">${estiloFallback.emoji} ${infoFallback.festividad}</span>
+                            <span class="text-xs bg-gray-700/50 text-gray-300 px-2.5 py-0.5 rounded border border-gray-600/30">Día Ferial / General</span>
+                            <span class="text-xs px-2.5 py-0.5 rounded ${estiloFallback.badgeClass}">${estiloFallback.emoji} ${infoFallback.tiempo}</span>
+                            <span class="text-xs text-gray-300 font-normal">(${fechaLegible})</span>
+                        </div>
+                        ${recomendacionHtml}
+                    `;
+                    bannerLiturgico.classList.remove('hidden');
+                }
+            } else {
+                // Rango de fechas seleccionado (ambas definidas y diferentes)
+                const fechaDesdeLegible = formatearFechaCompleta(desdeStr);
+                const fechaHastaLegible = formatearFechaCompleta(hastaStr);
+                nombreFestividad.innerHTML = `
+                    <div class="flex flex-col gap-1 md:flex-row md:items-center md:gap-3">
+                        <span class="text-amber-300 font-bold">Rango Seleccionado:</span>
+                        <span class="text-xs text-gray-300 font-normal">${fechaDesdeLegible} al ${fechaHastaLegible}</span>
+                    </div>
+                `;
+                bannerLiturgico.classList.remove('hidden');
+            }
+
+            renderizarMelodias();
+            renderizarCalendario();
+        }
+
+        // Renderizar la tabla del calendario litúrgico
+        function renderizarCalendario() {
+            tablaCalendarioCuerpo.innerHTML = '';
+            const itemsFiltrados = obtenerCalendarioFiltrado();
+
+            if (itemsFiltrados.length === 0) {
+                tablaCalendarioCuerpo.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">
+                            No se encontraron festividades específicas para este rango y filtro.
+                        </td>
+                    </tr>
+                `;
+                if (pestañaActiva === 'calendario') {
+                    contadorItems.textContent = "0 celebraciones";
+                }
+                return;
+            }
+
+            itemsFiltrados.forEach(item => {
+                const fila = document.createElement('tr');
+                fila.id = `cal-row-${item.fecha}`;
+                fila.className = "hover:bg-gray-800/60 transition-colors cursor-pointer border-b border-gray-700/50";
+                
+                fila.addEventListener('click', () => {
+                    fechaDesde.value = item.fecha;
+                    fechaHasta.value = item.fecha;
+                    evaluarFechaYLiturgia();
+                });
+
+                // Determinar el estilo del badge del Tipo de Celebración
+                let tipoBadgeClass = "bg-gray-950 text-gray-300 border border-gray-700";
+                if (item.tipoCeleb.includes('Solemnidad')) {
+                    tipoBadgeClass = "bg-amber-500/10 text-amber-400 border border-amber-500/30 font-semibold";
+                } else if (item.tipoCeleb.includes('Fiesta')) {
+                    tipoBadgeClass = "bg-blue-500/10 text-blue-400 border border-blue-500/30";
+                } else if (item.tipoCeleb.includes('Memoria')) {
+                    tipoBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
+                } else if (item.tipoCeleb.includes('Civil')) {
+                    tipoBadgeClass = "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30";
+                } else if (item.tipoCeleb.includes('Conmemoración')) {
+                    tipoBadgeClass = "bg-stone-500/10 text-stone-400 border border-stone-500/30";
+                } else if (item.tipoCeleb.includes('Triduo')) {
+                    tipoBadgeClass = "bg-indigo-500/10 text-indigo-400 border border-indigo-500/30";
+                } else if (item.tipoCeleb.includes('Domingo')) {
+                    tipoBadgeClass = "bg-rose-500/10 text-rose-400 border border-rose-500/30";
+                }
+
+                // Obtener el color litúrgico de la celebración y su emoji
+                const estiloCelebracion = obtenerEstiloColorLiturgico(item.colorLiturgico);
+                
+                // Obtener el color oficial del tiempo litúrgico
+                const colorTiempo = obtenerColorDelTiempo(item.tiempoLiturgico, item.colorLiturgico);
+                const estiloTiempo = obtenerEstiloColorLiturgico(colorTiempo);
+
+                fila.innerHTML = `
+                    <td class="px-6 py-4 font-medium text-gray-100 whitespace-nowrap">
+                        <div class="flex flex-col">
+                            <span class="text-sm font-semibold text-amber-400">${formatearFechaBonita(item.fecha)}</span>
+                            <span class="text-[10px] text-gray-500 font-mono">${formatearFechaCorta(item.fecha)}</span>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 font-semibold text-gray-200">
+                        ${estiloCelebracion.emoji} ${item.festividad}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="tipo-badge px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer hover:bg-opacity-20 transition-all ${tipoBadgeClass}" title="Filtrar tipo similar">
+                            ${item.tipoCeleb}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="tiempo-badge px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer hover:bg-opacity-20 transition-all ${estiloTiempo.badgeClass}" title="Filtrar tiempo similar">
+                            ${estiloTiempo.emoji} ${item.tiempoLiturgico}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 font-mono text-xs">
+                        <div class="flex flex-col">
+                            <span class="font-bold text-amber-300 text-sm">${item.idMelodia}</span>
+                            <span class="text-gray-400 text-[10px] truncate max-w-xs">${item.notas}</span>
+                        </div>
+                    </td>
+                `;
+
+                // Agregar listeners con stopPropagation para evitar el cambio de fecha por la fila
+                const btnTipo = fila.querySelector('.tipo-badge');
+                btnTipo.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    aplicarFiltroAtributo('tipo', item.tipoCeleb);
+                });
+
+                const btnTiempo = fila.querySelector('.tiempo-badge');
+                btnTiempo.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    aplicarFiltroAtributo('tiempo', item.tiempoLiturgico);
+                });
+
+                tablaCalendarioCuerpo.appendChild(fila);
+            });
+
+            if (pestañaActiva === 'calendario') {
+                contadorItems.textContent = `${itemsFiltrados.length} celebraciones`;
+            }
+        }
+
+        // Renderizar la tabla de melodías
+        function renderizarMelodias() {
+            const categoriaFiltrada = filtroTiempo.value;
+            tablaCuerpo.innerHTML = '';
+
+            const melodiasFiltradas = melodias.filter(m => {
+                if (categoriaFiltrada === 'TODOS') return true;
+                return m.cat === categoriaFiltrada;
+            });
+
+            if (melodiasFiltradas.length === 0) {
+                tablaCuerpo.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">
+                            No se encontraron melodías específicas para este filtro. Prueba seleccionando 'Todas las melodías'.
+                        </td>
+                    </tr>
+                `;
+                if (pestañaActiva === 'catalogo') {
+                    contadorItems.textContent = "0 melodías";
+                }
+                return;
+            }
+
+            melodiasFiltradas.forEach(m => {
+                const fila = document.createElement('tr');
+                fila.className = "hover:bg-gray-800/60 transition-colors border-b border-gray-700/50";
+
+                // Buscar fechas recomendadas en el calendario litúrgico de 2026 para esta melodía
+                const cleanNum = m.num.replace('*', '');
+                const fechasCoincidentes = calendarioLiturgico.filter(item => {
+                    const ids = item.idMelodia.split('/').map(s => s.trim());
+                    return ids.includes(cleanNum);
+                });
+
+                let fechasHtml = '';
+                if (fechasCoincidentes.length > 0) {
+                    fechasHtml = fechasCoincidentes.map(item => {
+                        return `
+                            <div class="mb-1 last:mb-0 flex items-center gap-1.5">
+                                <span class="text-xs font-semibold text-amber-400 font-mono cursor-pointer hover:underline" 
+                                      onclick="filtrarPorFechaYVerCalendario('${item.fecha}')"
+                                      title="Ver en Calendario">
+                                    📅 ${formatearFechaCorta(item.fecha)}
+                                </span>
+                                <span class="text-[10px] text-gray-400">(${item.festividad})</span>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    fechasHtml = `<span class="text-xs text-gray-500 italic">Uso general / s.n.</span>`;
+                }
+
+                fila.innerHTML = `
+                    <td class="px-6 py-4 font-mono font-bold text-amber-400 text-sm">${m.num}</td>
+                    <td class="px-6 py-4 font-semibold text-gray-200">${m.titulo || m.status}</td>
+                    <td class="px-6 py-4 text-xs text-gray-400 font-mono">${m.desc}</td>
+                    <td class="px-6 py-4">
+                        <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-gray-950 text-gray-300 border border-gray-700 whitespace-nowrap">
+                            ${m.tiempo}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-col">
+                            ${fechasHtml}
+                        </div>
+                    </td>
+                `;
+                tablaCuerpo.appendChild(fila);
+            });
+
+            if (pestañaActiva === 'catalogo') {
+                contadorItems.textContent = `${melodiasFiltradas.length} melodías`;
+            }
+        }
+
+        // Aplica filtro por atributo tipo/tiempo al hacer clic
+        window.aplicarFiltroAtributo = function(tipo, valor) {
+            if (tipo === 'tipo') {
+                filtroTipoCelebActivo = valor;
+            } else if (tipo === 'tiempo') {
+                filtroTiempoLiturgicoActivo = valor;
+            }
+            actualizarBarraFiltros();
+            renderizarCalendario();
+            
+            // Si la pestaña activa es catálogo, cambiar a calendario para ver los resultados
+            if (pestañaActiva === 'catalogo') {
+                cambiarPestana('calendario');
+            } else {
+                // Actualizar los contadores en la pestaña del catálogo
+                renderizarMelodias();
+            }
+        };
+
+        // Remueve filtro interactivo por atributo
+        window.removerFiltro = function(tipo) {
+            if (tipo === 'tipo') {
+                filtroTipoCelebActivo = null;
+            } else if (tipo === 'tiempo') {
+                filtroTiempoLiturgicoActivo = null;
+            }
+            actualizarBarraFiltros();
+            renderizarCalendario();
+            renderizarMelodias();
+        };
+
+        // Actualiza el contenedor visual de "Filtros Activos"
+        function actualizarBarraFiltros() {
+            const barra = document.getElementById('barra-filtros-activos');
+            const chipTipo = document.getElementById('filtro-activo-tipo');
+            const chipTiempo = document.getElementById('filtro-activo-tiempo');
+            const textoTipo = document.getElementById('texto-filtro-tipo');
+            const textoTiempo = document.getElementById('texto-filtro-tiempo');
+
+            let algunFiltroActivo = false;
+
+            if (filtroTipoCelebActivo) {
+                textoTipo.textContent = `Tipo: ${filtroTipoCelebActivo}`;
+                chipTipo.style.display = 'flex';
+                algunFiltroActivo = true;
+            } else {
+                chipTipo.style.display = 'none';
+            }
+
+            if (filtroTiempoLiturgicoActivo) {
+                textoTiempo.textContent = `Tiempo: ${filtroTiempoLiturgicoActivo}`;
+                chipTiempo.style.display = 'flex';
+                algunFiltroActivo = true;
+            } else {
+                chipTiempo.style.display = 'none';
+            }
+
+            if (algunFiltroActivo) {
+                barra.classList.remove('hidden');
+            } else {
+                barra.classList.add('hidden');
+            }
+        }
+
+        // Función global para filtrar por fecha y alternar al calendario
+        window.filtrarPorFechaYVerCalendario = function(fecha) {
+            fechaDesde.value = fecha;
+            fechaHasta.value = fecha;
+            evaluarFechaYLiturgia();
+            cambiarPestana('calendario');
+            resaltarFila(fecha);
+        };
+
+        // Alternar visualización entre pestañas
+        function cambiarPestana(pestana) {
+            pestañaActiva = pestana;
+            if (pestana === 'calendario') {
+                tabCalendario.className = "pb-3 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 focus:outline-none transition-all cursor-pointer";
+                tabCatalogo.className = "pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer";
+                panelCalendario.classList.remove('hidden');
+                panelCatalogo.classList.add('hidden');
+                
+                const totalCelebraciones = obtenerCalendarioFiltrado().length;
+                contadorItems.textContent = `${totalCelebraciones} celebraciones`;
+            } else {
+                tabCatalogo.className = "pb-3 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 focus:outline-none transition-all cursor-pointer";
+                tabCalendario.className = "pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer";
+                panelCatalogo.classList.remove('hidden');
+                panelCalendario.classList.add('hidden');
+                
+                const totalMelodias = melodias.filter(m => {
+                    const categoriaFiltrada = filtroTiempo.value;
+                    if (categoriaFiltrada === 'TODOS') return true;
+                    return m.cat === categoriaFiltrada;
+                }).length;
+                contadorItems.textContent = `${totalMelodias} melodías`;
+            }
+        }
+
+        // Resaltar visualmente una fila en la tabla del calendario
+        function resaltarFila(fecha) {
+            document.querySelectorAll('#tabla-calendario-cuerpo tr').forEach(r => {
+                r.classList.remove('bg-amber-500/10', 'border-amber-500/30');
+            });
+            
+            const fila = document.getElementById(`cal-row-${fecha}`);
+            if (fila) {
+                fila.classList.add('bg-amber-500/10', 'border-amber-500/30');
+                if (pestañaActiva === 'calendario') {
+                    fila.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
