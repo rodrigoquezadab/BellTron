@@ -110,6 +110,9 @@
                         <button id="tab-catalogo" class="pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer">
                             🎵 Catálogo de Melodías
                         </button>
+                        <button id="tab-programas" class="pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer">
+                            📋 Programas Predeterminados
+                        </button>
                     </div>
                     <span id="contador-items"
                         class="text-xs bg-gray-950 px-2.5 py-1 rounded-full text-gray-400 font-mono mb-3">0 celebraciones</span>
@@ -160,6 +163,86 @@
                         <tbody id="tabla-cuerpo" class="divide-y divide-gray-800">
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Tab 3: Programas Predeterminados y Registros -->
+                <div id="panel-programas" class="p-6 hidden">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                        
+                        <!-- Columna Izquierda: Editor de Programas -->
+                        <div class="lg:col-span-4 space-y-6">
+                            <div class="bg-gray-900/40 p-5 rounded-xl border border-gray-700 sticky top-24">
+                                <h3 id="editor-titulo" class="text-md font-semibold text-amber-400 mb-2 flex items-center gap-2">
+                                    📝 Agregar Programa
+                                </h3>
+                                <p class="text-xs text-gray-400 mb-4">
+                                    Define o edita programas de melodías litúrgicas. Los cambios se guardarán localmente.
+                                </p>
+                                
+                                <form id="form-registro" class="space-y-4">
+                                    <input type="hidden" id="reg-id" value="">
+                                    
+                                    <div>
+                                        <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1 font-semibold">Título o Festividad</label>
+                                        <input type="text" id="reg-titulo" required placeholder="Ej. Domingo de Pascua"
+                                            class="w-full bg-gray-950 border border-gray-700 rounded px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-amber-500 transition">
+                                    </div>
+                                    
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <div>
+                                            <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1 font-semibold">Color Litúrgico</label>
+                                            <select id="reg-color" required
+                                                class="w-full bg-gray-950 border border-gray-700 rounded px-2 py-2 text-xs text-gray-200 focus:outline-none focus:border-amber-500 transition">
+                                                <option value="blanco">⬜ Blanco / Oro</option>
+                                                <option value="verde">🟩 Verde (Ordinario)</option>
+                                                <option value="rojo">🟥 Rojo (Pentecostés)</option>
+                                                <option value="morado">🟪 Morado (Adv/Cua)</option>
+                                                <option value="gris">⬜ Otros / Gris</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1 font-semibold">Fecha (Opcional)</label>
+                                            <input type="date" id="reg-fecha"
+                                                class="w-full bg-gray-950 border border-gray-700 rounded px-2 py-2 text-xs text-gray-200 focus:outline-none focus:border-amber-500 transition">
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label class="block text-[11px] font-medium text-gray-400 uppercase tracking-wider mb-1 font-semibold">Descripción o Configuración de Toques</label>
+                                        <textarea id="reg-texto" required rows="6" placeholder="Ej. &#10;🔔 12:00 -> 53 (Risuscito)&#10;🔔 12:15 -> 150 (Alleluya)&#10;🔔 12:30 -> 53 (Risuscito)"
+                                            class="w-full bg-gray-950 border border-gray-700 rounded px-3 py-2 text-xs text-gray-200 focus:outline-none focus:border-amber-500 transition resize-none font-mono"></textarea>
+                                    </div>
+                                    
+                                    <div class="flex gap-2">
+                                        <button type="submit" id="btn-guardar-programa"
+                                            class="flex-1 bg-amber-500 hover:bg-amber-600 text-gray-950 font-semibold py-2 px-4 rounded text-xs transition cursor-pointer">
+                                            💾 Guardar
+                                        </button>
+                                        <button type="button" id="btn-cancelar-edicion" class="hidden flex-1 bg-gray-700 hover:bg-gray-600 text-gray-200 font-semibold py-2 px-4 rounded text-xs transition cursor-pointer">
+                                            🚫 Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                        <!-- Columna Derecha: Listado Unificado -->
+                        <div class="lg:col-span-8 space-y-6">
+                            <div class="bg-gray-900/40 p-5 rounded-xl border border-gray-700">
+                                <h3 class="text-md font-semibold text-gray-200 mb-4 flex items-center justify-between">
+                                    <span>📋 Programas Litúrgicos y Registros</span>
+                                    <button id="btn-borrar-todos-logs" class="text-[10px] text-red-400 hover:text-red-300 font-mono transition cursor-pointer font-bold">
+                                        ⚠️ Vaciar Lista
+                                    </button>
+                                </h3>
+                                
+                                <div id="lista-registros" class="space-y-4 overflow-y-auto pr-1">
+                                    <!-- Carga dinámica -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </section>
@@ -1241,8 +1324,8 @@
         "num":  "192",
         "titulo":  "O SANTISS.",
         "desc":  "O SANTISSIMA (scuola siciliana XVIII sec.)",
-        "tiempo":  "Mariano Tradicional",
-        "cat":  "MARIA"
+        "tiempo":  "Mariano Tradicional / Pascua",
+        "cat":  "MARIA / Pascua"
     },
     {
         "num":  "193",
@@ -1943,10 +2026,25 @@
         
         const tabCalendario = document.getElementById('tab-calendario');
         const tabCatalogo = document.getElementById('tab-catalogo');
+        const tabProgramas = document.getElementById('tab-programas');
         const panelCalendario = document.getElementById('panel-calendario');
         const panelCatalogo = document.getElementById('panel-catalogo');
+        const panelProgramas = document.getElementById('panel-programas');
 
-        let pestañaActiva = 'calendario'; // 'calendario' | 'catalogo'
+        const formRegistro = document.getElementById('form-registro');
+        const regId = document.getElementById('reg-id');
+        const regTitulo = document.getElementById('reg-titulo');
+        const regColor = document.getElementById('reg-color');
+        const regFecha = document.getElementById('reg-fecha');
+        const regTexto = document.getElementById('reg-texto');
+        const listaRegistros = document.getElementById('lista-registros');
+        const btnBorrarTodosLogs = document.getElementById('btn-borrar-todos-logs');
+        const editorTitulo = document.getElementById('editor-titulo');
+        const btnGuardarPrograma = document.getElementById('btn-guardar-programa');
+        const btnCancelarEdicion = document.getElementById('btn-cancelar-edicion');
+
+        let pestañaActiva = 'calendario'; // 'calendario' | 'catalogo' | 'programas'
+        let idEditando = null;
         let filtroTipoCelebActivo = null;
         let filtroTiempoLiturgicoActivo = null;
 
@@ -1960,6 +2058,9 @@
             actualizarBarraFiltros();
             evaluarFechaYLiturgia();
             cambiarPestana('calendario');
+            
+            // Cargar y mostrar bitácora
+            inicializarBitacora();
         });
 
         // Eventos
@@ -1989,6 +2090,7 @@
 
         tabCalendario.addEventListener('click', () => cambiarPestana('calendario'));
         tabCatalogo.addEventListener('click', () => cambiarPestana('catalogo'));
+        tabProgramas.addEventListener('click', () => cambiarPestana('programas'));
 
         // Establecer el input de fecha al día actual
         function establecerFechaHoy() {
@@ -2311,7 +2413,7 @@
 
             const melodiasFiltradas = melodias.filter(m => {
                 if (categoriaFiltrada === 'TODOS') return true;
-                return m.cat === categoriaFiltrada;
+                return m.cat && m.cat.split('/').map(c => c.trim()).includes(categoriaFiltrada);
             });
 
             if (melodiasFiltradas.length === 0) {
@@ -2456,28 +2558,302 @@
         // Alternar visualización entre pestañas
         function cambiarPestana(pestana) {
             pestañaActiva = pestana;
+            
+            // Reset tab styles
+            tabCalendario.className = "pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer";
+            tabCatalogo.className = "pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer";
+            tabProgramas.className = "pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer";
+            
+            // Hide all panels
+            panelCalendario.classList.add('hidden');
+            panelCatalogo.classList.add('hidden');
+            panelProgramas.classList.add('hidden');
+            
             if (pestana === 'calendario') {
                 tabCalendario.className = "pb-3 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 focus:outline-none transition-all cursor-pointer";
-                tabCatalogo.className = "pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer";
                 panelCalendario.classList.remove('hidden');
-                panelCatalogo.classList.add('hidden');
                 
                 const totalCelebraciones = obtenerCalendarioFiltrado().length;
                 contadorItems.textContent = `${totalCelebraciones} celebraciones`;
-            } else {
+            } else if (pestana === 'catalogo') {
                 tabCatalogo.className = "pb-3 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 focus:outline-none transition-all cursor-pointer";
-                tabCalendario.className = "pb-3 text-sm font-semibold border-b-2 border-transparent text-gray-400 hover:text-gray-200 focus:outline-none transition-all cursor-pointer";
                 panelCatalogo.classList.remove('hidden');
-                panelCalendario.classList.add('hidden');
                 
                 const totalMelodias = melodias.filter(m => {
                     const categoriaFiltrada = filtroTiempo.value;
                     if (categoriaFiltrada === 'TODOS') return true;
-                    return m.cat === categoriaFiltrada;
+                    return m.cat && m.cat.split('/').map(c => c.trim()).includes(categoriaFiltrada);
                 }).length;
                 contadorItems.textContent = `${totalMelodias} melodías`;
+            } else if (pestana === 'programas') {
+                tabProgramas.className = "pb-3 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 focus:outline-none transition-all cursor-pointer";
+                panelProgramas.classList.remove('hidden');
+                
+                const totalLogs = obtenerTotalLogs();
+                contadorItems.textContent = `${totalLogs} registros`;
             }
         }
+
+        // Lógica de Bitácora / Registros en localStorage
+        const STORAGE_KEY = 'belltron_bitacora_logs';
+
+        function inicializarBitacora() {
+            // Si no hay nada en localStorage, precargamos los 3 presets y el registro del usuario
+            if (!localStorage.getItem(STORAGE_KEY)) {
+                const logsIniciales = [
+                    {
+                        id: "preset-pascua",
+                        titulo: "Domingo de Pascua",
+                        color: "blanco",
+                        fecha: "",
+                        texto: "🔔 12:00 -> 53 o 92 (Regina Coeli / Risuscito)\n🔔 12:15 -> 150 (Alleluya Pasquale)\n🔔 12:30 -> 53 (Risuscito)"
+                    },
+                    {
+                        id: "preset-pentecostes",
+                        titulo: "Domingo de Pentecostés",
+                        color: "rojo",
+                        fecha: "",
+                        texto: "🔔 12:00 -> 285 o 282 (Llamado Ordinario)\n🔔 12:15 -> 153 (Veni Creatore Gregoriano)\n🔔 12:30 -> 153 (Veni Creatore Gregoriano)"
+                    },
+                    {
+                        id: "preset-ordinario",
+                        titulo: "Domingo del Tiempo Ordinario",
+                        color: "verde",
+                        fecha: "",
+                        texto: "🔔 12:00 -> 285 (Angelus 3-3-3) o 282\n🔔 12:15 -> 354 (Distesa 120s Dom. 4 Camp.)\n🔔 12:30 -> 354 o 285"
+                    },
+                    {
+                        id: "user-pascua-2026",
+                        titulo: "Pascua de Resurrección 2026",
+                        color: "blanco",
+                        fecha: "2026-04-05",
+                        texto: "En esta pascua usamos las melodías 92, 150 y 53 para los horarios de llamado de domingo correspondientes a 12:00, 12:15 y 12:30 respectivamente."
+                    }
+                ];
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(logsIniciales));
+            }
+            renderizarRegistros();
+
+            // Configurar fecha del formulario por defecto al día de hoy
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dd = String(hoy.getDate()).padStart(2, '0');
+            regFecha.value = `${yyyy}-${mm}-${dd}`;
+        }
+
+        function obtenerTotalLogs() {
+            try {
+                const logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                return logs.length;
+            } catch (e) {
+                return 0;
+            }
+        }
+
+        function renderizarRegistros() {
+            listaRegistros.innerHTML = '';
+            let logs = [];
+            try {
+                logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch (e) {
+                logs = [];
+            }
+
+            if (logs.length === 0) {
+                listaRegistros.innerHTML = `
+                    <div class="p-8 bg-gray-950/40 border border-dashed border-gray-800 rounded-lg text-center text-xs text-gray-500">
+                        No hay programas o registros guardados.
+                    </div>
+                `;
+                return;
+            }
+
+            logs.forEach(log => {
+                const itemDiv = document.createElement('div');
+                
+                // Determinar el estilo de la tarjeta según el color litúrgico
+                let cardBorderClass = "border-gray-800 hover:border-gray-700 bg-gray-950/60";
+                let badgeClass = "bg-gray-800 text-gray-300 border-gray-700";
+                
+                if (log.color === 'blanco') {
+                    cardBorderClass = "border-amber-500/20 hover:border-amber-500/40 bg-amber-950/5";
+                    badgeClass = "bg-amber-500/10 text-amber-400 border-amber-500/20";
+                } else if (log.color === 'verde') {
+                    cardBorderClass = "border-emerald-500/20 hover:border-emerald-500/40 bg-emerald-950/5";
+                    badgeClass = "bg-emerald-500/10 text-emerald-400 border-emerald-500/20";
+                } else if (log.color === 'rojo') {
+                    cardBorderClass = "border-red-500/20 hover:border-red-500/40 bg-red-950/5";
+                    badgeClass = "bg-red-500/10 text-red-400 border-red-500/20";
+                } else if (log.color === 'morado') {
+                    cardBorderClass = "border-purple-500/20 hover:border-purple-500/40 bg-purple-950/5";
+                    badgeClass = "bg-purple-500/10 text-purple-400 border-purple-500/20";
+                }
+                
+                const fechaTexto = log.fecha ? ` 📅 ${formatearFechaCorta(log.fecha)}` : "";
+                
+                itemDiv.className = `p-4 rounded-lg border ${cardBorderClass} flex justify-between gap-4 items-start transition`;
+                itemDiv.innerHTML = `
+                    <div class="space-y-2 flex-1 text-left">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-xs font-bold text-gray-100 text-sm">${log.titulo}</span>
+                            ${log.fecha ? `<span class="text-[10px] text-gray-400 font-mono font-semibold">${fechaTexto}</span>` : ''}
+                            <span class="text-[9px] uppercase font-semibold border px-2 py-0.5 rounded ${badgeClass}">${log.color}</span>
+                        </div>
+                        <p class="text-xs text-gray-300 leading-relaxed font-mono whitespace-pre-wrap bg-gray-950/40 p-2.5 rounded border border-gray-900/60">${log.texto}</p>
+                    </div>
+                    <div class="flex items-center gap-1.5 self-start">
+                        <button onclick="cargarEditarLog('${log.id}')" class="text-gray-500 hover:text-amber-400 font-mono transition text-xs cursor-pointer px-1.5 py-0.5 rounded border border-gray-800 hover:border-amber-500/20 bg-gray-900/40" title="Editar Programa">
+                            Editar
+                        </button>
+                        <button onclick="eliminarLog('${log.id}')" class="text-gray-500 hover:text-red-400 font-mono transition text-xs cursor-pointer px-1.5 py-0.5 rounded border border-gray-800 hover:border-red-500/20 bg-gray-900/40" title="Eliminar">
+                            Eliminar
+                        </button>
+                    </div>
+                `;
+                listaRegistros.appendChild(itemDiv);
+            });
+        }
+
+        // Cargar datos en el editor para modificar
+        window.cargarEditarLog = function(id) {
+            let logs = [];
+            try {
+                logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch (e) {
+                logs = [];
+            }
+
+            const log = logs.find(l => l.id === id);
+            if (!log) return;
+
+            idEditando = id;
+            regId.value = log.id;
+            regTitulo.value = log.titulo;
+            regColor.value = log.color || 'blanco';
+            regFecha.value = log.fecha || '';
+            regTexto.value = log.texto;
+
+            editorTitulo.innerHTML = `✏️ Editar Programa`;
+            btnGuardarPrograma.textContent = "💾 Guardar Cambios";
+            btnCancelarEdicion.classList.remove('hidden');
+            
+            // Hacer scroll suave hacia el editor
+            document.getElementById('panel-programas').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+
+        // Cancelar edición
+        btnCancelarEdicion.addEventListener('click', resetearFormularioEditor);
+
+        function resetearFormularioEditor() {
+            idEditando = null;
+            regId.value = '';
+            regTitulo.value = '';
+            regColor.value = 'blanco';
+            
+            // Resetear fecha a la de hoy
+            const hoy = new Date();
+            const yyyy = hoy.getFullYear();
+            const mm = String(hoy.getMonth() + 1).padStart(2, '0');
+            const dd = String(hoy.getDate()).padStart(2, '0');
+            regFecha.value = `${yyyy}-${mm}-${dd}`;
+            
+            regTexto.value = '';
+
+            editorTitulo.innerHTML = `📝 Agregar Programa`;
+            btnGuardarPrograma.textContent = "💾 Guardar";
+            btnCancelarEdicion.classList.add('hidden');
+        }
+
+        // Registrar envío del formulario (Creación o Edición)
+        formRegistro.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const tituloVal = regTitulo.value.trim();
+            const colorVal = regColor.value;
+            const fechaVal = regFecha.value;
+            const textoVal = regTexto.value.trim();
+
+            if (!tituloVal || !textoVal) return;
+
+            let logs = [];
+            try {
+                logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch (e) {
+                logs = [];
+            }
+
+            if (idEditando) {
+                // Modo Edición: Actualizar registro
+                logs = logs.map(log => {
+                    if (log.id === idEditando) {
+                        return {
+                            ...log,
+                            titulo: tituloVal,
+                            color: colorVal,
+                            fecha: fechaVal,
+                            texto: textoVal
+                        };
+                    }
+                    return log;
+                });
+            } else {
+                // Modo Creación: Añadir nuevo registro
+                const nuevoLog = {
+                    id: Date.now().toString(),
+                    titulo: tituloVal,
+                    color: colorVal,
+                    fecha: fechaVal,
+                    texto: textoVal
+                };
+                logs.push(nuevoLog);
+            }
+
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+            resetearFormularioEditor();
+            renderizarRegistros();
+            
+            if (pestañaActiva === 'programas') {
+                contadorItems.textContent = `${logs.length} registros`;
+            }
+        });
+
+        // Eliminar registro individual
+        window.eliminarLog = function(id) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este programa o registro? Se borrará permanentemente.')) return;
+            
+            let logs = [];
+            try {
+                logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+            } catch (e) {
+                logs = [];
+            }
+
+            logs = logs.filter(log => log.id !== id);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+
+            // Si se estaba editando justo el registro que se eliminó, cancelamos la edición
+            if (idEditando === id) {
+                resetearFormularioEditor();
+            }
+
+            renderizarRegistros();
+
+            if (pestañaActiva === 'programas') {
+                contadorItems.textContent = `${logs.length} registros`;
+            }
+        };
+
+        // Borrar todos los logs
+        btnBorrarTodosLogs.addEventListener('click', () => {
+            if (!confirm('¿Estás seguro de que deseas vaciar por completo la lista? Se perderán todos los programas y registros.')) return;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+            resetearFormularioEditor();
+            renderizarRegistros();
+
+            if (pestañaActiva === 'programas') {
+                contadorItems.textContent = `0 registros`;
+            }
+        });
 
         // Resaltar visualmente una fila en la tabla del calendario
         function resaltarFila(fecha) {

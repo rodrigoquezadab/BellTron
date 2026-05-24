@@ -258,7 +258,7 @@ A continuación se detalla la base de datos de melodías indexadas por su númer
 | **189** | [cite_start]AVEFATIMA [cite: 4] | [cite_start]AVE FATIMA 13 MAGGIO [cite: 4] | [cite_start]Fiesta de la Virgen de Fátima [cite: 4] |
 | **190** | [cite_start]IMMACOLATA [cite: 4] | [cite_start]IMMACOLATA [cite: 4] | [cite_start]Inmaculada Concepción (8 Dic) [cite: 4] |
 | **191** | [cite_start]MIRA POPOL [cite: 4] | [cite_start]MIRA IL TUO POPOLO [cite: 4] | [cite_start]Devocional Mariano [cite: 4] |
-| **192** | [cite_start]O SANTISS. [cite: 4] | [cite_start]O SANTISSIMA (scuola siciliana XVIII sec.) [cite: 4] | [cite_start]Mariano Tradicional [cite: 4] |
+| **192** | [cite_start]O SANTISS. [cite: 4] | [cite_start]O SANTISSIMA (scuola siciliana XVIII sec.) [cite: 4] | [cite_start]Mariano Tradicional / Pascua [cite: 4] |
 | **193** | [cite_start]MADRE SANT [cite: 4] | [cite_start]MADRE SANTA (P.Decha-L.Thielleux) [cite: 4] | [cite_start]Mariano [cite: 4] |
 | **194** | [cite_start]MAR.SANTIS [cite: 4] | [cite_start]O MARIA SANTISSIMA (tradizionale) [cite: 4] | [cite_start]Mariano Tradicional [cite: 4] |
 | **195** | [cite_start]MARIS STEL [cite: 4] | [cite_start]AVE MARIS STELLA (tradizionale) [cite: 4] | [cite_start]Mariano / Fiestas del Mar [cite: 4] |
@@ -596,3 +596,11 @@ Exclusividad Patriótica Chilena: Por manuscrito en el repertorio
 , la melodía 117 (VIRGEN DEL CARMEN) tiene una doble obligación: debe sonar tanto para su solemnidad religiosa (16 de julio) como obligatoriamente durante las Fiestas Patrias de Chile los días 18 y 19 de septiembre, vinculando a la patrona con el país.
 Santos Nacionales sin Melodía Específica: Puesto que Santa Teresa de Los Andes y San Alberto Hurtado no tienen pistas italianas con su nombre (como sí los tienen santos europeos en las pistas 222-234), el criterio establecido es asignarles cantos de discipulado litúrgico en español como "Juntos como hermanos" (119) y "Canto per Cristo" (102).
 Tiempos de Silencio: Durante el Triduo Pascual (desde el Gloria del Jueves Santo hasta la Vigilia Pascual), el campanario no debe ejecutar repiques alegres ni distesas, limitándose solo a melodías estrictamente penitenciales o de la pasión si fuera absolutamente necesario marcar un rito, pero tradicionalmente se recomienda silenciar.
+
+--------------------------------------------------------------------------------
+6. REGISTROS Y BITÁCORA DE CONFIGURACIÓN (HERRAMIENTA WEB)
+
+La aplicación web del Gestor de Campanario incluye una pestaña dedicada a "Programas Predeterminados" que integra en una sola interfaz interactiva y editable tanto los presets de referencia rápida como los registros personalizados del operador:
+
+* **Base de Datos Unificada (Almacenamiento Local)**: Todos los programas (incluidos los de referencia para Pascua, Pentecostés, Tiempo Ordinario y bitácoras personalizadas de uso) se almacenan de manera unificada y persistente en el navegador (`localStorage`).
+* **Editor Litúrgico Integrado**: Permite crear, modificar y eliminar cualquier registro de la lista. El formulario admite definir un título, asignar un color litúrgico oficial (Blanco, Verde, Rojo, Morado, Gris) que decora dinámicamente la tarjeta del programa, asociar una fecha opcional y detallar la configuración de toques u horarios con soporte de formato monoespaciado.
