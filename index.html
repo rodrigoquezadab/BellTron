@@ -18,6 +18,37 @@
         input[type="date"]::-webkit-calendar-picker-indicator:hover {
             filter: invert(0.8) sepia(1) saturate(5) hue-rotate(15deg); /* Efecto ámbar al pasar el cursor */
         }
+
+        /* Estilos personalizados para el panel de sugerencias y scroll */
+        .sugerencias-scroll::-webkit-scrollbar {
+            width: 6px;
+        }
+        .sugerencias-scroll::-webkit-scrollbar-track {
+            background: rgba(17, 24, 39, 0.8);
+            border-radius: 8px;
+        }
+        .sugerencias-scroll::-webkit-scrollbar-thumb {
+            background: rgba(75, 85, 99, 0.8);
+            border-radius: 8px;
+        }
+        .sugerencias-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(245, 158, 11, 0.8);
+        }
+
+        /* Animación suave para el menú desplegable */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-6px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .animate-fadeInDown {
+            animation: fadeInDown 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
     </style>
 </head>
 
@@ -53,6 +84,41 @@
                     Selecciona una fecha para descubrir qué tiempo litúrgico o festividad corresponde y qué códigos de
                     melodía debes programar en el Belltron.
                 </p>
+
+                <!-- Barra de Búsqueda Predictiva Universal con Autocompletado -->
+                <div class="relative mb-6">
+                    <label for="buscador-coincidencias" class="block text-xs font-semibold text-amber-400 uppercase tracking-wider mb-2 flex items-center justify-between">
+                        <span class="flex items-center gap-1.5">
+                            🔍 Buscador Universal de Coincidencias
+                        </span>
+                        <span class="text-[11px] font-normal text-gray-400 lowercase hidden sm:inline">
+                            Autocompletado predictivo • Navega con ↑ ↓ y selecciona con Enter
+                        </span>
+                    </label>
+                    <div class="relative flex items-center">
+                        <div class="absolute left-3.5 text-gray-400 pointer-events-none text-base">
+                            🔎
+                        </div>
+                        <input type="text" id="buscador-coincidencias" autocomplete="off" spellcheck="false"
+                            placeholder="Escribe el nombre de una melodía (ej. Christus Vincit, Carmen), código (ej. 117, 153) o fecha/festividad (ej. Pascua, 16 Jul)..."
+                            class="w-full bg-gray-950 border border-gray-700 hover:border-gray-600 focus:border-amber-500 rounded-lg pl-10 pr-20 py-3 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-amber-500/50 shadow-inner transition">
+                        <div class="absolute right-2.5 flex items-center gap-1">
+                            <button id="btn-limpiar-busqueda" type="button" title="Limpiar búsqueda"
+                                class="hidden p-1.5 text-gray-400 hover:text-amber-400 hover:bg-gray-800 rounded-md transition text-xs font-bold cursor-pointer">
+                                ✕
+                            </button>
+                            <span class="text-[10px] bg-gray-800 text-gray-400 font-mono px-1.5 py-0.5 rounded border border-gray-700 hidden sm:inline">
+                                ESC
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Panel Flotante de Autocompletado y Coincidencias -->
+                    <div id="sugerencias-autocompletado"
+                        class="hidden absolute left-0 right-0 top-full mt-2 bg-gray-900/95 backdrop-blur-md border border-gray-700/80 rounded-xl shadow-2xl z-50 overflow-hidden max-h-[460px] overflow-y-auto sugerencias-scroll animate-fadeInDown">
+                        <!-- Carga dinámica de resultados agrupados -->
+                    </div>
+                </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                     <div>
@@ -2024,6 +2090,11 @@
         const tablaCalendarioCuerpo = document.getElementById('tabla-calendario-cuerpo');
         const contadorItems = document.getElementById('contador-items');
         
+        // Elementos del buscador universal predictivo
+        const buscadorCoincidencias = document.getElementById('buscador-coincidencias');
+        const btnLimpiarBusqueda = document.getElementById('btn-limpiar-busqueda');
+        const sugerenciasAutocompletado = document.getElementById('sugerencias-autocompletado');
+
         const tabCalendario = document.getElementById('tab-calendario');
         const tabCatalogo = document.getElementById('tab-catalogo');
         const tabProgramas = document.getElementById('tab-programas');
@@ -2048,11 +2119,286 @@
         let filtroTipoCelebActivo = null;
         let filtroTiempoLiturgicoActivo = null;
 
+        // Estado del autocompletado y coincidencias
+        let indiceSugerenciaActiva = -1;
+        let itemsSugerenciasActuales = [];
+
+        const mesesEsp = [
+            'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+            'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+        ];
+
+        // Utilidad: remover acentos y pasar a minúsculas para comparaciones insensibles a tildes
+        function removerAcentos(str) {
+            if (!str) return '';
+            return str.toString().normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        }
+
+        // Utilidad: escapar caracteres HTML para prevenir inyección en resaltados
+        function escaparHtml(str) {
+            if (!str) return '';
+            return str.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Utilidad: resaltar coincidencias encontradas dentro de una cadena
+        function resaltarCoincidencia(texto, query) {
+            if (!texto || !query) return escaparHtml(texto || '');
+            const textoStr = texto.toString();
+            const textoNorm = removerAcentos(textoStr);
+            const queryNorm = removerAcentos(query);
+            const pos = textoNorm.indexOf(queryNorm);
+            if (pos === -1) return escaparHtml(textoStr);
+
+            const antes = textoStr.substring(0, pos);
+            const match = textoStr.substring(pos, pos + query.length);
+            const despues = textoStr.substring(pos + query.length);
+            return `${escaparHtml(antes)}<mark class="bg-amber-500/30 text-amber-300 font-semibold px-0.5 rounded">${escaparHtml(match)}</mark>${escaparHtml(despues)}`;
+        }
+
+        // Función central para buscar coincidencias cruzadas entre melodías y calendario litúrgico
+        function buscarCoincidencias(query) {
+            const q = removerAcentos(query);
+            if (!q) return { melodias: [], calendario: [] };
+
+            // 1. Coincidencias en melodías
+            const melodiasCoincidentes = melodias.filter(m => {
+                const numNorm = removerAcentos(m.num);
+                const tituloNorm = removerAcentos(m.titulo || m.status);
+                const descNorm = removerAcentos(m.desc);
+                const tiempoNorm = removerAcentos(m.tiempo);
+                const catNorm = removerAcentos(m.cat);
+                return numNorm.includes(q) || tituloNorm.includes(q) || descNorm.includes(q) || tiempoNorm.includes(q) || catNorm.includes(q);
+            });
+
+            // 2. Coincidencias en calendario litúrgico
+            const calendarioCoincidente = calendarioLiturgico.filter(item => {
+                const festividadNorm = removerAcentos(item.festividad);
+                const fechaNorm = removerAcentos(item.fecha);
+                const fechaCortaNorm = removerAcentos(formatearFechaCorta(item.fecha));
+                const mesNombre = mesesEsp[item.mes] || '';
+                const idMelodiaNorm = removerAcentos(item.idMelodia);
+                const tipoNorm = removerAcentos(item.tipoCeleb);
+                const tiempoNorm = removerAcentos(item.tiempoLiturgico);
+                const notasNorm = removerAcentos(item.notas);
+
+                return festividadNorm.includes(q) ||
+                       fechaNorm.includes(q) ||
+                       fechaCortaNorm.includes(q) ||
+                       mesNombre.includes(q) ||
+                       idMelodiaNorm.includes(q) ||
+                       tipoNorm.includes(q) ||
+                       tiempoNorm.includes(q) ||
+                       notasNorm.includes(q);
+            });
+
+            return { melodias: melodiasCoincidentes, calendario: calendarioCoincidente };
+        }
+
+        // Renderizar el panel flotante de autocompletado y coincidencias
+        function renderizarDropdownSugerencias(query) {
+            const q = query.trim();
+            if (!q) {
+                ocultarDropdownSugerencias();
+                return;
+            }
+
+            const { melodias: melList, calendario: calList } = buscarCoincidencias(q);
+            const totalCoincidencias = melList.length + calList.length;
+
+            itemsSugerenciasActuales = [];
+            indiceSugerenciaActiva = -1;
+
+            if (totalCoincidencias === 0) {
+                sugerenciasAutocompletado.innerHTML = `
+                    <div class="p-6 text-center text-sm text-gray-400">
+                        <span class="text-xl block mb-2">🔍</span>
+                        No se encontraron coincidencias para "<span class="text-amber-300 font-semibold">${escaparHtml(q)}</span>".
+                        <p class="text-xs text-gray-500 mt-1">Prueba con un nombre (ej. Carmen, Pascua), código numérico (ej. 117, 153) o mes (ej. Julio, Diciembre).</p>
+                    </div>
+                `;
+                sugerenciasAutocompletado.classList.remove('hidden');
+                return;
+            }
+
+            let html = `<div class="divide-y divide-gray-800">`;
+
+            // Sección 1: Melodías encontradas (hasta 6)
+            if (melList.length > 0) {
+                const mostrarMel = melList.slice(0, 6);
+                html += `
+                    <div class="p-2.5 bg-gray-950/60 text-xs font-semibold text-amber-400 uppercase tracking-wider flex items-center justify-between">
+                        <span class="flex items-center gap-1.5">🎵 Melodías Coincidentes (${melList.length})</span>
+                        <span class="text-[10px] font-normal text-gray-400">Clic para ver en catálogo</span>
+                    </div>
+                    <div class="p-1.5 space-y-1">
+                `;
+
+                mostrarMel.forEach((m) => {
+                    const indexGlobal = itemsSugerenciasActuales.length;
+                    itemsSugerenciasActuales.push({ tipo: 'melodia', data: m });
+
+                    // Identificar si tiene fechas recomendadas asociadas en 2026
+                    const cleanNum = m.num.replace('*', '');
+                    const fechasAsoc = calendarioLiturgico.filter(c => c.idMelodia.split('/').map(s => s.trim()).includes(cleanNum));
+                    let infoFechas = '';
+                    if (fechasAsoc.length > 0) {
+                        const fechasText = fechasAsoc.slice(0, 2).map(c => formatearFechaCorta(c.fecha)).join(', ');
+                        infoFechas = `<span class="text-[10px] text-amber-400/90 font-mono">📅 ${fechasText}${fechasAsoc.length > 2 ? '...' : ''}</span>`;
+                    }
+
+                    html += `
+                        <div class="sugerencia-item p-2.5 rounded-lg hover:bg-gray-800 cursor-pointer transition flex items-center justify-between gap-3 group"
+                             data-indice="${indexGlobal}"
+                             onclick="seleccionarSugerencia(${indexGlobal})">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <span class="px-2 py-1 rounded bg-amber-500/10 text-amber-400 font-mono font-bold text-xs border border-amber-500/20 group-hover:bg-amber-500/20">
+                                    ID ${resaltarCoincidencia(m.num, q)}
+                                </span>
+                                <div class="truncate">
+                                    <div class="text-xs font-semibold text-gray-200 group-hover:text-amber-300 transition">
+                                        ${resaltarCoincidencia(m.titulo || m.status, q)}
+                                    </div>
+                                    <div class="text-[11px] text-gray-400 font-mono truncate">
+                                        ${resaltarCoincidencia(m.desc, q)}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end gap-1 shrink-0">
+                                <span class="text-[10px] px-2 py-0.5 rounded-full bg-gray-950 text-gray-300 border border-gray-700">
+                                    ${resaltarCoincidencia(m.tiempo, q)}
+                                </span>
+                                ${infoFechas}
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            // Sección 2: Fechas & Festividades litúrgicas encontradas (hasta 6)
+            if (calList.length > 0) {
+                const mostrarCal = calList.slice(0, 6);
+                html += `
+                    <div class="p-2.5 bg-gray-950/60 text-xs font-semibold text-blue-400 uppercase tracking-wider flex items-center justify-between border-t border-gray-800">
+                        <span class="flex items-center gap-1.5">📅 Fechas & Festividades (${calList.length})</span>
+                        <span class="text-[10px] font-normal text-gray-400">Clic para saltar al calendario</span>
+                    </div>
+                    <div class="p-1.5 space-y-1">
+                `;
+
+                mostrarCal.forEach((c) => {
+                    const indexGlobal = itemsSugerenciasActuales.length;
+                    itemsSugerenciasActuales.push({ tipo: 'calendario', data: c });
+
+                    const estiloCeleb = obtenerEstiloColorLiturgico(c.colorLiturgico);
+
+                    html += `
+                        <div class="sugerencia-item p-2.5 rounded-lg hover:bg-gray-800 cursor-pointer transition flex items-center justify-between gap-3 group"
+                             data-indice="${indexGlobal}"
+                             onclick="seleccionarSugerencia(${indexGlobal})">
+                            <div class="flex items-center gap-3 min-w-0">
+                                <span class="px-2 py-1 rounded bg-blue-500/10 text-blue-400 font-mono font-bold text-xs border border-blue-500/20 group-hover:bg-blue-500/20 whitespace-nowrap">
+                                    ${resaltarCoincidencia(formatearFechaCorta(c.fecha), q)}
+                                </span>
+                                <div class="truncate">
+                                    <div class="text-xs font-semibold text-gray-200 group-hover:text-blue-300 transition flex items-center gap-1.5">
+                                        <span>${estiloCeleb.emoji}</span>
+                                        <span class="truncate">${resaltarCoincidencia(c.festividad, q)}</span>
+                                    </div>
+                                    <div class="text-[11px] text-gray-400 truncate">
+                                        ${resaltarCoincidencia(c.tipoCeleb, q)} • <span class="text-gray-400">${resaltarCoincidencia(c.tiempoLiturgico, q)}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-end gap-1 shrink-0">
+                                <span class="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20 font-mono font-bold">
+                                    Cód: ${resaltarCoincidencia(c.idMelodia, q)}
+                                </span>
+                                <span class="text-[9px] text-gray-500 font-mono">${formatearFechaBonita(c.fecha)}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div>`;
+            }
+
+            // Pie informativo con atajos de teclado
+            html += `
+                <div class="px-4 py-2 bg-gray-950/90 border-t border-gray-800 text-[11px] text-gray-400 flex flex-wrap justify-between items-center gap-2">
+                    <span>Navega con <kbd class="px-1.5 py-0.5 bg-gray-800 text-gray-300 rounded border border-gray-700 font-mono text-[10px]">↑</kbd> <kbd class="px-1.5 py-0.5 bg-gray-800 text-gray-300 rounded border border-gray-700 font-mono text-[10px]">↓</kbd> y pulsa <kbd class="px-1.5 py-0.5 bg-gray-800 text-gray-300 rounded border border-gray-700 font-mono text-[10px]">Enter</kbd></span>
+                    <span class="text-amber-400 font-medium">${totalCoincidencias} coincidencias en total</span>
+                </div>
+            </div>`;
+
+            sugerenciasAutocompletado.innerHTML = html;
+            sugerenciasAutocompletado.classList.remove('hidden');
+        }
+
+        // Ocultar el dropdown de sugerencias
+        function ocultarDropdownSugerencias() {
+            sugerenciasAutocompletado.classList.add('hidden');
+            sugerenciasAutocompletado.innerHTML = '';
+            indiceSugerenciaActiva = -1;
+            itemsSugerenciasActuales = [];
+        }
+
+        // Ejecutar la acción al seleccionar un ítem de sugerencia
+        window.seleccionarSugerencia = function(indice) {
+            if (indice < 0 || indice >= itemsSugerenciasActuales.length) return;
+            const itemSeleccionado = itemsSugerenciasActuales[indice];
+
+            if (itemSeleccionado.tipo === 'melodia') {
+                const mel = itemSeleccionado.data;
+                buscadorCoincidencias.value = mel.titulo || mel.num;
+                btnLimpiarBusqueda.classList.remove('hidden');
+                ocultarDropdownSugerencias();
+
+                // Cambiar a pestaña catálogo y actualizar vista
+                cambiarPestana('catalogo');
+                renderizarMelodias();
+            } else if (itemSeleccionado.tipo === 'calendario') {
+                const cal = itemSeleccionado.data;
+                buscadorCoincidencias.value = cal.festividad;
+                btnLimpiarBusqueda.classList.remove('hidden');
+                fechaDesde.value = cal.fecha;
+                fechaHasta.value = cal.fecha;
+                evaluarFechaYLiturgia();
+                ocultarDropdownSugerencias();
+
+                // Cambiar a pestaña calendario y resaltar fila
+                cambiarPestana('calendario');
+                setTimeout(() => resaltarFila(cal.fecha), 80);
+            }
+        };
+
+        // Actualizar visualmente el ítem enfocado mediante teclado
+        function actualizarSeleccionTeclado(nuevoIndice) {
+            const itemsDom = sugerenciasAutocompletado.querySelectorAll('.sugerencia-item');
+            if (itemsDom.length === 0) return;
+
+            itemsDom.forEach(el => el.classList.remove('bg-amber-500/20', 'border-l-4', 'border-amber-400', 'pl-3.5'));
+
+            if (nuevoIndice >= 0 && nuevoIndice < itemsDom.length) {
+                indiceSugerenciaActiva = nuevoIndice;
+                const activo = itemsDom[indiceSugerenciaActiva];
+                activo.classList.add('bg-amber-500/20', 'border-l-4', 'border-amber-400', 'pl-3.5');
+                activo.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+                indiceSugerenciaActiva = -1;
+            }
+        }
+
         // Inicialización
         window.addEventListener('DOMContentLoaded', () => {
             // Inicializar vacío para que muestre todas las melodías por defecto ordenadas por fecha
             fechaDesde.value = '';
             fechaHasta.value = '';
+            if (buscadorCoincidencias) buscadorCoincidencias.value = '';
             filtroTipoCelebActivo = null;
             filtroTiempoLiturgicoActivo = null;
             actualizarBarraFiltros();
@@ -2063,7 +2409,80 @@
             inicializarBitacora();
         });
 
-        // Eventos
+        // Eventos del Buscador Universal Predictivo
+        if (buscadorCoincidencias) {
+            buscadorCoincidencias.addEventListener('input', (e) => {
+                const valor = e.target.value;
+                if (valor.trim()) {
+                    btnLimpiarBusqueda.classList.remove('hidden');
+                    renderizarDropdownSugerencias(valor);
+                } else {
+                    btnLimpiarBusqueda.classList.add('hidden');
+                    ocultarDropdownSugerencias();
+                }
+                // Filtrado reactivo en vivo de las tablas abiertas
+                renderizarCalendario();
+                renderizarMelodias();
+            });
+
+            buscadorCoincidencias.addEventListener('focus', (e) => {
+                const valor = e.target.value;
+                if (valor.trim()) {
+                    renderizarDropdownSugerencias(valor);
+                }
+            });
+
+            buscadorCoincidencias.addEventListener('keydown', (e) => {
+                const totalItems = itemsSugerenciasActuales.length;
+                if (sugerenciasAutocompletado.classList.contains('hidden') || totalItems === 0) {
+                    if (e.key === 'Escape') {
+                        ocultarDropdownSugerencias();
+                    }
+                    return;
+                }
+
+                if (e.key === 'ArrowDown') {
+                    e.preventDefault();
+                    const proxIndice = (indiceSugerenciaActiva + 1) >= totalItems ? 0 : indiceSugerenciaActiva + 1;
+                    actualizarSeleccionTeclado(proxIndice);
+                } else if (e.key === 'ArrowUp') {
+                    e.preventDefault();
+                    const prevIndice = (indiceSugerenciaActiva - 1) < 0 ? totalItems - 1 : indiceSugerenciaActiva - 1;
+                    actualizarSeleccionTeclado(prevIndice);
+                } else if (e.key === 'Enter') {
+                    e.preventDefault();
+                    if (indiceSugerenciaActiva >= 0 && indiceSugerenciaActiva < totalItems) {
+                        seleccionarSugerencia(indiceSugerenciaActiva);
+                    } else {
+                        ocultarDropdownSugerencias();
+                    }
+                } else if (e.key === 'Escape') {
+                    e.preventDefault();
+                    ocultarDropdownSugerencias();
+                }
+            });
+        }
+
+        // Botón limpiar específico de la barra de búsqueda
+        if (btnLimpiarBusqueda) {
+            btnLimpiarBusqueda.addEventListener('click', () => {
+                buscadorCoincidencias.value = '';
+                btnLimpiarBusqueda.classList.add('hidden');
+                ocultarDropdownSugerencias();
+                renderizarCalendario();
+                renderizarMelodias();
+                buscadorCoincidencias.focus();
+            });
+        }
+
+        // Cerrar dropdown al hacer clic fuera del buscador
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('#buscador-coincidencias') && !e.target.closest('#sugerencias-autocompletado') && !e.target.closest('#btn-limpiar-busqueda')) {
+                ocultarDropdownSugerencias();
+            }
+        });
+
+        // Eventos existentes
         fechaDesde.addEventListener('change', evaluarFechaYLiturgia);
         fechaHasta.addEventListener('change', evaluarFechaYLiturgia);
         
@@ -2081,6 +2500,9 @@
         btnLimpiar.addEventListener('click', () => {
             fechaDesde.value = '';
             fechaHasta.value = '';
+            if (buscadorCoincidencias) buscadorCoincidencias.value = '';
+            if (btnLimpiarBusqueda) btnLimpiarBusqueda.classList.add('hidden');
+            ocultarDropdownSugerencias();
             filtroTiempo.value = 'TODOS';
             filtroTipoCelebActivo = null;
             filtroTiempoLiturgicoActivo = null;
@@ -2143,13 +2565,36 @@
             return `${partes[2]}-${partes[1]}-${partes[0]}`;
         }
 
-        // Obtiene la lista del calendario filtrado por rango de fecha, categoría y filtros interactivos, ordenada cronológicamente
+        // Obtiene la lista del calendario filtrado por rango de fecha, categoría, buscador universal y filtros interactivos, ordenada cronológicamente
         function obtenerCalendarioFiltrado() {
             const desdeVal = fechaDesde.value;
             const hastaVal = fechaHasta.value;
             const categoriaFiltrada = filtroTiempo.value;
+            const busquedaVal = removerAcentos(buscadorCoincidencias ? buscadorCoincidencias.value : '');
 
             return calendarioLiturgico.filter(item => {
+                // 0. Filtrado reactivo por término del buscador universal
+                if (busquedaVal) {
+                    const festividadNorm = removerAcentos(item.festividad);
+                    const fechaNorm = removerAcentos(item.fecha);
+                    const fechaCortaNorm = removerAcentos(formatearFechaCorta(item.fecha));
+                    const mesNombre = mesesEsp[item.mes] || '';
+                    const idMelodiaNorm = removerAcentos(item.idMelodia);
+                    const tipoNorm = removerAcentos(item.tipoCeleb);
+                    const tiempoNorm = removerAcentos(item.tiempoLiturgico);
+                    const notasNorm = removerAcentos(item.notas);
+
+                    const coincide = festividadNorm.includes(busquedaVal) ||
+                                     fechaNorm.includes(busquedaVal) ||
+                                     fechaCortaNorm.includes(busquedaVal) ||
+                                     mesNombre.includes(busquedaVal) ||
+                                     idMelodiaNorm.includes(busquedaVal) ||
+                                     tipoNorm.includes(busquedaVal) ||
+                                     tiempoNorm.includes(busquedaVal) ||
+                                     notasNorm.includes(busquedaVal);
+                    if (!coincide) return false;
+                }
+
                 // 1. Filtrado por fecha (rango inclusivo)
                 if (desdeVal && item.fecha < desdeVal) return false;
                 if (hastaVal && item.fecha > hastaVal) return false;
@@ -2406,21 +2851,43 @@
             }
         }
 
+        // Obtiene las melodías filtradas por categoría y término del buscador universal
+        function obtenerMelodiasFiltradas() {
+            const categoriaFiltrada = filtroTiempo.value;
+            const busquedaVal = removerAcentos(buscadorCoincidencias ? buscadorCoincidencias.value : '');
+
+            return melodias.filter(m => {
+                if (categoriaFiltrada !== 'TODOS') {
+                    const coincideCat = m.cat && m.cat.split('/').map(c => c.trim()).includes(categoriaFiltrada);
+                    if (!coincideCat) return false;
+                }
+                if (busquedaVal) {
+                    const numNorm = removerAcentos(m.num);
+                    const tituloNorm = removerAcentos(m.titulo || m.status);
+                    const descNorm = removerAcentos(m.desc);
+                    const tiempoNorm = removerAcentos(m.tiempo);
+                    const catNorm = removerAcentos(m.cat);
+                    const coincideTexto = numNorm.includes(busquedaVal) ||
+                                          tituloNorm.includes(busquedaVal) ||
+                                          descNorm.includes(busquedaVal) ||
+                                          tiempoNorm.includes(busquedaVal) ||
+                                          catNorm.includes(busquedaVal);
+                    if (!coincideTexto) return false;
+                }
+                return true;
+            });
+        }
+
         // Renderizar la tabla de melodías
         function renderizarMelodias() {
-            const categoriaFiltrada = filtroTiempo.value;
             tablaCuerpo.innerHTML = '';
-
-            const melodiasFiltradas = melodias.filter(m => {
-                if (categoriaFiltrada === 'TODOS') return true;
-                return m.cat && m.cat.split('/').map(c => c.trim()).includes(categoriaFiltrada);
-            });
+            const melodiasFiltradas = obtenerMelodiasFiltradas();
 
             if (melodiasFiltradas.length === 0) {
                 tablaCuerpo.innerHTML = `
                     <tr>
                         <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">
-                            No se encontraron melodías específicas para este filtro. Prueba seleccionando 'Todas las melodías'.
+                            No se encontraron melodías que coincidan con la búsqueda o filtro seleccionado.
                         </td>
                     </tr>
                 `;
@@ -2579,11 +3046,7 @@
                 tabCatalogo.className = "pb-3 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 focus:outline-none transition-all cursor-pointer";
                 panelCatalogo.classList.remove('hidden');
                 
-                const totalMelodias = melodias.filter(m => {
-                    const categoriaFiltrada = filtroTiempo.value;
-                    if (categoriaFiltrada === 'TODOS') return true;
-                    return m.cat && m.cat.split('/').map(c => c.trim()).includes(categoriaFiltrada);
-                }).length;
+                const totalMelodias = obtenerMelodiasFiltradas().length;
                 contadorItems.textContent = `${totalMelodias} melodías`;
             } else if (pestana === 'programas') {
                 tabProgramas.className = "pb-3 text-sm font-semibold border-b-2 border-amber-500 text-amber-400 focus:outline-none transition-all cursor-pointer";
