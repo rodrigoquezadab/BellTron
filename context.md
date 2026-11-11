@@ -64,9 +64,11 @@ Llamado Solemnidades	ID 360 o ID 370: Distesa 300s	Máxima solemnidad (5 minutos
 
 ### ⚙️ Reglas de Programación Dominical y Horarios Especiales
 
-* **Horario de Llamados (Domingos):** Todos los domingos hay tres llamados programados a las **12:00**, **12:15** y **12:30**.
-* **Llamado en Tiempo Ordinario:** Para el llamado a misa durante el Tiempo Ordinario, se deben configurar los códigos **285** (Angelus 3-3-3) o **282** (33 Tocchi di III).
-* **Llamado en Pentecostés:** Para el Domingo de Pentecostés, se deben cambiar los llamados de las **12:15** y **12:30** para que ejecuten el himno de Pentecostés (**ID 153**: Veni Creatore Gregoriano).
+* **Llamados del domingo (desde nov 2026):** antes de la misa solo campanadas: **12:15 → 1 campanada** (código **333**, TOCCO UNA CAMPANA) y **12:30 → 3 campanadas** (código **283**, 3 TOCCHI DI III).
+* **Mediodía:** todos los días, también domingo, **1 campanada a las 12:00** (código **333**).
+* **Programación en el equipo:** B + 1111 + 1 + 1 (Normal): `OK 333 OK OK 12 00 OK` (todos los días); `OK 333 OK →×1 OK 12 15 OK` (DOM); `OK 283 OK →×1 OK 12 30 OK` (DOM). Antes, borrar los llamados anteriores con B + 1111 + 2 + 1 y la tecla E.
+* **Llamado en Tiempo Ordinario (regla anterior):** antes se usaban los códigos **285** (Angelus 3-3-3) o **282** (33 Tocchi di III); reemplazado por el esquema de campanadas.
+* **Llamado en Pentecostés (regla anterior, opcional):** se cambiaban los llamados de las 12:15 y 12:30 por el **ID 153** (Veni Creatore Gregoriano). Si se mantiene, programarlo como festividad (Pascua + 49 días).
 * **Prueba de Funcionamiento (Monitoreo):** En caso de requerir pruebas de programación o si hay problemas con la emisión de sonido, se recomienda probar moviendo el interruptor de salida física del equipo (switch) a la posición **Inside** (interno / monitoreo local).
 * **Detener Ejecución:** Para detener inmediatamente una ejecución de campanas o toque en curso, presione el botón **NO** dos veces seguidas (o la tecla **F**) en el panel frontal del dispositivo.
 
