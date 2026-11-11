@@ -66,6 +66,7 @@
                 </div>
             </a>
             <nav id="nav-principal" class="flex flex-wrap justify-center gap-2">
+                <a href="#ruta" data-seccion="ruta" class="nav-link px-3 py-1.5 text-sm font-semibold rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">🧭 Antes de tocar</a>
                 <a href="#buscador" data-seccion="buscador" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Buscador</a>
                 <a href="#manual" data-seccion="manual" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Guía Rápida</a>
                 <a href="#manual-completo" data-seccion="manual-completo" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Manual</a>
@@ -77,6 +78,65 @@
     </header>
 
     <main class="max-w-7xl mx-auto px-4 py-8 space-y-12">
+
+        <!-- ===================== RUTA: ANTES DE TOCAR EL EQUIPO ===================== -->
+        <section id="ruta" class="scroll-mt-24 bg-gray-800 border-2 border-amber-500/40 rounded-2xl p-5 sm:p-6 space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-2">
+                <div>
+                    <h2 class="text-xl font-bold text-gray-100">🧭 Antes de tocar el equipo: sigue estos pasos en orden</h2>
+                    <p class="text-sm text-gray-400 mt-1">Para poner el campanario en cero y dejarlo con la programación de la parroquia sin perder nada. <strong class="text-red-300">No borres ni modifiques nada hasta completar los pasos 1 a 3.</strong></p>
+                </div>
+                <span id="ruta-progreso" class="text-xs text-gray-400 whitespace-nowrap"></span>
+            </div>
+            <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+                <li class="relative bg-gray-900/60 border border-red-500/40 rounded-lg p-4 flex flex-col gap-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-bold">1</span>
+                        <label class="inline-flex items-center gap-1.5 text-[11px] text-gray-400 cursor-pointer select-none"><input type="checkbox" data-ruta="1" class="accent-amber-500 w-4 h-4"> Hecho</label>
+                    </div>
+                    <p class="font-semibold text-gray-100 leading-snug">Fotografiar todos los menús</p>
+                    <p class="text-xs text-gray-400 flex-1">Recorre la guía de 39 puntos (F01–F39) sin modificar nada. Solo se sale con NO. Nombra las fotos F01, F02…</p>
+                    <a href="#guia-fotos" class="mt-1 inline-flex justify-center px-3 py-1.5 rounded-md text-xs font-medium bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20">Abrir guía de fotos →</a>
+                </li>
+                <li class="relative bg-gray-900/60 border border-red-500/40 rounded-lg p-4 flex flex-col gap-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-bold">2</span>
+                        <label class="inline-flex items-center gap-1.5 text-[11px] text-gray-400 cursor-pointer select-none"><input type="checkbox" data-ruta="2" class="accent-amber-500 w-4 h-4"> Hecho</label>
+                    </div>
+                    <p class="font-semibold text-gray-100 leading-snug">Traer las fotos para revisarlas</p>
+                    <p class="text-xs text-gray-400 flex-1">Cárgalas en la carpeta <span class="font-mono">fotos-registro/</span> del proyecto o adjúntalas a Claude. Se revisan, se descifran y se indica si falta alguna pantalla para volver a fotografiarla.</p>
+                    <a href="#guia-fotos" class="mt-1 inline-flex justify-center px-3 py-1.5 rounded-md text-xs font-medium bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20">Ver lista de fotos →</a>
+                </li>
+                <li class="relative bg-gray-900/60 border border-red-500/40 rounded-lg p-4 flex flex-col gap-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-bold">3</span>
+                        <label class="inline-flex items-center gap-1.5 text-[11px] text-gray-400 cursor-pointer select-none"><input type="checkbox" data-ruta="3" class="accent-amber-500 w-4 h-4"> Hecho</label>
+                    </div>
+                    <p class="font-semibold text-gray-100 leading-snug">Crear el plan de restauración</p>
+                    <p class="text-xs text-gray-400 flex-1">Con las fotos descifradas se completa la hoja de registro (tipo de aparato, martillos, motores…) y el plan de restauración. Imprime o descarga ambos.</p>
+                    <a href="#form-reg-config" class="mt-1 inline-flex justify-center px-3 py-1.5 rounded-md text-xs font-medium bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20">Ir a la hoja de registro →</a>
+                </li>
+                <li class="relative bg-gray-900/60 border border-amber-500/40 rounded-lg p-4 flex flex-col gap-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-bold">4</span>
+                        <label class="inline-flex items-center gap-1.5 text-[11px] text-gray-400 cursor-pointer select-none"><input type="checkbox" data-ruta="4" class="accent-amber-500 w-4 h-4"> Hecho</label>
+                    </div>
+                    <p class="font-semibold text-gray-100 leading-snug">Puesta a cero</p>
+                    <p class="text-xs text-gray-400 flex-1">Español, respaldo, borrado y recarga de la configuración técnica anotada.</p>
+                    <a href="#mo-cero" class="mt-1 inline-flex justify-center px-3 py-1.5 rounded-md text-xs font-medium bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20">Ver paso a paso →</a>
+                </li>
+                <li class="relative bg-gray-900/60 border border-emerald-500/40 rounded-lg p-4 flex flex-col gap-2">
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-full bg-amber-500/20 text-amber-300 font-bold">5</span>
+                        <label class="inline-flex items-center gap-1.5 text-[11px] text-gray-400 cursor-pointer select-none"><input type="checkbox" data-ruta="5" class="accent-amber-500 w-4 h-4"> Hecho</label>
+                    </div>
+                    <p class="font-semibold text-gray-100 leading-snug">Cargar la programación de la parroquia</p>
+                    <p class="text-xs text-gray-400 flex-1">12:00 diaria (333) · domingo 12:15 (333) y 12:30 (283). Comprobar y guardar.</p>
+                    <a href="#mo-parroquia" class="mt-1 inline-flex justify-center px-3 py-1.5 rounded-md text-xs font-medium bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20">Ver programación →</a>
+                </li>
+            </ol>
+            <p class="text-[11px] text-gray-500">Las casillas "Hecho" se recuerdan en este navegador para que sepas por dónde vas.</p>
+        </section>
 
         <section id="buscador" class="scroll-mt-24 space-y-6">
             <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 shadow-sm">
@@ -384,7 +444,7 @@
                     ⚙️ Reglas de Programación y Horarios Especiales
                 </h4>
                 <ul class="text-xs text-gray-400 space-y-2 leading-relaxed list-disc pl-4">
-                    <li><strong>Puesta a cero:</strong> para dejar el equipo en español, borrar todo y cargar la programación de la parroquia, sigue el <a href="#mo-cero" class="text-amber-400 hover:underline">paso a paso completo</a>.</li>
+                    <li><strong>Puesta a cero:</strong> antes de tocar el equipo sigue la <a href="#ruta" class="text-amber-400 hover:underline">ruta de 5 pasos</a>: primero <a href="#mo-registro" class="text-amber-400 hover:underline">registrar la configuración actual</a> y solo después la <a href="#mo-cero" class="text-amber-400 hover:underline">puesta a cero</a>.</li>
                     <li><strong>Idioma del equipo:</strong> el menú se puede poner en español con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code> + hora y minutos actuales + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">8</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code>. Ver <a href="#mo-idioma" class="text-amber-400 hover:underline">paso a paso</a>.</li>
                     <li><strong>Claves de acceso:</strong> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> para la programación a tiempo (tecla B). Para la configuración (tecla E) la clave es la <strong>hora y minutos actuales</strong> que muestra el equipo (ej. a las 09:47 → <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">0947</code>). Ver <a href="#mo-codigos" class="text-amber-400 hover:underline">todas las claves</a>.</li>
                     <li><strong>Llamados Dominicales:</strong> antes de la misa del domingo suena <strong>1 campanada a las 12:15</strong> (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">333</code>) y <strong>3 campanadas a las 12:30</strong> (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">283</code>). Ver <a href="#mo-parroquia" class="text-amber-400 hover:underline">cómo programarlo</a>.</li>
@@ -595,8 +655,8 @@
             <nav class="bg-gray-800 border border-gray-700 rounded-xl p-4 text-xs">
                 <p class="text-gray-500 uppercase tracking-wide font-semibold mb-2">Contenido</p>
                 <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1 list-decimal pl-5 text-gray-300">
-                    <li><a href="#mo-cero" class="hover:text-amber-400"><strong>Puesta a cero completa (paso a paso)</strong></a></li>
-                    <li><a href="#mo-registro" class="hover:text-amber-400"><strong>Hoja de registro de configuración</strong></a></li>
+                    <li><a href="#mo-registro" class="hover:text-amber-400"><strong>Paso ① · Registrar la configuración actual</strong></a></li>
+                    <li><a href="#mo-cero" class="hover:text-amber-400"><strong>Paso ② · Puesta a cero del campanario</strong></a></li>
                     <li><a href="#mo-teclado" class="hover:text-amber-400">Teclado y tabla de comandos</a></li>
                     <li><a href="#mo-codigos" class="hover:text-amber-400">Códigos de acceso</a></li>
                     <li><a href="#mo-frecuentes" class="hover:text-amber-400">Operaciones frecuentes</a></li>
@@ -613,69 +673,8 @@
 
             <div class="space-y-4 text-sm text-gray-300 leading-relaxed">
 
-                <article id="mo-cero" class="scroll-mt-24 bg-gray-800 border-2 border-amber-500/50 rounded-xl p-6 space-y-4">
-                    <h3 class="text-base font-semibold text-amber-400">⓪ Puesta a cero del campanario (paso a paso)</h3>
-                    <p class="text-gray-400">Proceso completo para dejar el equipo en español, borrar toda la programación anterior y cargar la programación asignada a la parroquia. Toma unos 20–30 minutos. Ten a mano papel o el celular para fotos.</p>
-                    <div class="bg-red-500/5 border border-red-500/30 rounded-lg p-3 text-xs text-gray-300">⚠️ El borrado (paso 4) también elimina la <strong>configuración técnica</strong> (campanas, martillos, motores, reloj). El paso 2 es obligatorio: sin esos datos las campanas pueden dejar de sonar bien. Si no estás seguro, hazlo junto al instalador.</div>
-
-                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
-                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">1</span> Poner el menú en español</p>
-                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code>. Cuando pida <span class="font-mono">CODIGO DE ACCESO</span>, escribe la <strong>hora y minutos que muestra el equipo</strong> (ej. 09:47 → <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">0947</code>).</li><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> (Configuración) y luego <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">8</code> (<span class="font-mono">LENGUA</span>).</li><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code> (Español) y espera el cambio automático.</li><li>Pulsa <strong>NO</strong> hasta volver al reloj.</li></ol>
-                    </div>
-
-                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
-                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">2</span> Registrar la configuración técnica actual</p>
-                        <p class="text-gray-300">Completa la <a href="#mo-registro" class="text-amber-400 hover:underline font-semibold">Hoja de registro de configuración</a> e imprímela o descárgala, y fotografía cada pantalla. Entra con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code> + hora y minutos + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> (solo mirar: sal con <strong>NO</strong> y responde <strong>NO</strong> a ¿ACTUALIZA?):</p><ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> Config. aparato: tipo (campanas verdaderas / electrónicas / mixto) y n.º de martillos, motores y servicios.</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code> Toque de horas: todos los parámetros (salidas, velocidades, pausas, tipo de reloj).</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code> Reloj: reloj de torre y reloj secundario.</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">5</code> Parámetros de volteo y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">6</code> duración del impulso de martillo.</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">9</code> Código de acceso: confirma que la clave de programación es <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> (si es otra, anótala).</li><li>Revisa también si hay fiestas agregadas en <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">7</code> (Más días festivos), p. ej. la fiesta patronal.</li></ol>
-                    </div>
-
-                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
-                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">3</span> Hacer un respaldo de lo que hay hoy</p>
-                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code> (Gestión datos).</li><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> y <strong>OK</strong> (<span class="font-mono">SALVA SU MEMORIA</span>). Espera a que vuelva al menú.</li><li>Si hay memory card insertada, el respaldo queda en ella. Así se puede volver atrás con la opción <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code> si algo sale mal.</li></ol>
-                    </div>
-
-                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
-                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">4</span> Borrar toda la programación y configuración</p>
-                        <p class="text-xs text-red-300">⛔ No sigas si la <a href="#mo-registro" class="underline">Hoja de registro</a> no está completa (sobre todo el <strong>tipo de aparato</strong> y el n.º de martillos y motores) e impresa o descargada.</p>
-                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>En el mismo menú de Gestión datos, baja con la flecha y pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code> (<span class="font-mono">CANC. PROG.TIEMPO</span>). Si pide confirmar, elige <strong>SI</strong> con las flechas laterales y <strong>OK</strong>.</li><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">5</code> (<span class="font-mono">CANCELA SONADA</span>) y confirma igual: borra las sonadas grabadas por el usuario (las de fábrica se mantienen).</li><li>Pulsa <strong>NO</strong> hasta volver al reloj.</li></ol>
-                    </div>
-
-                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
-                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">5</span> Ajustes básicos después del borrado</p>
-                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>Revisa que el menú siga en español; si volvió a italiano, repite el paso 1 (en italiano el menú dice <span class="font-mono">LINGUA</span>).</li><li>Corrige fecha y hora: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code>, escribe día, mes, año, horas, minutos y segundos exactos.</li><li>Desactiva la hora legal automática europea: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code>.</li></ol>
-                    </div>
-
-                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
-                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">6</span> Volver a cargar la configuración técnica</p>
-                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>Entra con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code> + hora y minutos + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code>.</li><li>En <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code>, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code>, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code>, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">5</code> y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">6</code> escribe los valores de la <a href="#mo-registro" class="text-amber-400 hover:underline">Hoja de registro</a> (paso 2); empieza por el tipo de aparato. En cada pantalla confirma con <strong>OK</strong>, sal con <strong>NO</strong> y responde <strong>SI</strong> a ¿ACTUALIZA?</li><li>Si en el paso 2 había fiestas propias (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">7</code>), vuelve a agregarlas.</li><li>Si la clave de programación era distinta de <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code>, revísala en <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">9</code>.</li></ol>
-                    </div>
-
-                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
-                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">7</span> Cargar la programación asignada a la parroquia</p>
-                        <p class="text-gray-400">Primero prueba con la tecla de ejecución manual que <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">333</code> da <strong>1</strong> campanada y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">283</code> da <strong>3</strong> (switch en <span class="font-mono">Inside</span>). Luego pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> (Normal) y escribe:</p>
-                        <div class="overflow-x-auto">
-                            <table class="w-full text-left text-xs border-collapse min-w-[520px]">
-                                <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
-                                    <tr><th class="px-3 py-2">Qué</th><th class="px-3 py-2">Teclas</th></tr>
-                                </thead>
-                                <tbody class="divide-y divide-gray-700/60 text-gray-300">
-                                    <tr><td class="px-3 py-2 whitespace-nowrap">12:00 todos los días · 1 campanada</td><td class="px-3 py-2 font-mono">OK · 333 · OK · OK · 12 00 · OK</td></tr>
-                                    <tr><td class="px-3 py-2 whitespace-nowrap">12:15 domingo · 1 campanada</td><td class="px-3 py-2 font-mono">OK · 333 · OK · flecha derecha ×1 · OK · 12 15 · OK</td></tr>
-                                    <tr><td class="px-3 py-2 whitespace-nowrap">12:30 domingo · 3 campanadas</td><td class="px-3 py-2 font-mono">OK · 283 · OK · flecha derecha ×1 · OK · 12 30 · OK</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <p class="text-gray-400">Termina con <strong>NO</strong>. Detalle y variantes en <a href="#mo-parroquia" class="text-amber-400 hover:underline">3b. Programación de la parroquia</a>.</p>
-                    </div>
-
-                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
-                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">8</span> Comprobar y guardar</p>
-                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code>: con las flechas deben aparecer solo las tres programaciones.</li><li>Prueba de nuevo con la ejecución manual y con el switch en <span class="font-mono">Inside</span>; luego vuelve el switch a su posición normal.</li><li>Guarda la nueva configuración: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code> → <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> → <strong>OK</strong>.</li><li>Al día siguiente, confirma que a las 12:00 sonó la campanada; y el domingo, las de 12:15 y 12:30.</li></ol>
-                    </div>
-                    <p class="text-xs text-gray-500">Basado en el manual de operación DMC‑250A, págs. 4–5, 12–16, 21, 30–31. El manual no describe las pantallas de confirmación del borrado ni si cambia el idioma: por eso los pasos 4 y 5 incluyen comprobaciones.</p>
-                    <div class="paginas-manual" data-paginas="4,5,31,12"></div>
-                </article>
                 <article id="mo-registro" class="scroll-mt-24 bg-gray-800 border-2 border-red-500/40 rounded-xl p-6 space-y-4">
-                    <h3 class="text-base font-semibold text-amber-400">📝 Hoja de registro de configuración (antes de borrar)</h3>
+                    <h3 class="text-lg font-bold text-red-300">Paso ① · Registrar la configuración actual <span class="text-sm font-normal text-gray-400">(antes de tocar nada)</span></h3>
                     <div class="bg-red-500/5 border border-red-500/30 rounded-lg p-3 text-sm text-gray-300 space-y-1">
                         <p><strong>Por qué es importante:</strong> el borrado (B3 → 4) elimina también la configuración técnica. El dato más crítico es el <strong>tipo de aparato</strong>: <em>campanas verdaderas</em> (martillos y motores que mueven campanas reales), <em>campanas electrónicas</em> (solo altavoces) o <em>sistema mixto</em> (ambas). Si después se carga un tipo o una cantidad de martillos/motores distinta, las campanas reales pueden no sonar, sonar la campana equivocada o no voltear.</p>
                         <p>Completa esta hoja <strong>mirando cada pantalla del equipo</strong> (sin modificar nada: sal con <strong>NO</strong> y responde <strong>NO</strong> a ¿ACTUALIZA?). Además saca una <strong>foto de cada pantalla</strong>.</p>
@@ -782,6 +781,67 @@
                         <button type="button" id="reg-limpiar" class="px-4 py-2 rounded-lg bg-gray-900 border border-gray-700 text-gray-400 text-sm hover:text-red-300 hover:border-red-500/40">Vaciar hoja</button>
                         <span id="reg-estado" class="self-center text-xs text-gray-500"></span>
                     </div>
+                </article>
+                <article id="mo-cero" class="scroll-mt-24 bg-gray-800 border-2 border-amber-500/50 rounded-xl p-6 space-y-4">
+                    <h3 class="text-lg font-bold text-amber-300">Paso ② · Puesta a cero del campanario <span class="text-sm font-normal text-gray-400">(solo con el registro terminado)</span></h3>
+                    <p class="text-gray-400"><strong class="text-red-300">¿Terminaste el <a href="#mo-registro" class="underline">Paso ①</a>?</strong> Si no, vuelve atrás. Proceso completo para dejar el equipo en español, borrar toda la programación anterior y cargar la programación asignada a la parroquia. Toma unos 20–30 minutos. Ten a mano papel o el celular para fotos.</p>
+                    <div class="bg-red-500/5 border border-red-500/30 rounded-lg p-3 text-xs text-gray-300">⚠️ El borrado (paso 4) también elimina la <strong>configuración técnica</strong> (campanas, martillos, motores, reloj). El paso 2 es obligatorio: sin esos datos las campanas pueden dejar de sonar bien. Si no estás seguro, hazlo junto al instalador.</div>
+
+                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
+                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">1</span> Poner el menú en español</p>
+                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code>. Cuando pida <span class="font-mono">CODIGO DE ACCESO</span>, escribe la <strong>hora y minutos que muestra el equipo</strong> (ej. 09:47 → <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">0947</code>).</li><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> (Configuración) y luego <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">8</code> (<span class="font-mono">LENGUA</span>).</li><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code> (Español) y espera el cambio automático.</li><li>Pulsa <strong>NO</strong> hasta volver al reloj.</li></ol>
+                    </div>
+
+                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
+                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">2</span> Registrar la configuración técnica actual</p>
+                        <p class="text-gray-300">Completa la <a href="#mo-registro" class="text-amber-400 hover:underline font-semibold">Hoja de registro de configuración</a> e imprímela o descárgala, y fotografía cada pantalla. Entra con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code> + hora y minutos + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> (solo mirar: sal con <strong>NO</strong> y responde <strong>NO</strong> a ¿ACTUALIZA?):</p><ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> Config. aparato: tipo (campanas verdaderas / electrónicas / mixto) y n.º de martillos, motores y servicios.</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code> Toque de horas: todos los parámetros (salidas, velocidades, pausas, tipo de reloj).</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code> Reloj: reloj de torre y reloj secundario.</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">5</code> Parámetros de volteo y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">6</code> duración del impulso de martillo.</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">9</code> Código de acceso: confirma que la clave de programación es <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> (si es otra, anótala).</li><li>Revisa también si hay fiestas agregadas en <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">7</code> (Más días festivos), p. ej. la fiesta patronal.</li></ol>
+                    </div>
+
+                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
+                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">3</span> Hacer un respaldo de lo que hay hoy</p>
+                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code> (Gestión datos).</li><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> y <strong>OK</strong> (<span class="font-mono">SALVA SU MEMORIA</span>). Espera a que vuelva al menú.</li><li>Si hay memory card insertada, el respaldo queda en ella. Así se puede volver atrás con la opción <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code> si algo sale mal.</li></ol>
+                    </div>
+
+                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
+                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">4</span> Borrar toda la programación y configuración</p>
+                        <p class="text-xs text-red-300">⛔ No sigas si la <a href="#mo-registro" class="underline">Hoja de registro</a> no está completa (sobre todo el <strong>tipo de aparato</strong> y el n.º de martillos y motores) e impresa o descargada.</p>
+                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>En el mismo menú de Gestión datos, baja con la flecha y pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code> (<span class="font-mono">CANC. PROG.TIEMPO</span>). Si pide confirmar, elige <strong>SI</strong> con las flechas laterales y <strong>OK</strong>.</li><li>Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">5</code> (<span class="font-mono">CANCELA SONADA</span>) y confirma igual: borra las sonadas grabadas por el usuario (las de fábrica se mantienen).</li><li>Pulsa <strong>NO</strong> hasta volver al reloj.</li></ol>
+                    </div>
+
+                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
+                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">5</span> Ajustes básicos después del borrado</p>
+                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>Revisa que el menú siga en español; si volvió a italiano, repite el paso 1 (en italiano el menú dice <span class="font-mono">LINGUA</span>).</li><li>Corrige fecha y hora: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code>, escribe día, mes, año, horas, minutos y segundos exactos.</li><li>Desactiva la hora legal automática europea: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code>.</li></ol>
+                    </div>
+
+                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
+                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">6</span> Volver a cargar la configuración técnica</p>
+                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li>Entra con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code> + hora y minutos + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code>.</li><li>En <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code>, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code>, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">4</code>, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">5</code> y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">6</code> escribe los valores de la <a href="#mo-registro" class="text-amber-400 hover:underline">Hoja de registro</a> (paso 2); empieza por el tipo de aparato. En cada pantalla confirma con <strong>OK</strong>, sal con <strong>NO</strong> y responde <strong>SI</strong> a ¿ACTUALIZA?</li><li>Si en el paso 2 había fiestas propias (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">7</code>), vuelve a agregarlas.</li><li>Si la clave de programación era distinta de <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code>, revísala en <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">9</code>.</li></ol>
+                    </div>
+
+                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
+                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">7</span> Cargar la programación asignada a la parroquia</p>
+                        <p class="text-gray-400">Primero prueba con la tecla de ejecución manual que <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">333</code> da <strong>1</strong> campanada y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">283</code> da <strong>3</strong> (switch en <span class="font-mono">Inside</span>). Luego pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> (Normal) y escribe:</p>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs border-collapse min-w-[520px]">
+                                <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                                    <tr><th class="px-3 py-2">Qué</th><th class="px-3 py-2">Teclas</th></tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                    <tr><td class="px-3 py-2 whitespace-nowrap">12:00 todos los días · 1 campanada</td><td class="px-3 py-2 font-mono">OK · 333 · OK · OK · 12 00 · OK</td></tr>
+                                    <tr><td class="px-3 py-2 whitespace-nowrap">12:15 domingo · 1 campanada</td><td class="px-3 py-2 font-mono">OK · 333 · OK · flecha derecha ×1 · OK · 12 15 · OK</td></tr>
+                                    <tr><td class="px-3 py-2 whitespace-nowrap">12:30 domingo · 3 campanadas</td><td class="px-3 py-2 font-mono">OK · 283 · OK · flecha derecha ×1 · OK · 12 30 · OK</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-gray-400">Termina con <strong>NO</strong>. Detalle y variantes en <a href="#mo-parroquia" class="text-amber-400 hover:underline">3b. Programación de la parroquia</a>.</p>
+                    </div>
+
+                    <div class="border-l-2 border-amber-500/50 pl-4 space-y-2">
+                        <p class="font-semibold text-gray-100"><span class="inline-flex items-center justify-center w-6 h-6 mr-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-mono">8</span> Comprobar y guardar</p>
+                        <ol class="list-decimal pl-5 space-y-1.5 text-gray-300"><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code>: con las flechas deben aparecer solo las tres programaciones.</li><li>Prueba de nuevo con la ejecución manual y con el switch en <span class="font-mono">Inside</span>; luego vuelve el switch a su posición normal.</li><li>Guarda la nueva configuración: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code> → <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> → <strong>OK</strong>.</li><li>Al día siguiente, confirma que a las 12:00 sonó la campanada; y el domingo, las de 12:15 y 12:30.</li></ol>
+                    </div>
+                    <p class="text-xs text-gray-500">Basado en el manual de operación DMC‑250A, págs. 4–5, 12–16, 21, 30–31. El manual no describe las pantallas de confirmación del borrado ni si cambia el idioma: por eso los pasos 4 y 5 incluyen comprobaciones.</p>
+                    <div class="paginas-manual" data-paginas="4,5,31,12"></div>
                 </article>
                 <article id="mo-teclado" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
                     <h3 class="text-base font-semibold text-amber-400">1. Teclado y tabla de comandos <span class="text-xs font-normal text-gray-500">· págs. 3–4</span></h3>
@@ -4920,6 +4980,28 @@
             guardarRegistro();
         });
 
+
+        // ===================== Ruta "antes de tocar el equipo": progreso =====================
+        (function () {
+            const CLAVE_RUTA = 'belltron_ruta_progreso';
+            const casillas = [...document.querySelectorAll('[data-ruta]')];
+            let marcados = {};
+            try { marcados = JSON.parse(almacen.getItem(CLAVE_RUTA)) || {}; } catch (e) { marcados = {}; }
+            const pintar = () => {
+                const hechos = casillas.filter(c => c.checked).length;
+                document.getElementById('ruta-progreso').textContent = hechos + ' de ' + casillas.length + ' pasos hechos';
+                casillas.forEach(c => c.closest('li').classList.toggle('opacity-60', c.checked));
+            };
+            casillas.forEach(c => {
+                c.checked = !!marcados[c.dataset.ruta];
+                c.addEventListener('change', () => {
+                    marcados[c.dataset.ruta] = c.checked;
+                    try { almacen.setItem(CLAVE_RUTA, JSON.stringify(marcados)); } catch (e) { /* sin almacenamiento */ }
+                    pintar();
+                });
+            });
+            pintar();
+        })();
         codigosBusqueda.addEventListener('input', renderizarCodigosOriginales);
         codigosGrupo.addEventListener('change', renderizarCodigosOriginales);
         renderizarCodigosOriginales();
