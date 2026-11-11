@@ -33,7 +33,7 @@ Fecha	Festividad	Rango	ID Melodía / Título
 25 Mar	La Anunciación del Señor	Solemnidad (S)	263 (Ecco Io Sono la Serva)
 29 Mar	Domingo de Ramos	Solemnidad	71 (Osanna Figlio di Davide)
 05 Abr	Domingo de Resurrección	Solemnidad (S)	143 (Regina Coeli Carrillon) - Prioridad por Solemnidad
-17 May	La Ascensión del Señor	Solemnidad (S)	148 (Cristo è Risorto) o 54 (Cristo Risusciti)
+17 May	La Ascensión del Señor	Solemnidad (S)	149 (Cristo è Risorto) o 54 (Cristo Risusciti)
 24 May	Domingo de Pentecostés	Solemnidad (S)	153 (Veni Creatore Gregoriano)
 31 May	La Santísima Trinidad	Solemnidad (S)	158 (O Trinità Beata)
 07 Jun	Corpus Christi	Solemnidad (S)	94 (Pange Lingua), 161 o 162
@@ -45,7 +45,7 @@ Fecha	Festividad	Rango	ID Melodía / Título
 18 Ago	San Alberto Hurtado	Memoria (M)	233 (Melodía de Santos)
 18-19 Sep	Fiestas Patrias de Chile	Civil / Nacional	117 (Virgen del Carmen - Según nota manuscrita)
 01 Nov	Todos los Santos	Solemnidad (S)	78 (La Pace dei Santi)
-02 Nov	Fieles Difuntos	Conmemoración	237 (Requiem Gregoriano)
+02 Nov	Fieles Difuntos	Conmemoración	238 (Requiem Gregoriano)
 22 Nov	Jesucristo, Rey del Universo	Solemnidad (S)	50 (Christus Vincit)
 08 Dic	Inmaculada Concepción	Solemnidad (S)	189 (Immacolata)
 25 Dic	Natividad del Señor	Solemnidad (S)	74 (Astro del Ciel) / 75 (Adeste Fideles)
@@ -56,7 +56,7 @@ Para las funciones no sujetas al calendario anual, se establecen los siguientes 
 
 Función / Sacramento	Melodía o Toque Sugerido	Especificación Técnica
 Matrimonios	ID 76: Marcia Nuziale	Melodía festiva de salida.
-Exequias / Difuntos	ID 237 (Requiem) o 302-310	Tocchi Funerale (según número de campanas).
+Exequias / Difuntos	ID 238 (Requiem) o 302-310	Tocchi Funerale (según número de campanas).
 Angelus Diario	ID 284: Angelus 3-7-9	Recomendado por tradición litúrgica estándar.
 Llamado Misa Ferial	ID 352: Distesa 60s	Duración breve para días ordinarios.
 Llamado Misa Dominical	ID 354: Distesa 120s	Duración media para el Día del Señor.
@@ -68,7 +68,7 @@ Llamado Solemnidades	ID 360 o ID 370: Distesa 300s	Máxima solemnidad (5 minutos
 * **Llamado en Tiempo Ordinario:** Para el llamado a misa durante el Tiempo Ordinario, se deben configurar los códigos **285** (Angelus 3-3-3) o **282** (33 Tocchi di III).
 * **Llamado en Pentecostés:** Para el Domingo de Pentecostés, se deben cambiar los llamados de las **12:15** y **12:30** para que ejecuten el himno de Pentecostés (**ID 153**: Veni Creatore Gregoriano).
 * **Prueba de Funcionamiento (Monitoreo):** En caso de requerir pruebas de programación o si hay problemas con la emisión de sonido, se recomienda probar moviendo el interruptor de salida física del equipo (switch) a la posición **Inside** (interno / monitoreo local).
-* **Detener Ejecución:** Para detener inmediatamente una ejecución de campanas o toque en curso, presione el botón **NO** dos veces seguidas en el panel frontal del dispositivo.
+* **Detener Ejecución:** Para detener inmediatamente una ejecución de campanas o toque en curso, presione el botón **NO** dos veces seguidas (o la tecla **F**) en el panel frontal del dispositivo.
 
 6. Especificaciones Técnicas de Melodías Seleccionadas
 
@@ -78,13 +78,13 @@ Listado de referencia rápida para el operador del sistema:
 * ID 117 (Virgen del Carmen): Himno oficial de la Patrona de Chile; uso imperativo en julio y septiembre.
 * ID 153 (Veni Creatore): Himno gregoriano fundamental para Pentecostés y celebraciones del Espíritu Santo.
 * ID 196 (Maris Stella): Versión gregoriana de "Ave Maris Stella", asignada para la apertura del año litúrgico el 1 de enero.
-* ID 237 (Requiem): Toque penitencial gregoriano para funerales y el día 2 de noviembre.
+* ID 238 (Requiem): Toque penitencial gregoriano para funerales y el día 2 de noviembre.
 
 7. Conclusión y Recomendaciones de Mantenimiento
 
 Para garantizar que la programación litúrgica aquí detallada se ejecute con exactitud, es imperativo asegurar la sincronización horaria del controlador. Se recomienda al sacristán o técnico responsable utilizar las funciones de Big Ben (IDs 266-281) para verificar la precisión del reloj interno. Dada la automatización de las Distese por tiempo (60s a 300s), cualquier desfase en el reloj afectará la percepción pública del llamado a la Eucaristía. La correcta implementación de este calendario técnico asegurará una voz armoniosa y litúrgicamente coherente para la parroquia durante todo el año 2026.
 
-# Manual de Contexto y Registro de Datos: Sistema de Campanario Belltron 250A
+# Manual de Contexto y Registro de Datos: Sistema de Campanario Belltron DMC-250A
 
 [cite_start]Este documento reúne toda la información técnica, litúrgica y operativa del programador automático de campanarios Belltron 250A[cite: 1]. Está diseñado para servir como fuente de verdad y base de conocimiento para configuraciones manuales o integraciones en aplicaciones web.
 
@@ -94,9 +94,13 @@ Para garantizar que la programación litúrgica aquí detallada se ejecute con e
 
 Para programar o ejecutar los códigos del sistema directamente en el panel físico del equipo, sigue estos pasos:
 
-1. **Acceso al Menú:** Presiona la tecla de programación o introduce el código técnico / password (**1111**) en el panel alfanumérico. La pantalla mostrará la señal de `PROGRAMACIÓN`.
-2. **Selección de Melodía:** Introduce el número de código correspondiente a la melodía o toque deseado (obtenido de las tablas de abajo).
-3. **Asignación de Horarios:** Define la hora de ejecución y los días de la semana mediante el calendario interno del Belltron 250A. Confirma para almacenar en la memoria del dispositivo.
+1. **Acceso al Menú:** el panel tiene tres teclas de función: **A** (reloj y funciones directas), **B** (programación a tiempo, clave **1111**) y **E** (configuración, clave = **hora y minutos actuales** del equipo). Fuente: manual oficial DMC-250A, págs. 3-4 y 36.
+2. **Tocar una melodía ahora:** tecla de ejecución manual → número de la sonada → **OK**. Para detenerla: **NO** dos veces o la tecla **F** (pág. 13).
+3. **Programar a una hora fija:** **B** + **1111** + **1** + **1** (Normal) → melodía, OK → día con flechas laterales (SIEMPR, DOM, NO_DOM…), OK → hora y minutos, OK → **NO** para salir (págs. 12 y 21).
+4. **Idioma del menú:** **E** + hora/minutos + **1** + **8** → **4** (Español). Los nombres de las melodías siguen en italiano (pág. 5).
+5. **Hora legal:** la automática (A14) usa fechas europeas; en Chile conviene desactivarla (**A142**) y ajustar la hora con **A11** (págs. 4 y 15).
+
+> Manual completo: `docs/manual_DMC-250A.pdf` (Belltron, modelo **DMC-250A**, 42 páginas, en español).
 
 ---
 
@@ -460,12 +464,12 @@ Asignación de melodías a las celebraciones del calendario litúrgico de Chile
 ⬜ 1 de enero: Santa María, Madre de Dios -> 62 AVE MARIA DI SCHUBERT
 ⬜ 4 de enero: La Epifanía del Señor -> 75 ADESTE FIDELES
 ⬜ 11 de febrero: Nuestra Señora de Lourdes -> 59 AVE MARIA DI LOURDES
-🟪 18 de febrero: Miércoles de Ceniza (Inicio Cuaresma) -> 137 ATTENDE DOMINE
+🟪 18 de febrero: Miércoles de Ceniza (Inicio Cuaresma) -> 135 ATTENDE DOMINE
 ⬜ 19 de marzo: San José, esposo de la Virgen -> 229 S. GIUSEPPE
 ⬜ 25 de marzo: La Anunciación del Señor -> 105 EL ANGEL GABRIEL
 🟥 29 de marzo: Domingo de Ramos -> 71 OSANNA FIGLIO DI DAVIDE
 ⬜ 2 de abril: Jueves Santo en la Cena del Señor -> 162 TANTUM ERGO GREGORIANO
-🟥 3 de abril: Viernes Santo en la Pasión del Señor -> 138 STABAT MATER DOLOROSA
+🟥 3 de abril: Viernes Santo en la Pasión del Señor -> 136 STABAT MATER DOLOROSA
 ⬜ 5 de abril: Domingo de Pascua de Resurrección -> 53 RISUCITO / 92 REGINA COELI
 ⬜ 13 de mayo: Nuestra Señora de Fátima -> 64 AVE MARIA DI FATIMA
 🟥 24 de mayo: Domingo de Pentecostés -> 153 VENI CREATORE GREGORIANO
@@ -479,7 +483,7 @@ Asignación de melodías a las celebraciones del calendario litúrgico de Chile
 ⬜ 18 de agosto: San Alberto Hurtado -> 102 CANTO PER CRISTO
 ⬜ 18 y 19 de septiembre: Fiestas Patrias de Chile -> 117 VIRGEN DEL CARMEN
 ⬜ 1 de noviembre: Todos los Santos -> 78 LA PACE DEI SANTI
-🟪 2 de noviembre: Todos los Fieles Difuntos -> 237 REQUIEM GREGORIANO
+🟪 2 de noviembre: Todos los Fieles Difuntos -> 238 REQUIEM GREGORIANO
 ⬜ 22 de noviembre: Cristo Rey del Universo -> 50 CHRISTUS VINCIT
 🟪 29 de noviembre: I Domingo de Adviento -> 123 IL SIGNORE E' VICINO
 ⬜ 8 de diciembre: La Inmaculada Concepción -> 190 IMMACOLATA / 218 TOTA PULCHRA
@@ -494,7 +498,7 @@ Estas melodías y toques se aplican según el evento parroquial, sobreponiéndos
 🟪 Difuntos y Funerales:
 Avisos de fallecimiento (Campana suelta): 312 (Si fallece un Hombre), 313 (Si fallece una Mujer), 314 (Si fallece un Clérigo).
 Toques fúnebres previos a la misa: Del 302 al 311, o del 315 al 319 (TOCCHI FUNERALE). Permiten configurar de 1 a 5 campanas tocando a duelo.
-Melodías de Luto: 237 (REQUIEM GREGORIANO) o 238 (L'ETERNO RIPOSO).
+Melodías de Luto: 238 (REQUIEM GREGORIANO / L'ETERNO RIPOSO).
 
 --------------------------------------------------------------------------------
 3. CATÁLOGO COMPLETO DE MELODÍAS POR TIEMPO LITÚRGICO
@@ -516,16 +520,16 @@ Listado de todas las melodías categorizadas disponibles en el sistema
 108 GLORIA IN EXCELCIS DEO
 109 ESTA NOCHE
 110 NAVIDAD NEGRA
-127 E' NATO UN BIMBO IN BETHLEM
+128 E' NATO UN BIMBO IN BETHLEM
 129 PASTORALE (Tradizionale)
 130 PIVA (Tradizionale)
 🟪 / 🟥 Tiempo de Cuaresma y Semana Santa:
-136 TI SALUTO O CROCE SANTA
-137 ATTENDE DOMINE (Cuaresmal-Gregoriano)
-138 STABAT MATER DOLOROSA (Vía Crucis / Viernes Santo)
-139 O CRISTO TU REGNERAI
-140 O CAPO INSANGUINATO (Pasión)
-149 SIGNORE DOLCE VOLTO (Pasión de Bach)
+134 TI SALUTO O CROCE SANTA
+135 ATTENDE DOMINE (Cuaresmal-Gregoriano)
+136 STABAT MATER DOLOROSA (Vía Crucis / Viernes Santo)
+137 O CRISTO TU REGNERAI
+138 O CAPO INSANGUINATO (Pasión)
+151 SIGNORE DOLCE VOLTO (Pasión de Bach)
 ⬜ Tiempo de Pascua:
 53 RISUCITO / 54 CRISTO RISUSCITI
 80 IO CREDO RISORGERO'
@@ -533,7 +537,7 @@ Listado de todas las melodías categorizadas disponibles en el sistema
 92 REGINA COELI
 144 IL CRISTO SIGNORE E' RISORTO
 145 ALLELUYA, ORA SIAMO LIBERI
-148 CRISTO E' RISORTO (G.F. Handel)
+149 CRISTO E' RISORTO (G.F. Handel)
 150 ALLELUYA PASQUALE
 🟥 Pentecostés (Espíritu Santo):
 153 VENI CREATORE GREGORIANO

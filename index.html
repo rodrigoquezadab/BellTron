@@ -56,19 +56,22 @@
 
     <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-50 shadow-md">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center space-x-3">
+            <a href="index.html" title="Recargar sitio"
+                onclick="event.preventDefault(); window.location.href = window.location.pathname + window.location.search;"
+                class="flex items-center space-x-3 rounded-md hover:opacity-80 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500/60">
                 <span class="text-2xl">🔔</span>
                 <div>
-                    <h1 class="text-xl font-bold tracking-tight text-amber-400">Belltron 250A</h1>
+                    <h1 class="text-xl font-bold tracking-tight text-amber-400">Belltron DMC‑250A</h1>
                     <p class="text-xs text-gray-400">Sistema de Gestión de Melodías Litúrgicas</p>
                 </div>
-            </div>
-            <nav class="flex space-x-2">
-                <a href="#buscador"
-                    class="px-3 py-1.5 text-sm font-medium rounded-md text-gray-300 hover:bg-gray-700 transition">Buscador</a>
-                <a href="#manual"
-                    class="px-3 py-1.5 text-sm font-medium rounded-md text-amber-400 bg-amber-500/10 border border-amber-500/20 hover:bg-amber-500/20 transition">Manual
-                    Técnico</a>
+            </a>
+            <nav id="nav-principal" class="flex flex-wrap justify-center gap-2">
+                <a href="#buscador" data-seccion="buscador" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Buscador</a>
+                <a href="#manual" data-seccion="manual" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Guía Rápida</a>
+                <a href="#manual-completo" data-seccion="manual-completo" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Manual</a>
+                <a href="#manual-oficial" data-seccion="manual-oficial" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Manual DMC‑250A</a>
+                <a href="#codigos" data-seccion="codigos" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Códigos</a>
+                <a href="#cambios" data-seccion="cambios" class="nav-link px-3 py-1.5 text-sm font-medium rounded-md border border-transparent text-gray-300 hover:bg-gray-700 transition">Cambios</a>
             </nav>
         </div>
     </header>
@@ -143,6 +146,14 @@
                             <option value="MARIA">Dedicadas a la Virgen María</option>
                             <option value="Aleluya">Aleluya</option>
                             <option value="Otros">Otros Tiempos (Cristo Rey, Matrimonio, etc.)</option>
+                            <optgroup label="Toques del equipo (solo catálogo)">
+                                <option value="Reloj">Reloj (Big Ben)</option>
+                                <option value="Ángelus">Ángelus y señales</option>
+                                <option value="Fúnebres">Fúnebres y avisos de fallecimiento</option>
+                                <option value="Volteos">Volteos, repiques y carillones</option>
+                                <option value="Distesas">Distesas (llamados a misa)</option>
+                                <option value="Relés">Relés de salida</option>
+                            </optgroup>
                         </select>
                     </div>
                     <div class="flex gap-2">
@@ -198,7 +209,7 @@
                             <button onclick="removerFiltro('tiempo')" class="hover:text-amber-400 font-bold ml-1 cursor-pointer text-sm">×</button>
                         </span>
                     </div>
-                    <table class="w-full text-left text-sm text-gray-300">
+                    <table class="w-full min-w-[880px] text-left text-sm text-gray-300">
                         <thead class="bg-gray-950 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-800">
                             <tr>
                                 <th class="px-6 py-3.5 font-semibold">Fecha</th>
@@ -215,12 +226,13 @@
 
                 <!-- Tab 2: Catálogo de Melodías -->
                 <div id="panel-catalogo" class="overflow-x-auto hidden">
-                    <table class="w-full text-left text-sm text-gray-300">
+                    <table class="w-full min-w-[880px] text-left text-sm text-gray-300">
                         <thead
                             class="bg-gray-950 text-gray-400 uppercase text-xs tracking-wider border-b border-gray-800">
                             <tr>
                                 <th class="px-6 py-3.5 font-semibold">Cód. Num</th>
                                 <th class="px-6 py-3.5 font-semibold">Título</th>
+                                <th class="px-6 py-3.5 font-semibold">Católica</th>
                                 <th class="px-6 py-3.5 font-semibold">Descripción Técnica</th>
                                 <th class="px-6 py-3.5 font-semibold">Tiempo / Uso Recomendado</th>
                                 <th class="px-6 py-3.5 font-semibold">Fechas Recomendadas (2026)</th>
@@ -329,56 +341,41 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col justify-between">
                     <div>
-                        <div
-                            class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">
-                            01
-                        </div>
-                        <h3 class="font-semibold text-gray-200 mb-2">Acceso al Menú</h3>
+                        <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">01</div>
+                        <h3 class="font-semibold text-gray-200 mb-2">Tocar una melodía ahora</h3>
                         <p class="text-xs text-gray-400 leading-relaxed">
-                            En el panel frontal, presiona la tecla de menú o introduce el código de programación
-                            técnica (password: <code class="bg-gray-950 text-amber-400 px-1 rounded font-mono">1111</code>).
-                            La pantalla mostrará <code class="bg-gray-950 text-amber-400 px-1 rounded font-mono">PROGRAMACIÓN</code>.
+                            Pulsa la tecla de <strong>ejecución manual</strong>. La pantalla muestra <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">EJECUCION SONADA</code>.
+                            Escribe el número (ej. <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">53</code>) y pulsa <strong>OK</strong>.
+                            Para detenerla: <strong>NO</strong> dos veces o la tecla <strong>F</strong>.
                         </p>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">
-                        Botón: MENU / ENTER
-                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">Manual pág. 13</div>
                 </div>
 
                 <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col justify-between">
                     <div>
-                        <div
-                            class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">
-                            02
-                        </div>
-                        <h3 class="font-semibold text-gray-200 mb-2">Selección de Código</h3>
+                        <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">02</div>
+                        <h3 class="font-semibold text-gray-200 mb-2">Programar a una hora fija</h3>
                         <p class="text-xs text-gray-400 leading-relaxed">
-                            Introduce el número de la melodía deseada obtenido en el buscador de arriba (ej. <code
-                                class="bg-gray-950 text-amber-400 px-1 rounded font-mono">53</code> para Risucito o
-                            <code class="bg-gray-950 text-amber-400 px-1 rounded font-mono">74</code> para Astro del
-                            Ciel).
+                            Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + clave <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> (Normal).
+                            Escribe la melodía y pulsa OK; con las flechas laterales elige el día (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">SIEMPR</code>, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">DOM</code>, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">NO_DOM</code>…), OK;
+                            escribe hora y minutos, OK. Sal con <strong>NO</strong>.
                         </p>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">
-                        Teclado: Numérico [0-9]
-                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">Manual págs. 12 y 21</div>
                 </div>
 
                 <div class="bg-gray-800 p-6 rounded-xl border border-gray-700 flex flex-col justify-between">
                     <div>
-                        <div
-                            class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">
-                            03
-                        </div>
-                        <h3 class="font-semibold text-gray-200 mb-2">Asignación de Horarios</h3>
+                        <div class="w-8 h-8 rounded-full bg-amber-500/20 text-amber-400 flex items-center justify-center font-bold font-mono text-sm mb-4">03</div>
+                        <h3 class="font-semibold text-gray-200 mb-2">Toque especial para un solo día</h3>
                         <p class="text-xs text-gray-400 leading-relaxed">
-                            Asigna la hora de ejecución del toque y los días de la semana correspondientes utilizando el
-                            calendario interno del Belltron 250A. Confirma para guardar en memoria.
+                            Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code>. Escribe día, mes, año, hora y minutos, OK;
+                            luego el número de la melodía, OK. Pulsa <strong>NO</strong> cuatro veces para volver al reloj.
+                            Para revisarlo o borrarlo: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A23</code>.
                         </p>
                     </div>
-                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">
-                        Botón: ENTER / GUARDAR
-                    </div>
+                    <div class="mt-4 pt-3 border-t border-gray-700/50 text-[11px] text-gray-500 font-mono">Manual págs. 16–17</div>
                 </div>
             </div>
 
@@ -387,14 +384,533 @@
                     ⚙️ Reglas de Programación y Horarios Especiales
                 </h4>
                 <ul class="text-xs text-gray-400 space-y-2 leading-relaxed list-disc pl-4">
-                    <li><strong>Contraseña de Acceso:</strong> Usar la clave <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> para ingresar a la programación técnica del equipo.</li>
+                    <li><strong>Claves de acceso:</strong> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> para la programación a tiempo (tecla B). Para la configuración (tecla E) la clave es la <strong>hora y minutos actuales</strong> que muestra el equipo (ej. a las 09:47 → <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">0947</code>). Ver <a href="#mo-codigos" class="text-amber-400 hover:underline">todas las claves</a>.</li>
                     <li><strong>Llamados Dominicales:</strong> Todos los domingos hay llamados programados a las <strong>12:00</strong>, <strong>12:15</strong> y <strong>12:30</strong>.</li>
                     <li><strong>Tiempo Ordinario:</strong> Configurar el llamado a misa con los códigos <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">285</code> o <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">282</code>.</li>
                     <li><strong>Pentecostés:</strong> En la solemnidad de Pentecostés, cambiar los llamados de las <strong>12:15</strong> y <strong>12:30</strong> por el himno de Pentecostés (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">153</code> - Veni Creatore).</li>
                     <li><strong>Pruebas y Diagnóstico:</strong> Si se requiere realizar pruebas o verificar si hay algún problema de salida, probar cambiando el selector físico (switch) del equipo a la posición <strong>Inside</strong> (interno / monitoreo local).</li>
-                    <li><strong>Detener Toques:</strong> Para cancelar o detener inmediatamente cualquier toque o ejecución de campanas en curso, se debe presionar el botón <strong>NO</strong> dos veces seguidas en el panel del equipo.</li>
+                    <li><strong>Detener Toques:</strong> Para cancelar o detener inmediatamente cualquier toque o ejecución de campanas en curso, se debe presionar el botón <strong>NO</strong> dos veces seguidas, o la tecla <strong>F</strong>, en el panel del equipo.</li>
                 </ul>
             </div>
+        </section>
+
+        <hr class="border-gray-800">
+
+        <!-- ===================== MANUAL TÉCNICO COMPLETO ===================== -->
+        <section id="manual-completo" class="scroll-mt-24 space-y-6">
+            <div class="max-w-3xl">
+                <h2 class="text-2xl font-bold text-gray-100 flex items-center gap-2">📖 Manual Técnico Completo</h2>
+                <p class="text-sm text-gray-400 mt-1">
+                    Procedimientos, reglas y protocolos de operación del Belltron 250A. La lista detallada de cada número
+                    está en <a href="#codigos" class="text-amber-400 hover:underline">Códigos originales</a>.
+                </p>
+            </div>
+
+            <nav class="bg-gray-800 border border-gray-700 rounded-xl p-4 text-xs">
+                <p class="text-gray-500 uppercase tracking-wide font-semibold mb-2">Contenido</p>
+                <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1 list-decimal pl-5 text-gray-300">
+                    <li><a href="#man-config" class="hover:text-amber-400">Configuración en el panel del equipo</a></li>
+                    <li><a href="#man-reglas" class="hover:text-amber-400">Reglas dominicales y horarios especiales</a></li>
+                    <li><a href="#man-llamados" class="hover:text-amber-400">Llamados a misa, Ángelus y reloj</a></li>
+                    <li><a href="#man-sacramentos" class="hover:text-amber-400">Sacramentos y eventos parroquiales</a></li>
+                    <li><a href="#man-colores" class="hover:text-amber-400">Colores litúrgicos y criterios</a></li>
+                    <li><a href="#man-consideraciones" class="hover:text-amber-400">Consideraciones y notas manuscritas</a></li>
+                    <li><a href="#man-mantenimiento" class="hover:text-amber-400">Mantenimiento y diagnóstico</a></li>
+                    <li><a href="#man-tradiciones" class="hover:text-amber-400">Tradiciones católicas de toque</a></li>
+                    <li><a href="#man-tecnicas" class="hover:text-amber-400">Técnicas de toque y glosario</a></li>
+                    <li><a href="#man-equipo" class="hover:text-amber-400">Sobre el equipo Belltron y soporte</a></li>
+                </ol>
+            </nav>
+
+            <div class="space-y-4 text-sm text-gray-300 leading-relaxed">
+
+                <article id="man-config" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 class="text-base font-semibold text-amber-400 mb-3">1. Configuración en el panel del equipo</h3>
+                    <ol class="list-decimal pl-5 space-y-2 text-gray-400">
+                        <li><strong class="text-gray-200">Acceso al menú:</strong> el panel tiene tres teclas de función: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A</code> reloj y funciones directas, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> programación a tiempo (clave <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code>) y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code> configuración (clave = hora y minutos actuales). Ver <a href="#manual-oficial" class="text-amber-400 hover:underline">Manual DMC‑250A</a>.</li>
+                        <li><strong class="text-gray-200">Selección de melodía:</strong> introduce el número de código de la melodía o toque deseado (ver <a href="#codigos" class="text-amber-400 hover:underline">Códigos originales</a>).</li>
+                        <li><strong class="text-gray-200">Asignación de horarios:</strong> define la hora de ejecución y los días de la semana con el calendario interno del DMC‑250A. Confirma para guardar en la memoria del equipo.</li>
+                        <li><strong class="text-gray-200">Relés auxiliares:</strong> al final de una cadena de programación se pueden usar <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">499</code> (ON R1) y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">500</code> (OFF R1) para encender o apagar focos, amplificadores o motores externos.</li>
+                        <li><strong class="text-gray-200">Detener un toque en curso:</strong> presiona el botón <strong>NO</strong> dos veces seguidas, o la tecla <strong>F</strong>, en el panel frontal.</li>
+                    </ol>
+                </article>
+
+                <article id="man-reglas" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 class="text-base font-semibold text-amber-400 mb-3">2. Reglas dominicales y horarios especiales</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li><strong class="text-gray-200">Horario de llamados (domingos):</strong> todos los domingos hay tres llamados programados a las <strong>12:00</strong>, <strong>12:15</strong> y <strong>12:30</strong>.</li>
+                        <li><strong class="text-gray-200">Tiempo Ordinario:</strong> el llamado a misa se configura con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">285</code> (Angelus 3-3-3) o <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">282</code> (33 Tocchi di III).</li>
+                        <li><strong class="text-gray-200">Pentecostés:</strong> cambiar los llamados de las <strong>12:15</strong> y <strong>12:30</strong> por el himno <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">153</code> (Veni Creatore Gregoriano).</li>
+                        <li><strong class="text-gray-200">Triduo Pascual:</strong> desde el Gloria del Jueves Santo hasta la Vigilia Pascual no se ejecutan repiques alegres ni distesas. Tradicionalmente se recomienda silenciar el campanario.</li>
+                    </ul>
+                </article>
+
+                <article id="man-llamados" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-4">
+                    <h3 class="text-base font-semibold text-amber-400">3. Llamados a misa, Ángelus y reloj</h3>
+                    <p class="text-gray-400">La duración de la distesa (volteo continuo) marca la jerarquía de la celebración: breve para días feriales, media para domingos y fiestas, y larga para solemnidades.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse min-w-[520px]">
+                            <thead class="bg-gray-900/60 text-gray-400 uppercase tracking-wide">
+                                <tr><th class="px-3 py-2">Función</th><th class="px-3 py-2">Código</th><th class="px-3 py-2">Especificación</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                <tr><td class="px-3 py-2">Llamado misa ferial</td><td class="px-3 py-2 font-mono text-amber-300">352</td><td class="px-3 py-2">Distesa feriale · 60 s</td></tr>
+                                <tr><td class="px-3 py-2">Llamado domingo</td><td class="px-3 py-2 font-mono text-amber-300">353 / 354</td><td class="px-3 py-2">Distesa domenica · 60 s / 120 s</td></tr>
+                                <tr><td class="px-3 py-2">Llamado solemnidades</td><td class="px-3 py-2 font-mono text-amber-300">355 · 360 · 370</td><td class="px-3 py-2">Solenne 120 s · distesas de 300 s (5 min)</td></tr>
+                                <tr><td class="px-3 py-2">Ángelus diario</td><td class="px-3 py-2 font-mono text-amber-300">284</td><td class="px-3 py-2">Angelus 3-7-9 (tradición estándar)</td></tr>
+                                <tr><td class="px-3 py-2">Ángelus ferial / festivo</td><td class="px-3 py-2 font-mono text-amber-300">296 / 297</td><td class="px-3 py-2">Días de semana / domingos y solemnidades</td></tr>
+                                <tr><td class="px-3 py-2">Reloj Big Ben</td><td class="px-3 py-2 font-mono text-amber-300">266 – 269</td><td class="px-3 py-2">1/4, 2/4, 3/4 y hora completa</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-gray-400">
+                        <p class="font-semibold text-gray-200 mb-1">Distesas personalizadas por duración</p>
+                        <ul class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-xs font-mono">
+                            <li><span class="text-gray-500">60 s:</span> 356, 361, 366, 371, 376, 381, 386, 391</li>
+                            <li><span class="text-gray-500">90 s:</span> 357, 362, 367, 372, 377, 382, 387, 392</li>
+                            <li><span class="text-gray-500">120 s:</span> 358, 363, 368, 373, 378, 383, 388, 393</li>
+                            <li><span class="text-gray-500">180 s:</span> 359, 364, 369, 374, 379, 384, 389, 394</li>
+                            <li><span class="text-gray-500">300 s:</span> 360, 365, 370, 375, 380, 385, 390, 395</li>
+                        </ul>
+                    </div>
+                    <p class="text-xs text-gray-500">Patrones de Ángelus: 3-7-9 (284, 288, 291, 294) · 3-3-3 (285, 287, 290, 293) · 3-4-5-1 (289, 292, 295). Las variantes 287–295 corresponden a las campanas 24, 28 y 31.</p>
+                </article>
+
+                <article id="man-sacramentos" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 class="text-base font-semibold text-amber-400 mb-3">4. Sacramentos y eventos parroquiales</h3>
+                    <p class="text-gray-400 mb-3">Estos toques se aplican según el evento y se sobreponen al tiempo litúrgico del día.</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li><strong class="text-gray-200">Matrimonios:</strong> melodía <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">76</code> (Marcia Nuziale), melodía festiva de salida.</li>
+                        <li><strong class="text-gray-200">Bautismos y días de júbilo:</strong> el equipo no tiene una melodía de "bautismo"; se usan <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">331</code> / <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">332</code> (Allegrezza 1 y 2) o cualquiera del bloque <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">340–347</code> (Festa 1 a 8).</li>
+                        <li><strong class="text-gray-200">Avisos de fallecimiento:</strong> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">312</code> hombre, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">313</code> mujer, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">314</code> clérigo.</li>
+                        <li><strong class="text-gray-200">Toques fúnebres previos a la misa:</strong> del <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">302</code> al <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">311</code> o del <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">315</code> al <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">319</code>; permiten de 1 a 5 campanas a duelo.</li>
+                        <li><strong class="text-gray-200">Melodías de luto:</strong> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">238</code> (Requiem Gregoriano / L'Eterno Riposo). Ojo: el <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">237</code> es O Redemptor, no el Requiem (ver <a href="#cambios" class="text-amber-400 hover:underline">Cambios</a>).</li>
+                    </ul>
+                </article>
+
+                <article id="man-colores" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 class="text-base font-semibold text-amber-400 mb-3">5. Colores litúrgicos y criterios de priorización</h3>
+                    <ul class="space-y-2 text-gray-400 mb-4">
+                        <li>⬜ <strong class="text-gray-200">Blanco / Dorado:</strong> júbilo, luz y pureza. Navidad, Pascua, solemnidades del Señor, fiestas de la Virgen, santos no mártires, bautismos y matrimonios.</li>
+                        <li>🟪 <strong class="text-gray-200">Morado:</strong> preparación, penitencia o luto. Adviento, Cuaresma, difuntos y funerales.</li>
+                        <li>🟩 <strong class="text-gray-200">Verde:</strong> Tiempo Ordinario; la esperanza y la vida cotidiana de la Iglesia.</li>
+                        <li>🟥 <strong class="text-gray-200">Rojo:</strong> fuego del Espíritu y sangre. Domingo de Ramos, Viernes Santo, Pentecostés, apóstoles y mártires.</li>
+                    </ul>
+                    <ol class="list-decimal pl-5 space-y-2 text-gray-400">
+                        <li><strong class="text-gray-200">Jerarquía litúrgica:</strong> distesas de 300 s para solemnidades, 120 s para fiestas y domingos, 60 s para memorias y días feriales.</li>
+                        <li><strong class="text-gray-200">Identidad nacional:</strong> se prioriza la devoción a la Virgen del Carmen, Patrona de Chile.</li>
+                        <li><strong class="text-gray-200">Tiempos fuertes:</strong> el paso entre Adviento, Navidad, Cuaresma, Pascua y Tiempo Ordinario se marca cambiando la melodía de apertura, respetando el carácter penitencial o festivo de cada tiempo.</li>
+                    </ol>
+                </article>
+
+                <article id="man-consideraciones" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 class="text-base font-semibold text-amber-400 mb-3">6. Consideraciones y notas manuscritas</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li><strong class="text-gray-200">Virgen del Carmen (117):</strong> en el calendario litúrgico suena en su solemnidad (16 de julio). Además, según la nota manuscrita del catálogo, la parroquia la toca el 18 y 19 de septiembre (Fiestas Patrias). Como es una fecha civil, no figura en el calendario de búsqueda: se programa como toque especial.</li>
+                        <li><strong class="text-gray-200">Santos chilenos sin melodía propia:</strong> Santa Teresa de los Andes y San Alberto Hurtado no tienen pista con su nombre (como sí los santos europeos 222–234). Se les asignan cantos de discipulado en español: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">119</code> (Juntos como hermanos) y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">102</code> (Canto per Cristo).</li>
+                        <li><strong class="text-gray-200">Tiempos de silencio:</strong> durante el Triduo Pascual solo se admiten melodías estrictamente penitenciales o de la Pasión si es indispensable marcar un rito.</li>
+                    </ul>
+                </article>
+
+                <article id="man-mantenimiento" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 class="text-base font-semibold text-amber-400 mb-3">7. Mantenimiento y diagnóstico</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li><strong class="text-gray-200">Sincronización del reloj:</strong> mantener la hora del controlador exacta; cualquier desfase afecta los llamados programados. Usar los toques Big Ben (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">266–281</code>) para verificar la precisión del reloj interno.</li>
+                        <li><strong class="text-gray-200">Pruebas sin sonido exterior:</strong> si hay que probar la programación o hay problemas de salida, mover el interruptor físico (switch) del equipo a la posición <strong>Inside</strong> (monitoreo interno).</li>
+                        <li><strong class="text-gray-200">Claves:</strong> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> para programar (B); hora y minutos actuales para configurar (E). Detalle en <a href="#mo-codigos" class="text-amber-400 hover:underline">Códigos de acceso</a>.</li>
+                        <li><strong class="text-gray-200">Cambio de hora en Chile:</strong> la hora legal automática del equipo (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A14</code>) usa las fechas europeas (último domingo de marzo y de octubre), que no coinciden con Chile. Conviene dejarla desactivada (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A142</code>) y corregir la hora a mano con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A11</code> cuando cambie el horario.</li>
+                    </ul>
+                </article>
+
+                <article id="man-tradiciones" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 class="text-base font-semibold text-amber-400 mb-3">8. Tradiciones católicas de toque</h3>
+                    <p class="text-gray-400 mb-3">Usos tradicionales de las campanas en la vida parroquial, según la guía de campanología de Belltron. Son referencias de costumbre: no están asignados a fechas del calendario.</p>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li><strong class="text-gray-200">Aviso de misa:</strong> se toca 15, 30, 45 o 60 minutos antes de la celebración, según la costumbre del lugar. Nuestra parroquia usa llamados escalonados los domingos (12:00, 12:15 y 12:30).</li>
+                        <li><strong class="text-gray-200">Ángelus:</strong> tres veces al día, en la mañana, a mediodía y en la tarde. Códigos <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">284</code>–<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">301</code>; para el mediodía festivo, <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">320</code> (Mezzadia festiva).</li>
+                        <li><strong class="text-gray-200">Viernes a las 15:00:</strong> toque por la Agonía de Jesús, todos los viernes. No figura en las reglas de programación de la parroquia registradas en esta app.</li>
+                        <li><strong class="text-gray-200">Cuarenta Horas (adoración eucarística):</strong> <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">322</code> Quarantore.</li>
+                        <li><strong class="text-gray-200">Muerte o elección del Papa:</strong> la tradición prevé toques especiales. Sugerencia (no viene en la hoja): toques fúnebres (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">302–311</code>) para la muerte y repique festivo (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">340–347</code>) para la elección.</li>
+                        <li><strong class="text-gray-200">Viático:</strong> aviso cuando se lleva la Comunión a un enfermo grave.</li>
+                        <li><strong class="text-gray-200">Mes de María:</strong> en Chile se celebra del 8 de noviembre al 8 de diciembre (en Italia, en mayo). Melodías marianas sugeridas: ver categoría María en el buscador.</li>
+                        <li><strong class="text-gray-200">Otras ocasiones:</strong> matrimonios, sacramentos, funerales, fiestas patronales, procesiones, solemnidades, triduos, novenas, rogativas y sus vísperas, catequesis y bendición de casas.</li>
+                    </ul>
+                </article>
+
+                <article id="man-tecnicas" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6">
+                    <h3 class="text-base font-semibold text-amber-400 mb-3">9. Técnicas de toque y glosario</h3>
+                    <p class="text-gray-400 mb-3">El Belltron 250A es un equipo italiano: por defecto, la pantalla y la hoja de códigos muestran los nombres de melodías y toques en italiano, a veces abreviados (p. ej. <span class="font-mono text-gray-300">CRISTUS VINCIT</span>, <span class="font-mono text-gray-300">RISUSCITO</span>). En la app se conservan tal cual, sin traducir ni corregir, para que coincidan con lo que muestra el equipo. Las técnicas de toque que aparecen en esos nombres son:</p>
+                    <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3 text-gray-400">
+                        <div><dt class="font-semibold text-gray-200">Distesa</dt><dd>Volteo: la campana gira u oscila libremente durante un tiempo fijo. Códigos 352–395.</dd></div>
+                        <div><dt class="font-semibold text-gray-200">A tocco / Tocchi</dt><dd>Golpes del badajo con la campana quieta, contados. Ej.: 282 "33 tocchi" (uno por cada año de Cristo).</dd></div>
+                        <div><dt class="font-semibold text-gray-200">A martello</dt><dd>Golpes con martillo exterior, como en las horas del reloj (Big Ben 266–281).</dd></div>
+                        <div><dt class="font-semibold text-gray-200">Scampanio</dt><dd>Repique rápido y alegre de varias campanas. Códigos 321, 328 y 329.</dd></div>
+                        <div><dt class="font-semibold text-gray-200">Doppio bolognese</dt><dd>Técnica de la tradición de Bolonia en que las campanas giran en secuencia. Códigos 348–351.</dd></div>
+                        <div><dt class="font-semibold text-gray-200">Tirabasso / Tirabasse</dt><dd>Variante boloñesa de toques "tirados bajos". Aparece en 286 y 348–351.</dd></div>
+                        <div><dt class="font-semibold text-gray-200">Allegrezza / Festa</dt><dd>Toques de júbilo para bautismos y fiestas. Códigos 331–332 y 340–347.</dd></div>
+                        <div><dt class="font-semibold text-gray-200">Funerale / Annuncio morte</dt><dd>Toques de duelo y avisos de fallecimiento. Códigos 302–319.</dd></div>
+                        <div><dt class="font-semibold text-gray-200">Campana 24, 28, 31…</dt><dd>Número que identifica cada campana (por su tamaño o nota). Los toques indican qué campanas suenan.</dd></div>
+                        <div><dt class="font-semibold text-gray-200">D1</dt><dd>Aparece en los módulos de distesa (ej. DIS.-32/29/D1-27). La hoja no explica su significado.</dd></div>
+                    </dl>
+                </article>
+
+                <article id="man-equipo" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">10. Sobre el equipo Belltron y soporte</h3>
+                    <ul class="list-disc pl-5 space-y-2 text-gray-400">
+                        <li><strong class="text-gray-200">Fabricante:</strong> Belltron, empresa italiana fundada en 1982 con sede en la provincia de Teramo (Abruzos) y oficina comercial en Madrid. El toque "Martinsicuro" (352–355) probablemente lleva el nombre de un pueblo de esa zona.</li>
+                        <li><strong class="text-gray-200">Modelo DMC‑250A:</strong> el equipo es un <strong>DMC‑250A</strong> ("Tower Maestro"). Su manual de operación en español está integrado en la sección <a href="#manual-oficial" class="text-amber-400 hover:underline">Manual DMC‑250A</a>. Los modelos actuales del fabricante son DMC‑870 y DMC‑3800.</li>
+                        <li><strong class="text-gray-200">Duración de las melodías:</strong> el manual del DMC‑250A no la indica (tampoco trae la lista de melodías). Solo se conocen las de las distesas (352–395). Para el resto hay que medirlas en el equipo con el switch en <strong>Inside</strong>.</li>
+                        <li><strong class="text-gray-200">Soporte técnico:</strong> teléfono <span class="font-mono text-gray-200">+39 0861 753521</span> · <a href="https://www.belltron.com/it/faq" target="_blank" rel="noopener" class="text-amber-400 hover:underline">belltron.com</a>. Conviene tener a mano el número de serie del equipo.</li>
+                    </ul>
+                    <div class="bg-gray-900/50 border border-gray-700 rounded-lg p-4 text-xs text-gray-400">
+                        <p class="font-semibold text-gray-300 mb-1">Funciones de los equipos Belltron actuales (no todas existen en el DMC‑250A)</p>
+                        <ul class="list-disc pl-5 space-y-1">
+                            <li>Teclas de acceso rápido para activar o desactivar programas y tocar al instante toques especiales (funerales, eventos solemnes).</li>
+                            <li>Cada melodía se puede repetir o encadenar durante los minutos que se indiquen, por lo que la duración de un toque depende también de la programación.</li>
+                            <li>Calendario litúrgico perpetuo con fiestas fijas y móviles (Navidad, Pascua).</li>
+                            <li>Salidas de relé para luces, calefacción, puertas y alarmas (en el DMC‑250A: hasta 28 servicios; códigos 499 ON R1 y 500 OFF R1).</li>
+                            <li>Grabación de melodías locales: Belltron puede grabar una partitura que se le envíe.</li>
+                        </ul>
+                    </div>
+                    <p class="text-xs text-gray-500">Fuentes: <a href="https://www.belltron.com/it/la-campanologia" target="_blank" rel="noopener" class="hover:underline">Belltron – La campanologia</a> · <a href="https://www.belltron.com/it/faq" target="_blank" rel="noopener" class="hover:underline">Belltron – FAQ</a> · <a href="https://www.belltron.com/it/prodotti/campane/campane-elettroniche/dmc-870ea" target="_blank" rel="noopener" class="hover:underline">Belltron – DMC‑870EA</a> · <a href="https://en.wikipedia.org/wiki/Bolognese_bell_ringing" target="_blank" rel="noopener" class="hover:underline">Wikipedia – Bolognese bell ringing</a>. Consultadas el 8 de noviembre de 2026.</p>
+                </article>
+            </div>
+        </section>
+
+        <hr class="border-gray-800">
+
+        <!-- ===================== MANUAL OFICIAL DMC-250A ===================== -->
+        <section id="manual-oficial" class="scroll-mt-24 space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold text-gray-100 flex items-center gap-2">📘 Manual de operación DMC‑250A</h2>
+                    <p class="text-sm text-gray-400 mt-1">Resumen del manual oficial de Belltron (42 páginas, en español) para el equipo de la parroquia. Cada apartado indica la página del original.</p>
+                </div>
+                <a href="docs/manual_DMC-250A.pdf" target="_blank" rel="noopener"
+                    class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 text-sm font-medium hover:bg-amber-500/20 transition whitespace-nowrap">📄 Abrir PDF original</a>
+            </div>
+
+            <nav class="bg-gray-800 border border-gray-700 rounded-xl p-4 text-xs">
+                <p class="text-gray-500 uppercase tracking-wide font-semibold mb-2">Contenido</p>
+                <ol class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-1 list-decimal pl-5 text-gray-300">
+                    <li><a href="#mo-teclado" class="hover:text-amber-400">Teclado y tabla de comandos</a></li>
+                    <li><a href="#mo-codigos" class="hover:text-amber-400">Códigos de acceso</a></li>
+                    <li><a href="#mo-frecuentes" class="hover:text-amber-400">Operaciones frecuentes</a></li>
+                    <li><a href="#mo-programacion" class="hover:text-amber-400">Programación a tiempo (B)</a></li>
+                    <li><a href="#mo-fiestas" class="hover:text-amber-400">Fiestas móviles y prioridades</a></li>
+                    <li><a href="#mo-servicios" class="hover:text-amber-400">Programas de servicio (A24)</a></li>
+                    <li><a href="#mo-datos" class="hover:text-amber-400">Respaldo de la programación</a></li>
+                    <li><a href="#mo-config" class="hover:text-amber-400">Configuración del equipo (E)</a></li>
+                    <li><a href="#mo-extras" class="hover:text-amber-400">Accesorios, conexiones y seguridad</a></li>
+                </ol>
+            </nav>
+
+            <div class="space-y-4 text-sm text-gray-300 leading-relaxed">
+
+                <article id="mo-teclado" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">1. Teclado y tabla de comandos <span class="text-xs font-normal text-gray-500">· págs. 3–4</span></h3>
+                    
+                    <p class="text-gray-400">Al encenderlo, la pantalla muestra <span class="font-mono">BELLTRON ITALY</span> con la versión del software y el número de serie durante unos 15 segundos; luego, la fecha y la hora. Revisa que la hora sea correcta.</p>
+                    <ul class="list-disc pl-5 space-y-1.5 text-gray-400"><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A</code> <strong class="text-gray-200">Reloj y acceso directo:</strong> hora, habilitar funciones, ver salidas y volumen.</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> <strong class="text-gray-200">Programación a tiempo:</strong> programar, verificar/modificar y gestionar datos. Pide la clave <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code>.</li><li><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code> <strong class="text-gray-200">Configuración:</strong> ajustes del aparato. Pide como clave la hora y minutos actuales.</li><li><strong class="text-gray-200">Tecla de ejecución manual</strong> (icono de mano): toca una sonada al instante.</li><li><strong class="text-gray-200">OK</strong> confirma · <strong class="text-gray-200">NO</strong> retrocede o cancela · <strong class="text-gray-200">F</strong> detiene la ejecución · <strong class="text-gray-200">flechas</strong>: arriba/abajo recorren opciones, izquierda/derecha cambian valores (p. ej. ¿ACTUALIZA? NO → SI).</li></ul>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse min-w-[620px]">
+                            <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                                <tr><th class="px-3 py-2">Tecla</th><th class="px-3 py-2">Menú</th><th class="px-3 py-2">Opciones</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A1</td><td class="px-3 py-2">Reloj</td><td class="px-3 py-2">1 Corregir fecha/hora · 2 Sincr. reloj torre · 3 Sincr. reloj secundario · 4 Hora legal · 5 Corrección del reloj</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A2</td><td class="px-3 py-2">Habilita funciones</td><td class="px-3 py-2">1 Suspender sonadas · 2 Programación particular · 3 Modificar prog. particular · 4 Ejecución servicios · 5 Ciclo semanal</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A3 / A4</td><td class="px-3 py-2">Salidas / Volumen</td><td class="px-3 py-2">Ver el estado de las salidas · Volumen general, tono bajo y tono alto</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">B1</td><td class="px-3 py-2">Programación</td><td class="px-3 py-2">1 Normal · 2 Día tipo · 3 Semana tipo · 4 Festividad · 5 Día semana mes · 6 Prog. todos los días · 7 Prog. casual</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">B2</td><td class="px-3 py-2">Verifica/modifica</td><td class="px-3 py-2">Los mismos 7 tipos</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">B3</td><td class="px-3 py-2">Gestión datos</td><td class="px-3 py-2">1 Salvar memoria · 2 Recuperar programación · 3 Recuperar sonadas · 4 Cancelar programación · 5 Cancelar sonadas</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">E1</td><td class="px-3 py-2">Configuración</td><td class="px-3 py-2">1 Config. aparato · 2 Entrada · 3 Toque de horas · 4 Ajustar esfera · 5 Parámetros volteo · 6 Duración impulso martillo · 7 Más días festivos · 8 Idioma · 9 Código de acceso</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">E2 / E3</td><td class="px-3 py-2">Servicios / Teleprog.</td><td class="px-3 py-2">Gestión de nuevos servicios · Slave, Master, Prog. módem</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <article id="mo-codigos" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">2. Códigos de acceso <span class="text-xs font-normal text-gray-500">· págs. 4, 10 y 36</span></h3>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse min-w-[520px]">
+                            <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                                <tr><th class="px-3 py-2">Código</th><th class="px-3 py-2">Para qué sirve</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">1111</td><td class="px-3 py-2">Clave de fábrica de la programación a tiempo (tecla B). Se puede cambiar en E‑1‑9.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">Hora + minutos</td><td class="px-3 py-2">Clave de la configuración (tecla E): la hora actual del equipo, p. ej. a las 09:47 se escribe 0947.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">1492</td><td class="px-3 py-2">Bloquea o desbloquea el teclado.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">924</td><td class="px-3 py-2">Hace parpadear el LED rojo del reloj de torre: al cambiar la hora, las agujas no se mueven. Útil para probar sin mover el reloj exterior; después hay que reponer las agujas con A12.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">Llave maestra</td><td class="px-3 py-2">Existe una llave "passpartout" de fábrica; está en la pág. 36 del manual. Úsala solo si se olvidó la clave.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <article id="mo-frecuentes" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">3. Operaciones frecuentes <span class="text-xs font-normal text-gray-500">· págs. 4–5 y 13–20</span></h3>
+                    
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse min-w-[560px]">
+                            <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                                <tr><th class="px-3 py-2">Teclas</th><th class="px-3 py-2">Qué hace</th><th class="px-3 py-2">Pág.</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">Ejecución + n.º + OK</td><td class="px-3 py-2">Toca una sonada ahora. Para detenerla: NO dos veces o F.</td><td class="px-3 py-2">13</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A11</td><td class="px-3 py-2">Corregir fecha y hora: escribe día, mes, año, horas, minutos y segundos.</td><td class="px-3 py-2">4</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A12 / A13</td><td class="px-3 py-2">Indicar dónde están las agujas del reloj de torre / secundario para que el equipo las ponga en hora.</td><td class="px-3 py-2">14</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A141 / A142</td><td class="px-3 py-2">Activar / desactivar la hora legal automática (fechas europeas: ver nota abajo).</td><td class="px-3 py-2">15</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A15</td><td class="px-3 py-2">Corregir la precisión del reloj: adelanta o atrasa X segundos al mes.</td><td class="px-3 py-2">15</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A21</td><td class="px-3 py-2">Silenciar todas las sonadas desde una fecha y hora hasta otra (p. ej. Triduo Pascual).</td><td class="px-3 py-2">16</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A22</td><td class="px-3 py-2">Programar una sonada especial para un solo día.</td><td class="px-3 py-2">16</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A23</td><td class="px-3 py-2">Ver, modificar (A) o borrar (E) las sonadas especiales.</td><td class="px-3 py-2">17</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A24 + n.º + OK + 1</td><td class="px-3 py-2">Ejecutar un programa de servicio (ver tabla de servicios).</td><td class="px-3 py-2">18</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A25</td><td class="px-3 py-2">Ciclo semanal: rotar hasta 4 semanas tipo cada 7 días.</td><td class="px-3 py-2">20</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A3</td><td class="px-3 py-2">Ver el estado de las salidas (martillos, motores, servicios).</td><td class="px-3 py-2">20</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">A4</td><td class="px-3 py-2">Volumen general, tono bajo y tono alto (flechas).</td><td class="px-3 py-2">20</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">E + clave + 1 + 8</td><td class="px-3 py-2">Idioma del menú: 1 italiano, 2 inglés, 3 francés, <strong>4 español</strong>, 5 polaco, 6 alemán, 7 portugués. Los nombres de las melodías no cambian.</td><td class="px-3 py-2">5</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="bg-amber-500/5 border border-amber-500/30 rounded-lg p-3 text-xs text-gray-300">⚠️ <strong>Hora legal en Chile:</strong> la función automática cambia la hora el último domingo de marzo y de octubre (calendario europeo). En Chile las fechas son otras, por lo que conviene desactivarla (<code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A142</code>) y ajustar la hora con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A11</code> en cada cambio de horario.</div>
+                </article>
+
+                <article id="mo-programacion" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">4. Programación a tiempo (tecla B) <span class="text-xs font-normal text-gray-500">· págs. 12 y 21–30</span></h3>
+                    
+                    <p class="text-gray-400">Entrada: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> y el número del tipo. En cada programa se puede elegir con las flechas qué ejecutar: Melodía, On/Off servicio, Día tipo, Tipo de reloj, Habilita/Deshabilita reloj, Habilita/Deshabilita sonadas.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse min-w-[680px]">
+                            <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                                <tr><th class="px-3 py-2">Tipo</th><th class="px-3 py-2">Para qué sirve</th><th class="px-3 py-2">Ejemplo del manual</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">1 Normal</td><td class="px-3 py-2">Una sonada a una hora, todos los días o en ciertos días de la semana.</td><td class="px-3 py-2">Melodía 51 solo el domingo a las 12:00: OK 51 OK, flecha derecha 1 vez (DOM), OK 12 00 OK, NO.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">2 Día tipo</td><td class="px-3 py-2">Conjunto de sonadas de un "día modelo" (ferial, prefestivo, festivo, solemne; verano o invierno).</td><td class="px-3 py-2">B+1111+12+OK, elegir melodía y hora; NO para salir.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">3 Semana tipo</td><td class="px-3 py-2">Combina días tipo para lunes–viernes, sábado y domingo, con fecha de inicio.</td><td class="px-3 py-2">B+1111+13: 1 Total, 2 Día singular, 3 Fecha (ej. 01 04).</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">4 Festividad</td><td class="px-3 py-2">Sonadas o días tipo en fiestas ya cargadas de fábrica (Pascua, Navidad, Reyes…) o X días antes/después de ellas.</td><td class="px-3 py-2">Día tipo 24 el día de Pascua; melodía 17 a las 12:00 en Navidad.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">5 Semana del mes</td><td class="px-3 py-2">Primer, segundo, tercer, cuarto o último día de la semana de un mes.</td><td class="px-3 py-2">Melodía 34 el primer viernes de cada mes a las 15:00.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">6 Referida a fecha</td><td class="px-3 py-2">Entre dos fechas fijas, a una hora.</td><td class="px-3 py-2">Ángelus (prog. 100) del 15/03 al 15/10 a las 06:00 y del 16/10 al 31/12 a las 07:00.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">7 Casual</td><td class="px-3 py-2">Grupos de hasta 50 sonadas que suenan al azar o en orden (cíclico) en un período (Navidad, Pascua, novenas).</td><td class="px-3 py-2">B 1 7, agregar sonadas con OK, NO al terminar, elegir Random o Cíclica.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-gray-400">Para revisar o corregir: <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">2</code> y el tipo. Con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A</code> se modifica, con <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">E</code> se borra y con las flechas arriba/abajo se recorren las programaciones; si no hay ninguna aparece <span class="font-mono">FIN</span>.</p>
+                </article>
+
+                <article id="mo-fiestas" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">5. Fiestas móviles y prioridades <span class="text-xs font-normal text-gray-500">· págs. 24–30 y 41</span></h3>
+                    
+                    <p class="text-gray-400">El equipo calcula las fiestas móviles a partir de la fecha de Pascua (tabla de la pág. 41, años 2008–2030). Con <strong>Festividad → Prg. ref. festividad</strong> se puede programar algo X días antes o después de ellas.</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse min-w-[420px]">
+                            <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                                <tr><th class="px-3 py-2">Referencia</th><th class="px-3 py-2">Fiesta</th><th class="px-3 py-2">Fecha 2026</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P − 46</td><td class="px-3 py-2">Miércoles de Ceniza</td><td class="px-3 py-2">18 feb</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P − 42</td><td class="px-3 py-2">I domingo de Cuaresma</td><td class="px-3 py-2">22 feb</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P − 7</td><td class="px-3 py-2">Domingo de Ramos</td><td class="px-3 py-2">29 mar</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P</td><td class="px-3 py-2">Pascua de Resurrección</td><td class="px-3 py-2">5 abr</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P + 7</td><td class="px-3 py-2">Domingo de la Divina Misericordia</td><td class="px-3 py-2">12 abr</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P + 42</td><td class="px-3 py-2">Ascensión (en domingo, como en Chile)</td><td class="px-3 py-2">17 may</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P + 49</td><td class="px-3 py-2">Pentecostés</td><td class="px-3 py-2">24 may</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P + 56</td><td class="px-3 py-2">Santísima Trinidad</td><td class="px-3 py-2">31 may</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P + 63</td><td class="px-3 py-2">Corpus Christi (en domingo)</td><td class="px-3 py-2">7 jun</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P + 68</td><td class="px-3 py-2">Sagrado Corazón de Jesús</td><td class="px-3 py-2">12 jun</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">P + 69</td><td class="px-3 py-2">Inmaculado Corazón de María</td><td class="px-3 py-2">13 jun</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p class="text-gray-400">Ejemplos del manual útiles para la parroquia:</p>
+                    <ul class="list-disc pl-5 space-y-1.5 text-gray-400"><li>Día tipo 9 los domingos de Adviento: 28 días antes de Navidad, por 7 días, solo domingo.</li><li>Semana tipo 5 de Ceniza a Jueves Santo: 46 días antes de Pascua, por 43 días.</li><li><strong class="text-gray-200">Silencio del Triduo:</strong> deshabilitar sonido 2 días antes de Pascua por 2 días a las 03:00, y volver a habilitarlo el día de Pascua a las 03:00.</li><li>Semana tipo 6 del primer domingo de Adviento hasta Epifanía (6 de enero), usando el período virtual 61.</li></ul>
+                    <p class="font-semibold text-gray-200">Prioridades</p>
+                    <ul class="list-disc pl-5 space-y-1.5 text-gray-400"><li>Las programaciones festivas tienen prioridad sobre las normales; si se superponen días o semanas tipo, solo se ejecutan las festivas.</li><li>Una sonada festiva se suma a la programación normal, pero si choca en la misma hora gana la festiva.</li><li>Si se superponen dos períodos festivos, gana el que empieza más tarde. En la programación referida a fecha, gana el período que empezó más recientemente.</li><li>La semana tipo 61 es un período virtual que equivale al término de la festividad.</li></ul>
+                </article>
+
+                <article id="mo-servicios" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">6. Programas de servicio (A24) <span class="text-xs font-normal text-gray-500">· págs. 18–19</span></h3>
+                    
+                    <p class="text-gray-400">Pulsa <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">A24</code>, el número del servicio, OK y <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1</code> para activarlo; un asterisco confirma que quedó activo. Tras un corte de luz, los servicios se ejecutan igual al volver la corriente. Los números 46 a 100 son personalizables (tecla E2).</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse min-w-[560px]">
+                            <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                                <tr><th class="px-3 py-2">N.º</th><th class="px-3 py-2">Servicio</th><th class="px-3 py-2">Descripción</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">01</td><td class="px-3 py-2">Sólo hora</td><td class="px-3 py-2">Solo el toque de la hora.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">02 / 03</td><td class="px-3 py-2">1 o 2 toques a la media</td><td class="px-3 py-2">Hora exacta y 1 o 2 toques a la media hora.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">04 / 05</td><td class="px-3 py-2">Hora + 1 o 2 toques</td><td class="px-3 py-2">Hora exacta, y a la media la hora seguida de 1 o 2 toques.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">06</td><td class="px-3 py-2">2T_1234 (reloj español)</td><td class="px-3 py-2">1-2-3 toques a los cuartos y 4 a la hora, seguidos de las horas.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">07</td><td class="px-3 py-2">1T_1234</td><td class="px-3 py-2">1, 2, 3 toques a los cuartos y 4 a la hora, seguidos de las horas.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">08</td><td class="px-3 py-2">Cuartos (1-2-3)</td><td class="px-3 py-2">Hora exacta y solo 1-2-3 toques a los cuartos.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">09</td><td class="px-3 py-2">Hora + cuartos</td><td class="px-3 py-2">Hora exacta y, a los cuartos, hora + 1, 2, 3 toques.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">10</td><td class="px-3 py-2">Cuartos + hora</td><td class="px-3 py-2">Hora exacta y, a los cuartos, cuartos seguidos de la hora.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">11 / 12</td><td class="px-3 py-2">Adelanta / atrasa 1 hora</td><td class="px-3 py-2">Hora legal / hora solar.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">14 / 15</td><td class="px-3 py-2">Habilita / deshabilita reloj</td><td class="px-3 py-2">Activa o desactiva el toque del reloj.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">16 / 17</td><td class="px-3 py-2">Habilita / deshabilita sonadas</td><td class="px-3 py-2">Activa o silencia las sonadas (campanas atadas).</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">22 / 23</td><td class="px-3 py-2">Habilita / deshabilita torre</td><td class="px-3 py-2">Activa o detiene el avance de las agujas del reloj de torre.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">37 / 38</td><td class="px-3 py-2">Habilita / deshabilita sonadas + reloj</td><td class="px-3 py-2">Sonadas y toque de horas a la vez.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">39</td><td class="px-3 py-2">Reinicia random</td><td class="px-3 py-2">Las sonadas casuales vuelven a empezar desde el número más bajo.</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300 whitespace-nowrap">44 / 45</td><td class="px-3 py-2">Prog. reloj on / off</td><td class="px-3 py-2">Incluye o quita el servicio 14 de la programación a tiempo.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </article>
+
+                <article id="mo-datos" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">7. Respaldo de la programación (B3) <span class="text-xs font-normal text-gray-500">· pág. 31</span></h3>
+                    
+                    <p class="text-gray-400"><code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">B</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">1111</code> + <code class="bg-gray-950 text-amber-300 px-1 rounded font-mono">3</code>:</p>
+                    <ul class="list-disc pl-5 space-y-1.5 text-gray-400"><li><strong class="text-gray-200">1 Salvar memoria:</strong> guarda toda la programación en la memoria interna, o en la memory card si está insertada.</li><li><strong class="text-gray-200">2 Recuperar</strong> la programación a tiempo y la configuración · <strong class="text-gray-200">3 Recuperar sonadas</strong>.</li><li><strong class="text-gray-200">4 Cancelar</strong> la programación y la configuración · <strong class="text-gray-200">5 Cancelar sonadas</strong> (no borra las de fábrica).</li><li>La memory card tiene prioridad sobre la memoria interna: guarda primero en la interna y después en la tarjeta.</li><li>Las sonadas de fábrica no se respaldan; para respaldarlas hay que duplicarlas con otro número.</li></ul>
+                    <div class="bg-amber-500/5 border border-amber-500/30 rounded-lg p-3 text-xs text-gray-300">💡 Recomendación: hacer <strong>Salvar memoria</strong> cada vez que se cambie la programación de la temporada.</div>
+                </article>
+
+                <article id="mo-config" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">8. Configuración del equipo (tecla E) <span class="text-xs font-normal text-gray-500">· págs. 4–11 y 32–34</span></h3>
+                    
+                    <p class="text-gray-400">Son ajustes de instalación; normalmente no hay que tocarlos. Se entra con E + hora y minutos actuales + 1.</p>
+                    <ul class="list-disc pl-5 space-y-1.5 text-gray-400"><li><strong class="text-gray-200">E‑1‑1 Config. aparato:</strong> tipo (campanas verdaderas, electrónicas, sistema mixto o no personalizado) y cantidad de martillos (máx. 20), motores (máx. 14) y servicios (máx. 28).</li><li><strong class="text-gray-200">E‑1‑2 Entrada:</strong> teclado (ninguno, teclas 1‑9 o externo) y asignación de notas a martillos.</li><li><strong class="text-gray-200">E‑1‑3 Toque de horas:</strong> salidas, velocidad, pausas y repetición del toque de horas y cuartos; o un toque personalizado tipo Big Ben con melodías por cuarto (antes o después del cuarto).</li><li><strong class="text-gray-200">E‑1‑4 Reloj:</strong> reloj de torre (impulso cada 60 o 30 s, tipo USA) y reloj secundario (12 o 24 horas).</li><li><strong class="text-gray-200">E‑1‑5 Parámetros volteo:</strong> tiempo de parada (s) y de activación entre volteos.</li><li><strong class="text-gray-200">E‑1‑6 Duración impulso:</strong> tiempo de cierre del relé de martillo.</li><li><strong class="text-gray-200">E‑1‑7 Más días festivos:</strong> agregar fiestas propias, p. ej. la fiesta patronal el último domingo de julio.</li><li><strong class="text-gray-200">E‑1‑8 Idioma</strong> y <strong class="text-gray-200">E‑1‑9 Código de acceso</strong> de la programación.</li><li><strong class="text-gray-200">E2 Servicios:</strong> salidas de relé 1–20 vinculadas o no a la red, con estado activa, desactivada o impulso de 2 s (p. ej. abrir puertas).</li></ul>
+                </article>
+
+                <article id="mo-extras" class="scroll-mt-24 bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                    <h3 class="text-base font-semibold text-amber-400">9. Accesorios, conexiones y seguridad <span class="text-xs font-normal text-gray-500">· págs. 2 y 35–40</span></h3>
+                    
+                    <ul class="list-disc pl-5 space-y-1.5 text-gray-400"><li><strong class="text-gray-200">Radiocomando (opcional):</strong> ON/OFF, número del programa, START para tocar; ON, ON/OFF y STOP para detener.</li><li><strong class="text-gray-200">Radiosincronización (opcional):</strong> receptor DCF‑77 o GPS. El LED de radiosincronización se enciende cuando el reloj se ajustó al menos una vez en el día y se apaga a medianoche.</li><li><strong class="text-gray-200">Reloj de torre:</strong> si existe, su LED rojo debe estar siempre encendido; al cambiar la hora las agujas se mueven solas.</li><li><strong class="text-gray-200">Salida de servicio automática:</strong> la última salida libre activa el cuadro eléctrico unos instantes antes de cada programa y lo apaga 15 s después.</li><li><strong class="text-gray-200">Conexiones:</strong> tarjetas de relé RL055‑2/4/6 (24 V AC, datos RS485) y esquemas con reloj de torre, radiocomando y martillos: ver págs. 37–40 del PDF.</li><li><strong class="text-gray-200">Seguridad:</strong> no abrir la tapa (no hay piezas reparables por el usuario), no exponer a agua ni humedad, no bloquear la ventilación, mantener la conexión a tierra y desenchufar durante tormentas o si no se usará por largo tiempo.</li></ul>
+                    <p class="text-xs text-gray-500">Fabricante: AERIS Elettronica s.r.l. (Belltron), Colonnella (TE), Italia · Tel. +39 0861 753521 · <a href="https://www.belltron.com" target="_blank" rel="noopener" class="hover:underline">belltron.com</a></p>
+                </article>
+            </div>
+        </section>
+
+        <hr class="border-gray-800">
+
+        <!-- ===================== CÓDIGOS ORIGINALES ===================== -->
+        <section id="codigos" class="scroll-mt-24 space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div class="max-w-3xl">
+                    <h2 class="text-2xl font-bold text-gray-100 flex items-center gap-2">🔢 Códigos Originales</h2>
+                    <p class="text-sm text-gray-400 mt-1">
+                        Hoja de códigos del equipo tal como aparece en el registro original: número, nombre que muestra la
+                        pantalla, descripción y uso.
+                    </p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-2 w-full md:w-auto min-w-0">
+                    <input id="codigos-busqueda" type="search" placeholder="Buscar número o nombre…"
+                        class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 placeholder-gray-500 focus:outline-none focus:border-amber-500 w-full sm:w-64">
+                    <select id="codigos-grupo"
+                        class="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-gray-100 focus:outline-none focus:border-amber-500 w-full sm:w-56 min-w-0 truncate">
+                        <option value="">Todos los grupos</option>
+                    </select>
+                </div>
+            </div>
+            <p id="codigos-contador" class="text-xs text-gray-500"></p>
+            <div class="bg-gray-800 border border-gray-700 rounded-xl overflow-x-auto">
+                <table class="w-full text-left text-sm border-collapse min-w-[640px]">
+                    <thead class="bg-gray-900/80 text-xs text-gray-400 uppercase tracking-wide sticky top-0">
+                        <tr>
+                            <th class="px-4 py-3 w-24">Código</th>
+                            <th class="px-4 py-3">Pantalla (mnemónico)</th>
+                            <th class="px-4 py-3">Descripción</th>
+                            <th class="px-4 py-3">Uso</th>
+                            <th class="px-4 py-3">Católica</th>
+                        </tr>
+                    </thead>
+                    <tbody id="codigos-cuerpo"></tbody>
+                </table>
+            </div>
+        </section>
+
+        <hr class="border-gray-800">
+
+        <!-- ===================== REGISTRO DE CAMBIOS ===================== -->
+        <section id="cambios" class="scroll-mt-24 space-y-6">
+            <div class="max-w-3xl">
+                <h2 class="text-2xl font-bold text-gray-100 flex items-center gap-2">📝 Cambios respecto a la hoja original</h2>
+                <p class="text-sm text-gray-400 mt-1">
+                    Referencia de las diferencias entre los <a href="#codigos" class="text-amber-400 hover:underline">códigos originales</a>
+                    del equipo y los datos que usa el buscador (catálogo y calendario). Revisado el 8 de noviembre de 2026.
+                </p>
+            </div>
+
+            <!-- 1. Discrepancias -->
+            <article class="bg-emerald-500/5 border border-emerald-500/30 rounded-xl p-6 space-y-3">
+                <h3 class="text-base font-semibold text-emerald-300">✅ 1. Códigos del calendario corregidos (8 nov 2026)</h3>
+                <p class="text-sm text-gray-400">El calendario indicaba el nombre correcto pero con el número de otra melodía de la hoja original: programado tal cual, el equipo habría tocado la melodía de la columna "Lo que sonaba". <strong class="text-gray-200">Ya se corrigieron al código de la hoja.</strong></p>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse min-w-[640px]">
+                        <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                            <tr><th class="px-3 py-2">Fecha</th><th class="px-3 py-2">Celebración</th><th class="px-3 py-2">Antes</th><th class="px-3 py-2">Lo que sonaba</th><th class="px-3 py-2">Ahora</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                            <tr><td class="px-3 py-2 whitespace-nowrap">18 feb</td><td class="px-3 py-2">Miércoles de Ceniza</td><td class="px-3 py-2"><span class="font-mono text-red-300">137</span> Attende Domine</td><td class="px-3 py-2">O Cristo tu regnerai</td><td class="px-3 py-2"><span class="font-mono text-emerald-300 font-bold">135</span> Attende Domine</td></tr>
+                            <tr><td class="px-3 py-2 whitespace-nowrap">3 abr</td><td class="px-3 py-2">Viernes Santo</td><td class="px-3 py-2"><span class="font-mono text-red-300">138</span> Stabat Mater Dolorosa</td><td class="px-3 py-2">O Capo insanguinato</td><td class="px-3 py-2"><span class="font-mono text-emerald-300 font-bold">136</span> Stabat Mater Dolorosa</td></tr>
+                            <tr><td class="px-3 py-2 whitespace-nowrap">17 may</td><td class="px-3 py-2">Ascensión del Señor</td><td class="px-3 py-2"><span class="font-mono text-red-300">148</span> Cristo è Risorto</td><td class="px-3 py-2">Alleluya a Colui che risuscitò</td><td class="px-3 py-2"><span class="font-mono text-emerald-300 font-bold">149</span> Cristo è Risorto (Handel)</td></tr>
+                            <tr><td class="px-3 py-2 whitespace-nowrap">2 nov</td><td class="px-3 py-2">Fieles Difuntos</td><td class="px-3 py-2"><span class="font-mono text-red-300">237</span> Requiem Gregoriano</td><td class="px-3 py-2">O Redemptor</td><td class="px-3 py-2"><span class="font-mono text-emerald-300 font-bold">238</span> Requiem / L'Eterno Riposo</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-gray-500">Origen: la "Guía maestra" de <code>context.md</code> tiene varios números corridos 1 o 2 posiciones respecto a la hoja (127, 136, 137, 138, 139, 140, 148, 149, 237). De ahí se copiaron al calendario. También se corrigieron en <code>context.md</code>.</p>
+            </article>
+
+            <!-- 2. Cambios aplicados -->
+            <article class="bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                <h3 class="text-base font-semibold text-amber-400">2. Correcciones ya aplicadas a los códigos</h3>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs border-collapse min-w-[520px]">
+                        <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                            <tr><th class="px-3 py-2">Antes</th><th class="px-3 py-2">Ahora</th><th class="px-3 py-2">Melodía</th><th class="px-3 py-2">Motivo</th></tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                            <tr><td class="px-3 py-2 font-mono text-red-300">*50</td><td class="px-3 py-2 font-mono text-emerald-300">50</td><td class="px-3 py-2">Christus Vincit</td><td class="px-3 py-2">Se quitó el asterisco del número para que coincida con el código del equipo.</td></tr>
+                            <tr><td class="px-3 py-2 font-mono text-red-300">164</td><td class="px-3 py-2 font-mono text-emerald-300">64</td><td class="px-3 py-2">Ave Maria di Fatima</td><td class="px-3 py-2">Error de transcripción: el 164 es "Genti tutte proclamate".</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="text-xs text-gray-500">Aplicadas el 23 de mayo de 2026 (commit 37197cc).</p>
+                <p class="text-sm text-gray-400"><strong class="text-gray-200">Calendario solo católico (8 nov 2026):</strong> se quitaron del calendario de búsqueda las entradas civiles "Fiestas Patrias de Chile" (18 y 19 de septiembre, código 117). La costumbre parroquial de tocar la Virgen del Carmen esos días queda anotada en el Manual, apartado 6.</p>
+                <p class="text-sm text-gray-400"><strong class="text-gray-200">Manual oficial DMC‑250A (11 nov 2026):</strong> se integró el manual de operación del equipo (PDF de 42 páginas en <code>docs/</code>) en la sección <a href="#manual-oficial" class="text-amber-400 hover:underline">Manual DMC‑250A</a>. Con él se corrigió: el modelo exacto es <strong>DMC‑250A</strong>; la clave <span class="font-mono">1111</span> es solo para la programación (tecla B), mientras que la configuración (tecla E) usa la hora y minutos actuales; un toque en curso se detiene con NO dos veces <em>o con la tecla F</em>; y el idioma del menú se puede cambiar a español (E‑1‑8, opción 4). La Guía rápida ahora usa los pasos reales del equipo.</p>
+            </article>
+
+            <!-- 3. Nombres distintos -->
+            <article class="bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-4">
+                <h3 class="text-base font-semibold text-amber-400">3. Nombres que el buscador muestra distinto</h3>
+                <div>
+                    <p class="text-sm text-gray-300 font-semibold mb-1">Catálogo del buscador · toques del equipo (8 nov 2026)</p>
+                    <p class="text-sm text-gray-400">El catálogo del buscador solo tenía las 213 melodías (50–265) y 8 distesas. Los toques del 266 al 500 (reloj, Ángelus, fúnebres, volteos, distesas y relés) estaban en <code>context.md</code> como listas y no se habían cargado. Ahora se agregan desde la hoja original con categorías propias en el filtro, y se pueden buscar por número, nombre o uso (p. ej. "angelus", "funerale", "299").</p>
+                    <p class="text-sm text-gray-400 mt-2">Antes, los códigos <span class="font-mono text-amber-300">356, 361, 366, 371, 376, 381, 386, 391</span> aparecían como el módulo completo ("Escalonado en: 60s, 90s, 120s, 180s y 300s"). En la hoja, cada uno es solo la versión de <strong>60 s</strong> de su módulo; ahora cada duración tiene su propio código. Las 213 melodías tienen el mismo nombre que la hoja.</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-300 font-semibold mb-1">Calendario · nombres en italiano (8 nov 2026)</p>
+                    <p class="text-sm text-gray-400 mb-2">El equipo es italiano y muestra los nombres en italiano. El calendario mezclaba nombres en español, latín e italiano; ahora cada fecha usa exactamente el nombre de la hoja original (15 fechas actualizadas). Ejemplos de cómo estaba antes:</p>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs border-collapse min-w-[480px]">
+                            <thead class="text-gray-400 uppercase tracking-wide bg-gray-900/60">
+                                <tr><th class="px-3 py-2">Código</th><th class="px-3 py-2">Antes</th><th class="px-3 py-2">Ahora (hoja original)</th></tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700/60 text-gray-300">
+                                <tr><td class="px-3 py-2 font-mono text-amber-300">53</td><td class="px-3 py-2">RISUCITO</td><td class="px-3 py-2">RISUSCITI</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300">59</td><td class="px-3 py-2">AVE MARIA DI LOURDES</td><td class="px-3 py-2">AVE MARIA DI LOURDES RIDOTTA</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300">74</td><td class="px-3 py-2">ASTRO DEL CIEL</td><td class="px-3 py-2">ASTRO CIEL</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300">92</td><td class="px-3 py-2">REGINA COELI</td><td class="px-3 py-2">REG COELI</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300">233</td><td class="px-3 py-2">Melodía de Santos - Uso facultativo (Beata Laura Vicuña)</td><td class="px-3 py-2">S. GIOVANNI BOSCO</td></tr>
+                                <tr><td class="px-3 py-2 font-mono text-amber-300">135</td><td class="px-3 py-2">ATTENDE DOMINE</td><td class="px-3 py-2">ATTENDE DOMINE (Quaresimale-Gregoriano)</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </article>
+
+            <!-- 4. Cobertura -->
+            <article class="bg-gray-800 border border-gray-700 rounded-xl p-6 space-y-3">
+                <h3 class="text-base font-semibold text-amber-400">4. Cobertura del buscador</h3>
+                <ul class="list-disc pl-5 space-y-2 text-sm text-gray-400">
+                    <li><strong class="text-gray-200">Números sin registro en la hoja:</strong> <span class="font-mono text-amber-300">93, 98, 235</span>. No aparecen en el registro original ni en el buscador.</li>
+                    <li><strong class="text-gray-200">Códigos de la hoja que no están en el catálogo del buscador:</strong> <span id="cambios-faltantes" class="font-mono text-amber-300"></span></li>
+                </ul>
+            </article>
         </section>
 
     </main>
@@ -1956,38 +2472,441 @@
 ]
 ;
 
+        // Hoja original de códigos del Belltron 250A (fuente: context.md). Incluye melodías y toques del 50 al 500.
+        const codigosOriginales = [
+            {"num":"50","titulo":"CRISTUS VINCIT","desc":"CHRISTUS VINCIT","uso":"Cristo Rey","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"51","titulo":"PIE SIGNOR","desc":"PIETA' SIGNORE","uso":"Cuaresma / Penitencial","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"52","titulo":"VOGL DIO","desc":"NOI VOGLIAM DIO","uso":"Devocional General","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"53","titulo":"RISUSCITO","desc":"RISUSCITI","uso":"Pascua","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"54","titulo":"CRI_RISUS","desc":"CRISTO RISUSCITI","uso":"Pascua","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"55","titulo":"NEI CIELI","desc":"NEI CIELI S'ODA RISUONAR","uso":"Pascua / Alabanza","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"56","titulo":"O DEL CIEL","desc":"O DEL CIELO GRAN REGINA","uso":"Mariano","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"57","titulo":"ODO SUONAR","desc":"ODO SUONAR","uso":"General","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"58","titulo":"AND VED DI","desc":"ANDRO' A VEDERLA UN DI'","uso":"Devocional / Difuntos","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"59","titulo":"AM LOURDES","desc":"AVE MARIA DI LOURDES RIDOTTA","uso":"Mariano","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"60","titulo":"AM LOURDES","desc":"AVE MARIA DI LOURDES SEMPLICE","uso":"Mariano","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"61","titulo":"AM LOURDES","desc":"AVE MARIA DI LOURDES CON VARIAZIONE","uso":"Mariano","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"62","titulo":"AM SHUBERT","desc":"AVE MARIA DI SCHUBERT","uso":"Mariano (Bodas / Solemnidades)","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"63","titulo":"AM GOUNOD","desc":"AVE MARIA DI GOUNOD","uso":"Mariano (Bodas / Solemnidades)","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"64","titulo":"AM FATIMA","desc":"AVE MARIA DI FATIMA","uso":"Mariano","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"65","titulo":"MAD CAMMIN","desc":"MADONNA DEL CAMMINO","uso":"Mariano","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"66","titulo":"MIR POPOLO","desc":"MIRA IL TUO POPOLO","uso":"Mariano / Cuaresma","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"67","titulo":"NOM DOLCIS","desc":"NOME DOLCISSIMO","uso":"Devocional","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"68","titulo":"SANTISSIMA","desc":"O SANTISSIMA","uso":"Mariano","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"69","titulo":"DELL AUROR","desc":"DELL'AURORA TU SORGI","uso":"Mariano / Adviento","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"70","titulo":"DIO CO NOI","desc":"DIO S'E' FATTO COME NOI","uso":"Navidad / Encarnación","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"71","titulo":"OSANNA DAV","desc":"OSANNA FIGLIO DI DAVIDE","uso":"Domingo de Ramos","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"72","titulo":"GLORIA EXC","desc":"GLORIA IN EXCELSIS DEO","uso":"Alabanza / Solemnidades","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"73","titulo":"TU SCENDI","desc":"TU SCENDI DALLE STELLE","uso":"Navidad","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"74","titulo":"ASTRO DEL CIEL","desc":"ASTRO CIEL","uso":"Nochebuena / Navidad","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"75","titulo":"ADESTE F.","desc":"ADESTE FIDELES","uso":"Navidad","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"76","titulo":"MARC NUZ.","desc":"MARCIA NUZIALE","uso":"Matrimonios","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"77","titulo":"FRAT SOLE","desc":"FRATELLO SOLE SORELLA LUNA","uso":"Devocional / San Francisco","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"78","titulo":"LA PACE","desc":"LA PACE DEI SANTI","uso":"General / Santos","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"79","titulo":"GLORIA","desc":"GLORIA","uso":"Ordinario / Misa","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"80","titulo":"IO CREDO","desc":"IO CREDO RISORGERO'","uso":"Exequias / Difuntos","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"81","titulo":"MARCIA PON","desc":"MARCIA PONTIFICIA","uso":"Solemnidades / Fiestas del Papa","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"82","titulo":"ALLELULIA1","desc":"ALLELULIA 1","uso":"Aleluya / Pascua","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"83","titulo":"ALLELULIA II","desc":"ALLELULIA2","uso":"Aleluya / Pascua","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"84","titulo":"SANTO","desc":"SANTO","uso":"Ordinario / Misa","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"85","titulo":"NEI CIELI","desc":"NEI CIELI","uso":"Alabanza","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"86","titulo":"TU SEI VIT","desc":"TU SEI LA MIA VITA (SIMBOLUM)","uso":"General","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"87","titulo":"MI ALZERO","desc":"MI ALZERO' E ANDRO'","uso":"Cuaresma / Penitencial","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"88","titulo":"NOEL NOEL","desc":"NOEL NOEL","uso":"Navidad","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"89","titulo":"PADRE NOST","desc":"PADRE NOSTRO","uso":"Ordinario / Misa","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"90","titulo":"NOI CANTER","desc":"NOI CANTEREMO GLORIA A TE","uso":"Alabanza","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"91","titulo":"TU SOLE VI","desc":"TU SOLE VIVO","uso":"General","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"92","titulo":"REGINA COELI","desc":"REG COELI","uso":"Pascua (Tiempo de Pascua)","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"93","titulo":"—","desc":"Sin registro en la hoja original","uso":"—","grupo":"Melodías Litúrgicas Principales y Devocionales","vacio":true},
+            {"num":"94","titulo":"PANGE LIN","desc":"PANGE LINGUA","uso":"Corpus Christi","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"95","titulo":"PIU PRESS.","desc":"PIU' PRESSO A TE SIGNORE","uso":"Devocional / Difuntos","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"96","titulo":"INNI CANTI","desc":"INNE E CANTI / T ADORIAM","uso":"Adoración Eucarística","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"97","titulo":"LAUDA SION","desc":"LAUDA SION","uso":"Corpus Christi","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"98","titulo":"—","desc":"Sin registro en la hoja original","uso":"—","grupo":"Melodías Litúrgicas Principales y Devocionales","vacio":true},
+            {"num":"99","titulo":"SAL REGINA","desc":"SALVE REGINA","uso":"Virgen María","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"100","titulo":"LODATE DIO","desc":"LODATE DIO","uso":"Alabanza","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"101","titulo":"RESTA NOI","desc":"RESTA CON NOI","uso":"Eucaristía / Emaús","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"102","titulo":"CANTO PER","desc":"CANTO PER CRISTO","uso":"General","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"103","titulo":"CR VINCIT2","desc":"CHRISTUS VINCIT SEMPLICE","uso":"Cristo Rey / Solemnidades","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"104","titulo":"ALEGRES PR","desc":"ALEGRES PREGONAN","uso":"General / Adviento","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"105","titulo":"EL ANGEL","desc":"EL ANGEL GABRIEL","uso":"Anunciación / Adviento","grupo":"Melodías Litúrgicas Principales y Devocionales"},
+            {"num":"106","titulo":"AL LIEGAR","desc":"AL LIEGAR AQUI / DEO","uso":"General","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"107","titulo":"AY MI NOCH","desc":"AY,MI NOCHE BUENA / ESTA NOCHE","uso":"Villancico / Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"108","titulo":"GLORIA EXC","desc":"GLORIA IN EXCELSIS","uso":"Navidad / Alabanza","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"109","titulo":"ESTA NOCHE","desc":"ESTA NOCHE","uso":"Villancico / Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"110","titulo":"NAVIDAD NE","desc":"NAVIDAD NEGRA","uso":"Navidad Folclórica","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"111","titulo":"EL NINO CR","desc":"EL NINO CRIOLO","uso":"Villancico Latinoamericano","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"112","titulo":"H.COROMOTO","desc":"HIMNO A LA VIRGEN DE COROMOTO","uso":"Festividad Mariana","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"113","titulo":"DON BOSCO","desc":"SALVE DON BOSCO","uso":"Festividad de San Juan Bosco","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"114","titulo":"PESCADOR","desc":"PESCADOR DE HOMBRES","uso":"Vocacional / Ordinario","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"115","titulo":"ALABARÈ","desc":"ALABARE'","uso":"Animación / Bautismos","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"116","titulo":"VE.VA","desc":"VENID Y VAMOS TODOS / TODO","uso":"Mes de María","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"117","titulo":"VIRGEN DEL","desc":"VIRGEN DEL CARMEN","uso":"Fiesta de la Virgen del Carmen","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"118","titulo":"S.MAR.CAMM","desc":"SANTA MARIA DEL CAMMINO","uso":"Mariano","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"119","titulo":"J.COMO HER","desc":"JUNTOS COMO HERMANOS","uso":"Entrada / Comunidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"120","titulo":"GLOR.ALELU","desc":"GLORIA GLORIA ALELUJA","uso":"Pascua / Alabanza","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"121","titulo":"HIMNO ALEG","desc":"HIMNO A LA ALEGRIA","uso":"General","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"122","titulo":"SI ACCENDE","desc":"ACCENDE UNA LUCE (Nov. Nat.- Fiore-Venturi)","uso":"Novena de Navidad / Adviento","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"123","titulo":"SIGN.VICIN","desc":"IL SIGNORE E' VICINO (Avvento - Galliano)","uso":"Tiempo de Adviento","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"124","titulo":"N.REDENTOR","desc":"O NOSTRO REDENTORE (Nov. Nat.-Gregoriano)","uso":"Novena de Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"125","titulo":"TI PREGHIA","desc":"TI PREGHIAMO CON VIVA FEDE (Avv. Maestri)","uso":"Tiempo de Adviento","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"126","titulo":"TU SEI AVV","desc":"TU SEI L'AVVENTO (Galliano-Semprini)","uso":"Tiempo de Adviento","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"127","titulo":"M.P.AVVENT","desc":"Maria Tu Porta dell'Avvento (Gal-Sempr.)","uso":"Adviento / Mariano","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"128","titulo":"BIMBO BETH","desc":"E' NATO UN BIMBO IN BETHLEM (trad.Nat.)","uso":"Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"129","titulo":"PASTORALE","desc":"PASTORALE (Tradizionale)","uso":"Tiempo de Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"130","titulo":"PIVA","desc":"PIVA (Tradizionale)","uso":"Tradicional Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"131","titulo":"TEMPO RIN.","desc":"TEMPO DI RINASCERE (Natale Gall.-Semp.)","uso":"Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"132","titulo":"NOEL NOEL","desc":"NOEL NOEL (Tradizionale)","uso":"Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"133","titulo":"QUANNO RIN","desc":"QUANNO NASCETTE NINNO (Trad. S.Alfonso)","uso":"Navidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"134","titulo":"SAL. CROCE","desc":"TI SALUTO O CROCE SANTA (Cant S. Croce)","uso":"Cuaresma / Viernes Santo","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"135","titulo":"ATT.DOMINE","desc":"ATTENDE DOMINE (Quaresimale-Gregoriano)","uso":"Tiempo de Cuaresma","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"136","titulo":"STABAT MAT","desc":"STABAT MATER DOLOROSA (B.V.Addolorata)","uso":"Cuaresma / Virgen de los Dolores","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"137","titulo":"CRISTO REG","desc":"O CRISTO TU REGNERAI (Quares.-Trad.Slavo)","uso":"Cuaresma","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"138","titulo":"CAPO INS.","desc":"O CAPO INSANGUINATO (Quares.Hassler-Bach)","uso":"Semana Santa / Pasión","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"139","titulo":"COME PADRE","desc":"COME UN PADRE (Penitenziale-E.Bosio)","uso":"Cuaresma / Penitencial","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"140","titulo":"OSAN.F.DAV","desc":"OSANNA AL FIGLIO DI DAVID (P.Damilano)","uso":"Domingo de Ramos","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"141","titulo":"QUANDO VER","desc":"TU QUANDO VERRAI (Avvento - Croft)","uso":"Tiempo de Adviento","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"142","titulo":"NEI CIELI","desc":"NEI CIELI UN GRIDO RISUONO' (Pasquale)","uso":"Tiempo de Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"143","titulo":"REG. COELI","desc":"REGINA COELI + CARRILLON (Ferro)","uso":"Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"144","titulo":"XSTO RISOR","desc":"IL CRISTO SIGNORE E' RISORTO (V.Bellone)","uso":"Tiempo de Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"145","titulo":"ALLEL.LIB","desc":"ALLELUYA, ORA SIAMO LIBERI (Pasquale)","uso":"Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"146","titulo":"XR.RIS.TR.","desc":"CRISTO RISORGE CRISTO TRIONFA (Damilano)","uso":"Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"147","titulo":"A.RIS.RED.","desc":"ALLELUYA, E' RISORTO IL REDENTORE (Gnoto)","uso":"Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"148","titulo":"A.COL.RIS.","desc":"ALLELUYA A COLUI CHE RISUSCITO'","uso":"Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"149","titulo":"C.R.HANDEL","desc":"CRISTO E' RISORTO (G.F.Handel)","uso":"Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"150","titulo":"ALL.PASQUA","desc":"ALLELUYA PASQUALE (Tradizionale)","uso":"Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"151","titulo":"PASS.BACH","desc":"SIGNORE DOLCE VOLTO (\"Passione\" di Bach)","uso":"Semana Santa / Pasión","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"152","titulo":"RE GLORIA","desc":"IL RE DI GLORIA FATE ENTRAR","uso":"Domingo de Ramos / Cristo Rey","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"153","titulo":"VIENI CREA","desc":"VENI CREATORE (Gregoriano)","uso":"Pentecostés","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"154","titulo":"V.S.SPIRIT","desc":"VIENI SANTO SPIRITO (M.Piatti)","uso":"Pentecostés","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"155","titulo":"SPIRITO S.","desc":"SPIRITO SANTO (Recalcati)","uso":"Pentecostés","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"156","titulo":"TE LODIAMO","desc":"TE LODIAMO TRINITA' (Vienna 1776)","uso":"Santísima Trinidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"157","titulo":"INNO TRIN.","desc":"INNO ALLA TRINITA' (M. Frisina)","uso":"Santísima Trinidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"158","titulo":"TRIN.BEATA","desc":"O TRINITA' BEATA (Inno Vespri Dom.)","uso":"Santísima Trinidad","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"159","titulo":"IMM.CREAT.","desc":"O CLEMENTE CREATORE (D.Stefani)","uso":"Tiempos Fuertes / Cuaresma","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"160","titulo":"VICTIME P.","desc":"VICTIME PASCHALIS LAUDES (Seq. Pasqua)","uso":"Domingo de Pascua","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"161","titulo":"ADORO TE D","desc":"ADORO TE DEVOTE (Gregoriano)","uso":"Corpus Christi / Eucaristía","grupo":"Melodías de Tradición Hispana, Villancicos y Santos"},
+            {"num":"162","titulo":"TANTUM E.G","desc":"TANTUM ERGO (Gregoriano)","uso":"Eucaristía / Reserva","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"163","titulo":"TANTUM E.P","desc":"TANTUM ERGO (Perosi)","uso":"Eucaristía / Reserva","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"164","titulo":"GENTI TUT.","desc":"GENTI TUTTE PROCLAMATE","uso":"Alabanza General","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"165","titulo":"LAUDA SION","desc":"LAUDA SION","uso":"Corpus Christi","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"166","titulo":"LAUDA JER.","desc":"LAUDA SION (Gregoriano) / LAUDA JERUSALEM","uso":"Corpus Christi","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"167","titulo":"DATO CIBO","desc":"HAI DATO UN CIBO (Sec. XVII)","uso":"Comunión / Eucaristía","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"168","titulo":"OSTIA DIV.","desc":"T'ADORIAM OSTIA DIVINA","uso":"Adoración Eucarística","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"169","titulo":"INNI CANTI","desc":"INNI E CANTI","uso":"Alabanza","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"170","titulo":"FONTE VIVA","desc":"TU FONTE VIVA (Parigi, sec. XVII)","uso":"General / Eucaristía","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"171","titulo":"PANE VITA","desc":"SONO IL PANE DI VITA","uso":"Comunión","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"172","titulo":"T.CANTIDIO","desc":"TUTTA LA TERRA CANTI A DIO (L.Bourgeois)","uso":"Alabanza General","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"173","titulo":"Q.SETE C.","desc":"QUANTA SETE NEL MIO CUORE","uso":"Devocional / Retiros","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"174","titulo":"CREAZ.GIU.","desc":"LA CREAZIONE GIUBILI (Ehrembreitstein)","uso":"Alabanza Universal","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"175","titulo":"PANEMVIVUM","desc":"PANEM VIVUM (Bonnal)","uso":"Corpus Christi","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"176","titulo":"SS.CUORI","desc":"SS. CUORI","uso":"Sagrado Corazón de Jesús","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"177","titulo":"OSTIA VIVA","desc":"OSTIA VIVA (Inno Eucaristico)","uso":"Adoración Eucarística","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"178","titulo":"FONTEGIOIA","desc":"O FONTE DELLA GIOIA (J.S. Bach)","uso":"Meditación / General","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"179","titulo":"VIVO FUOCO","desc":"TU SEI VIVO FUOCO (J.Neander 1680)","uso":"Espíritu Santo / Alabanza","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"180","titulo":"SOLE VIVO","desc":"TU SOLE VIVO","uso":"General","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"181","titulo":"A.LOD.SIGN","desc":"ALLELUYA, LODATE IL SIGNORE (M.Frisina)","uso":"Alabanza de Frisina","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"182","titulo":"CIELI NARR","desc":"I CIELI NARRANO (M. Frisina)","uso":"Solemnidades / Cantos de Frisina","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"183","titulo":"ACCL.SIGN","desc":"ACCLAMATE AL SIGNORE (M.Frisina)","uso":"Alabanza","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"184","titulo":"REGNO DIO","desc":"IL REGNO DI DIO (M.Frisina)","uso":"General","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"185","titulo":"SALVE REG.","desc":"SALVE REGINA (Gregoriano)","uso":"Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"186","titulo":"AVE MARIA","desc":"AVE MARIA (Gregoriano)","uso":"Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"187","titulo":"REG.COELOR","desc":"AVE REGINA COELORUM (Gregoriano)","uso":"Mariano (Antífona de Cuaresma)","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"188","titulo":"REDEMPT.MA","desc":"ALMA REDEMPTORIS MATER (Gregoriano)","uso":"Mariano (Antífona de Adviento)","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"189","titulo":"AVEFATIMA","desc":"AVE FATIMA 13 MAGGIO","uso":"Fiesta de la Virgen de Fátima","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"190","titulo":"IMMACOLATA","desc":"IMMACOLATA","uso":"Inmaculada Concepción (8 Dic)","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"191","titulo":"MIRA POPOL","desc":"MIRA IL TUO POPOLO","uso":"Devocional Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"192","titulo":"O SANTISS.","desc":"O SANTISSIMA (scuola siciliana XVIII sec.)","uso":"Mariano Tradicional / Pascua","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"193","titulo":"MADRE SANT","desc":"MADRE SANTA (P.Decha-L.Thielleux)","uso":"Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"194","titulo":"MAR.SANTIS","desc":"O MARIA SANTISSIMA (tradizionale)","uso":"Mariano Tradicional","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"195","titulo":"MARIS STEL","desc":"AVE MARIS STELLA (tradizionale)","uso":"Mariano / Fiestas del Mar","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"196","titulo":"MARIS STEL","desc":"AVE MARIS STELLA (gregoriano)","uso":"Mariano Solemnidades","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"197","titulo":"SALVEMATER","desc":"SALVE MATER","uso":"Antífona Mariana","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"198","titulo":"SALUT.VERG","desc":"TI SALUTIAMO O VERGINE","uso":"Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"199","titulo":"ACQUAFONTE","desc":"ACQUA DI FONTE (D. Stefani)","uso":"Pascua / Bautismo","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"200","titulo":"AVE MARIA","desc":"AVE MARIA","uso":"Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"201","titulo":"VERG.PURIS","desc":"O VERGINE PURISSIMA (Tradizionale)","uso":"Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"202","titulo":"LIETA ARM.","desc":"LIETA ARMONIA","uso":"General / Fiestas","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"203","titulo":"SANTACASA","desc":"NELLA TUA SANTA CASA (Canto Madonna Loreto)","uso":"Virgen de Loreto","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"204","titulo":"MADO. NERA","desc":"MADONNA NERA (Sant. Cezstocowa-Polonia)","uso":"Virgen de Czestochowa","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"205","titulo":"AM.ISERNIA","desc":"AVE MARIA DI ISERNIA (Mons. A. Gemma)","uso":"Mariano Local / Devocional","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"206","titulo":"FIORECARM.","desc":"FIORE DEL CARMELO (L. Zappatore)","uso":"Fiesta de la Virgen del Carmen","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"207","titulo":"FIORCARMEL","desc":"FIORE DEL CARMELO Sequenza (L. Zappatore)","uso":"Virgen del Carmen (Solemne)","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"208","titulo":"EVV. MARIA","desc":"EVVIVA MARIA","uso":"Festividades Populares Marianas","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"209","titulo":"AM.MREGINA","desc":"AVE MARIA MADRE E REGINA","uso":"María Reina","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"210","titulo":"REG.APOST.","desc":"ALLA REGINA DEGLI APOSTOLI (Figlia Sion)","uso":"Tiempos apostólicos / Pentecostés","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"211","titulo":"APOST.PREG","desc":"GLI APOSTOLI UNITI IN PREGHIERA - F.Sion","uso":"Cenáculo / Pentecostés","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"212","titulo":"SPE.N.SALV","desc":"SPERANZA NOSTRA SALVE","uso":"Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"213","titulo":"AM.FATIMA","desc":"MARIA DI FATIMA (Sant.N.S.Fatima)","uso":"Virgen de Fátima","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"214","titulo":"VER.ROSAR.","desc":"O VERGIN DEL ROSARIO (Canto di Fatima)","uso":"Virgen del Rosario (7 Oct)","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"215","titulo":"MERAVIGLIE","desc":"MERAVIGLIE IN TE","uso":"Magnificat / Alabanza","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"216","titulo":"S.REGINA2","desc":"SALVE REGINA (F.Brun 1911)","uso":"Mariano","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"217","titulo":"VER.SANTA","desc":"VERGIN SANTA CHE ACCOGLI BENIGNA (Trad.)","uso":"Mariano Devocional","grupo":"Himnos Eucarísticos, Alabanzas e Himnos Marianos Mayores"},
+            {"num":"218","titulo":"TOTA PULC.","desc":"TOTA PULCHRA (Gregoriano)","uso":"Inmaculada Concepción / Purísima","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"219","titulo":"S.DOLCE V.","desc":"SALVE DOLCE VERGINE (M. Frisina)","uso":"Mariano (Frisina)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"220","titulo":"MAGNIFICAT","desc":"MAGNIFICAT (M. Frisina)","uso":"Cántico de la Virgen","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"221","titulo":"MIA MADRE","desc":"CHI E' MIA MADRE (D. Machetta)","uso":"General Litúrgico","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"222","titulo":"IN S.CHI-1","desc":"INNO S. CHIARA - 1","uso":"Festividad de Santa Clara (11 Ago)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"223","titulo":"IN S.CHI-4","desc":"INNO S. CHIARA - 4","uso":"Santa Clara","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"224","titulo":"S.NICANDRO","desc":"INNO A SAN NICANDRO","uso":"San Nicandro Mártir","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"225","titulo":"RITE VOS C","desc":"RITE VOS CIVES (Resp. lit. SS Nicandro M.)","uso":"San Nicandro (Solemne)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"226","titulo":"S.VINC.PAL","desc":"INNO A SAN VINCENZO DE PAOLI","uso":"San Vicente de Paúl (27 Sept)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"227","titulo":"IN S.FRA-1","desc":"INNO S. FRANCESCO -1","uso":"San Francisco de Asís (4 Oct)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"228","titulo":"IN S.ANT-1","desc":"INNO S. ANTONIO -1","uso":"San Antonio de Padua (13 Jun)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"229","titulo":"S.GIUSEPPE","desc":"S. GIUSEPPE","uso":"San José (19 Mar / 1 May)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"230","titulo":"S.SEBAST.","desc":"S. SEBASTIANO","uso":"San Sebastián (20 Ene)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"231","titulo":"S.BENEDET.","desc":"S. BENEDETTO","uso":"San Benito Abad (11 Jul)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"232","titulo":"S.GIUSTA","desc":"S. GIUSTA","uso":"Santa Justa","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"233","titulo":"S.G.BOSCO","desc":"S. GIOVANNI BOSCO","uso":"San Juan Bosco (31 Ene)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"234","titulo":"S.RITA - 1","desc":"S. RITA - 1","uso":"Santa Rita de Casia (22 May)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"235","titulo":"—","desc":"Sin registro en la hoja original","uso":"—","grupo":"Santoral, Cantos Comunes y Salmos","vacio":true},
+            {"num":"236","titulo":"AVE CROCE","desc":"AVE CROCE (Canto Venerdì Santo)","uso":"Semana Santa / Viernes Santo","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"237","titulo":"REDEMPTOR","desc":"O REDEMPTOR (Gregoriano)","uso":"Jueves Santo (Misa Crismal)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"238","titulo":"REQUIEM / ETERNO RIP","desc":"REQUIEM (Gregoriano) / L'ETERNO RIPOSO","uso":"Exequias / Día de los Difuntos","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"239","titulo":"GERUSALEM.","desc":"GERUSALEMME","uso":"General Escatológico","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"240","titulo":"SPLEN.GESU","desc":"SPLENDI GESU'","uso":"Alabanza / Oración","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"241","titulo":"CANT.INSI.","desc":"CANTIAMO INSIEME A GESU' IL SIGNORE","uso":"Comunión / Asamblea","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"242","titulo":"SPLEND.PAD","desc":"CRISTO SPLENDORE DEL PADRE","uso":"Himno de Laudes / General","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"243","titulo":"S.VERONICA","desc":"INNO A S. VERONICA GIULIANI (F.Ferro)","uso":"Santa Verónica Giuliani","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"244","titulo":"CHIESA DIO","desc":"CHIESA DI DIO, POPOLO IN FESTA","uso":"Entrada / Aniversario de Dedicación","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"245","titulo":"TEMPIO AD.","desc":"IL TEMPIO TUO ADORABILE","uso":"Dedicación del Templo","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"246","titulo":"NOB.S.CHIE","desc":"NOBILE SANTA CHIESA","uso":"Himno eclesial","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"247","titulo":"SEI TU SIG","desc":"SEI TU SIGNORE IL PANE","uso":"Eucaristía / Comunión","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"248","titulo":"CREDIAMO","desc":"NOI CREDIAMO IN TE","uso":"Acto de Fe / Ofertorio","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"249","titulo":"TI RINGRAZ","desc":"TI RINGRAZIO O MIO SIGNORE","uso":"Acción de gracias","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"250","titulo":"RACCOGLI","desc":"O SIGNORE RACCOGLI I TUOI FIGLI","uso":"Ofertorio / Unidad","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"251","titulo":"SALMO 22","desc":"IL SIGNORE E' MIO PASTORE","uso":"Salmo Responsorial / Difuntos","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"252","titulo":"CANT DN.3","desc":"BENEDICIAMO IL SIGNORE","uso":"Cántico de Daniel (Laudes)","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"253","titulo":"GESU SALV.","desc":"GESU' SALVEZZA NOSTRA (Galliano-Semprini)","uso":"General Litúrgico","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"254","titulo":"PANE CAMMI","desc":"IL TUO POPOLO IN CAMMINO","uso":"Comunión / Corpus Christi","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"255","titulo":"TI ESALTO","desc":"TI ESALTO DIO MIO RE","uso":"Alabanza / Salmo","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"256","titulo":"MISTERO CE","desc":"MISTERO DELLA CENA","uso":"Jueves Santo / Eucaristía","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"257","titulo":"COM E BELL","desc":"COME E' BELLO SIGNORE STARE INSIEME","uso":"Encuentros / Fraternidad","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"258","titulo":"DOVECARITA","desc":"DOV'E' CARITA' E AMORE","uso":"Jueves Santo / Ubi Caritas","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"259","titulo":"GLORIA LOU","desc":"GLORIA DI LOURDES","uso":"Procesión de Antorchas","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"260","titulo":"SANTO OSAN","desc":"SANTO-OSANNA","uso":"Ordinario de la Misa","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"261","titulo":"SPLENDI VE","desc":"TU SPLENDI O VERGINE","uso":"Mariano","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"262","titulo":"DONO SUBL.","desc":"MARIA, DONO SUBLIME DEL PADRE","uso":"Mariano","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"263","titulo":"SONOSERVA","desc":"ECCO IO SONO LA SERVA DEL SIGNORE","uso":"Anunciación / Adviento","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"264","titulo":"MADRE AMOR","desc":"SALVE MADRE DELL'AMORE","uso":"Mariano","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"265","titulo":"A. LOURDES","desc":"AVE MARIA DI LOURDES","uso":"Mariano","grupo":"Santoral, Cantos Comunes y Salmos"},
+            {"num":"266","titulo":"BIG BEN1/4","desc":"PRIMO QUARTO","uso":"Primer cuarto de hora","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"267","titulo":"BIG BEN2/4","desc":"SECONDO QUARTO","uso":"Media hora","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"268","titulo":"BIG BEN3/4","desc":"TERZO QUARTO","uso":"Tres cuartos de hora","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"269","titulo":"BIG BEN4/4","desc":"BIG BEN COMPLETO","uso":"Hora en punto","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"270","titulo":"PAUSA + BIG BEN","desc":"PAUSA + BIG BEN X OROLOGO PERSONAL 1/4","uso":"Reloj personalizado con pausa previa","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"271","titulo":"PAUSA + BIG BEN","desc":"PAUSA + BIG BEN X OROLOGO PERSONAL 2/4","uso":"Reloj personalizado con pausa previa","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"272","titulo":"PAUSA + BIG BEN","desc":"PAUSA + BIG BEN X OROLOGO PERSONAL 3/4","uso":"Reloj personalizado con pausa previa","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"273","titulo":"PAUSA + BIG BEN","desc":"PAUSA + BIG BEN X OROLOGO PERSONAL 4/4 completo","uso":"Reloj personalizado con pausa previa","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"274","titulo":"BIG BEN REP.","desc":"BIG BEN REPETICIÓN 1/4","uso":"Réplica de relojería","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"275","titulo":"BIG BEN REP.","desc":"BIG BEN REPETICIÓN 2/4","uso":"Réplica de relojería","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"276","titulo":"BIG BEN REP.","desc":"BIG BEN REPETICIÓN 3/4","uso":"Réplica de relojería","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"277","titulo":"BIG BEN REP.","desc":"BIG BEN REPETICIÓN 4/4 completo","uso":"Réplica de relojería","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"278–281","titulo":"PAUSA + BIG BEN REP.","desc":"PAUSA + BIG BEN REPETICIÓN PERSONALIZADA","uso":"Réplica de relojería con pausa previa","grupo":"Reloj automatizado tipo \"Big Ben\""},
+            {"num":"282","titulo":"33 TOCCHI DI III","desc":"33 TOCCHI DI III","uso":"Conmemoración de la edad de Cristo · Llamado en Tiempo Ordinario","grupo":"Ángelus y señales tradicionales"},
+            {"num":"283","titulo":"3 TOCCHI DI III","desc":"3 TOCCHI DI III","uso":"Señal tradicional","grupo":"Ángelus y señales tradicionales"},
+            {"num":"284","titulo":"ANGELUS 3-7-9","desc":"ANGELUS 3-7-9","uso":"Ángelus diario (recomendado)","grupo":"Ángelus y señales tradicionales"},
+            {"num":"285","titulo":"ANGELUS 3-3-3","desc":"ANGELUS 3-3-3","uso":"Ángelus · Llamado en Tiempo Ordinario","grupo":"Ángelus y señales tradicionales"},
+            {"num":"286","titulo":"ANGELUS BOLOGNESE","desc":"ANGELUS BOLOGNESE TIRABASSO","uso":"Estructura reducida","grupo":"Ángelus y señales tradicionales"},
+            {"num":"287","titulo":"ANGELUS 3-3-3 C.24","desc":"ANGELUS 3-3-3 · CAMPANA 24","uso":"Variante para campana 24","grupo":"Ángelus y señales tradicionales"},
+            {"num":"288","titulo":"ANGELUS 3-7-9 C.24","desc":"ANGELUS 3-7-9 · CAMPANA 24","uso":"Variante para campana 24","grupo":"Ángelus y señales tradicionales"},
+            {"num":"289","titulo":"ANGELUS 3-4-5-1 C.24","desc":"ANGELUS 3-4-5-1 · CAMPANA 24","uso":"Variante para campana 24","grupo":"Ángelus y señales tradicionales"},
+            {"num":"290","titulo":"ANGELUS 3-3-3 C.28","desc":"ANGELUS 3-3-3 · CAMPANA 28","uso":"Variante para campana 28","grupo":"Ángelus y señales tradicionales"},
+            {"num":"291","titulo":"ANGELUS 3-7-9 C.28","desc":"ANGELUS 3-7-9 · CAMPANA 28","uso":"Variante para campana 28","grupo":"Ángelus y señales tradicionales"},
+            {"num":"292","titulo":"ANGELUS 3-4-5-1 C.28","desc":"ANGELUS 3-4-5-1 · CAMPANA 28","uso":"Variante para campana 28","grupo":"Ángelus y señales tradicionales"},
+            {"num":"293","titulo":"ANGELUS 3-3-3 C.31","desc":"ANGELUS 3-3-3 · CAMPANA 31","uso":"Variante para campana 31","grupo":"Ángelus y señales tradicionales"},
+            {"num":"294","titulo":"ANGELUS 3-7-9 C.31","desc":"ANGELUS 3-7-9 · CAMPANA 31","uso":"Variante para campana 31","grupo":"Ángelus y señales tradicionales"},
+            {"num":"295","titulo":"ANGELUS 3-4-5-1 C.31","desc":"ANGELUS 3-4-5-1 · CAMPANA 31","uso":"Variante para campana 31","grupo":"Ángelus y señales tradicionales"},
+            {"num":"296","titulo":"ANGELUS FERIALE","desc":"ANGELUS FERIALE 3-4-5-1 CAMPANA GRANDE","uso":"Días de semana","grupo":"Ángelus y señales tradicionales"},
+            {"num":"297","titulo":"ANGELUS FESTIVO","desc":"ANGELUS FESTIVO (Tocchi veloci 1-3-4)","uso":"Domingos y solemnidades","grupo":"Ángelus y señales tradicionales"},
+            {"num":"298–301","titulo":"ANGELUS (variantes)","desc":"Variantes generales de toques de Ángelus (1.5\", Tipo 1, Tipo 2)","uso":"Ángelus","grupo":"Ángelus y señales tradicionales"},
+            {"num":"320","titulo":"MEZZADIA FESTIVA","desc":"MEZZADIA FESTIVA (Toque a 5 campanas)","uso":"Mediodía festivo","grupo":"Ángelus y señales tradicionales"},
+            {"num":"302","titulo":"FUNERALE C.24","desc":"TOCCHI FUNERALE CAMPANA 24","uso":"Funeral · 1 campana","grupo":"Exequias y toques fúnebres"},
+            {"num":"303","titulo":"FUNERALE C.28","desc":"TOCCHI FUNERALE CAMPANA 28","uso":"Funeral · 1 campana","grupo":"Exequias y toques fúnebres"},
+            {"num":"304","titulo":"FUNERALE C.31","desc":"FUNERALE CAMPANA 31","uso":"Funeral · 1 campana","grupo":"Exequias y toques fúnebres"},
+            {"num":"305","titulo":"FUNERALE 28-26-24","desc":"TOCCHI FUNERALE CAMPANA 28-26-24","uso":"Funeral · 3 campanas","grupo":"Exequias y toques fúnebres"},
+            {"num":"306","titulo":"FUNERALE 31-29-26-24","desc":"TOCCHI FUNERALE CAMPANA 31-29-26-24","uso":"Funeral · 4 campanas","grupo":"Exequias y toques fúnebres"},
+            {"num":"307","titulo":"FUNERALE 37-35-33-31-30","desc":"TOCCHI FUNERALE CAMPANA 37-35-33-31-30","uso":"Funeral · 5 campanas","grupo":"Exequias y toques fúnebres"},
+            {"num":"308","titulo":"FUNERALE 34-31-27","desc":"TOCCHI FUNERALE CAMPANA 34-31-27","uso":"Funeral · 3 campanas","grupo":"Exequias y toques fúnebres"},
+            {"num":"309","titulo":"FUNERALE 34-32-29-27","desc":"TOCCHI FUNERALE CAMPANA 34-32-29-27","uso":"Funeral · 4 campanas","grupo":"Exequias y toques fúnebres"},
+            {"num":"310","titulo":"FUNERALE 31-29-27-25-24","desc":"TOCCHI FUNERALE CAMPANA 31-29-27-25-24","uso":"Funeral · 5 campanas","grupo":"Exequias y toques fúnebres"},
+            {"num":"311","titulo":"FUNERALE + CAMPANONE","desc":"TOCCHI FUNERALE PIU' CAMPANONE","uso":"Funeral","grupo":"Exequias y toques fúnebres"},
+            {"num":"312","titulo":"ANNUNCIO MORTE UOMO","desc":"ANNUNCIO MORTE UOMO","uso":"Aviso: fallece un hombre","grupo":"Exequias y toques fúnebres"},
+            {"num":"313","titulo":"ANNUNCIO MORTE DONNA","desc":"ANNUNCIO MORTE DONNA","uso":"Aviso: fallece una mujer","grupo":"Exequias y toques fúnebres"},
+            {"num":"314","titulo":"ANNUNCIO MORTE CHIERICO","desc":"ANNUNCIO MORTE CHIERICO","uso":"Aviso: fallece un sacerdote o religioso","grupo":"Exequias y toques fúnebres"},
+            {"num":"315–319","titulo":"FUNERALE (alternativos)","desc":"Ritmos fúnebres alternativos (Funeral Campanón, Toque Fun 1, 2 y 4 Campanas)","uso":"Funeral","grupo":"Exequias y toques fúnebres"},
+            {"num":"321","titulo":"SCAMPANIO VELOCE","desc":"SCAMPANIO VELOCE A 3 CAMPANE","uso":"Repique rápido","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"322","titulo":"QUARANTORE","desc":"QUARANTORE","uso":"Adoración de las 40 horas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"323","titulo":"CARILLON 1","desc":"CARILLON 1","uso":"Melodía tipo carrillón","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"324","titulo":"CARILLON 2","desc":"CARILLON 2","uso":"Melodía tipo carrillón","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"325","titulo":"CARILLON 3","desc":"CARILLON 3","uso":"Melodía tipo carrillón","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"326","titulo":"CAMPANELLA","desc":"CAMPANELLA","uso":"Toque rápido de llamada menor","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"327","titulo":"BAUDETTA","desc":"BAUDETTA","uso":"Toque tradicional festivo","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"328","titulo":"SCAMPANIO + DISTESA","desc":"SCAMPANIO CON DISTESA (2 CAMPANE DO2)","uso":"Repique con volteo","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"329","titulo":"SCAMPANIO + DISTESA","desc":"SCAMPANIO CON DISTESA (1 CAMPANA DO2)","uso":"Repique con volteo","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"330","titulo":"TOCCHINI","desc":"TOCCHINI","uso":"Toque breve","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"331","titulo":"ALLEGR. 1","desc":"ALLEGREZZA 1","uso":"Júbilo · Bautismos","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"332","titulo":"ALLEGR. 2","desc":"ALLEGREZZA 2","uso":"Júbilo · Bautismos","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"333","titulo":"TOCCO UNA C. 1","desc":"TOCCO UNA CAMPANA · Toque 1","uso":"Pulso único de control","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"334","titulo":"TOCCO UNA C. 2","desc":"TOCCO UNA CAMPANA · Toque 2","uso":"Pulso único de control","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"335","titulo":"TOCCO UNA C. 3","desc":"TOCCO UNA CAMPANA · Toque 3","uso":"Pulso único de control","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"336","titulo":"TOCCO UNA C. 4","desc":"TOCCO UNA CAMPANA · Toque 4","uso":"Pulso único de control","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"337","titulo":"TOCCO DUE C. 1-2","desc":"TOCCO DUE CAMPANE · 1-2","uso":"Pulso doble sincronizado","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"338","titulo":"TOCCO DUE C. 2-3","desc":"TOCCO DUE CAMPANE · 2-3","uso":"Pulso doble sincronizado","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"339","titulo":"TOCCO DUE C. 3-4","desc":"TOCCO DUE CAMPANE · 3-4","uso":"Pulso doble sincronizado","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"340","titulo":"FESTA 1","desc":"FESTA 1","uso":"Señal de júbilo · Bautismos y fiestas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"341","titulo":"FESTA 2","desc":"FESTA 2","uso":"Señal de júbilo · Bautismos y fiestas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"342","titulo":"FESTA 3","desc":"FESTA 3","uso":"Señal de júbilo · Bautismos y fiestas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"343","titulo":"FESTA 4","desc":"FESTA 4","uso":"Señal de júbilo · Bautismos y fiestas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"344","titulo":"FESTA 5","desc":"FESTA 5","uso":"Señal de júbilo · Bautismos y fiestas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"345","titulo":"FESTA 6","desc":"FESTA 6","uso":"Señal de júbilo · Bautismos y fiestas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"346","titulo":"FESTA 7","desc":"FESTA 7","uso":"Señal de júbilo · Bautismos y fiestas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"347","titulo":"FESTA 8","desc":"FESTA 8","uso":"Señal de júbilo · Bautismos y fiestas","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"348–351","titulo":"DOPPIO BOLOGNESE","desc":"DOPPIO BOLOGNESE (variantes normal, Tirabasse y Tirabasso)","uso":"Tradición de Bolonia","grupo":"Volteos, repiques festivos y carillones"},
+            {"num":"352","titulo":"FERIALE MARTINSICURO","desc":"FERIALE \"Martinsicuro\" DISTESA · 3 campanas","uso":"60 s · Llamado misa ferial","grupo":"Distesas (volteo continuo)"},
+            {"num":"353","titulo":"DISTESA DOMENICA","desc":"DISTESA DOMENICA \"Martinsicuro\" · 4 campanas","uso":"60 s · Domingos","grupo":"Distesas (volteo continuo)"},
+            {"num":"354","titulo":"DISTESA DOMENICA","desc":"DISTESA DOMENICA \"Martinsicuro\" · 4 campanas","uso":"120 s · Llamado misa dominical","grupo":"Distesas (volteo continuo)"},
+            {"num":"355","titulo":"SOLENNE MARTINSICURO","desc":"SOLENNE \"Martinsicuro\" · Festa 4 campanas","uso":"120 s · Solemnidades","grupo":"Distesas (volteo continuo)"},
+            {"num":"356","titulo":"DIS.-32/29/27","desc":"Módulo estándar de 3 campanas","uso":"60 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"357","titulo":"DIS.-32/29/27","desc":"Módulo estándar de 3 campanas","uso":"90 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"358","titulo":"DIS.-32/29/27","desc":"Módulo estándar de 3 campanas","uso":"120 s (2 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"359","titulo":"DIS.-32/29/27","desc":"Módulo estándar de 3 campanas","uso":"180 s (3 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"360","titulo":"DIS.-32/29/27","desc":"Módulo estándar de 3 campanas","uso":"300 s (5 min · procesiones)","grupo":"Distesas (volteo continuo)"},
+            {"num":"361","titulo":"DIS.-32/29/D1-27","desc":"Variante de 3 campanas con D1","uso":"60 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"362","titulo":"DIS.-32/29/D1-27","desc":"Variante de 3 campanas con D1","uso":"90 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"363","titulo":"DIS.-32/29/D1-27","desc":"Variante de 3 campanas con D1","uso":"120 s (2 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"364","titulo":"DIS.-32/29/D1-27","desc":"Variante de 3 campanas con D1","uso":"180 s (3 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"365","titulo":"DIS.-32/29/D1-27","desc":"Variante de 3 campanas con D1","uso":"300 s (5 min · procesiones)","grupo":"Distesas (volteo continuo)"},
+            {"num":"366","titulo":"DIS.-D1-23/28/32/35","desc":"Módulo de 4 campanas tipo A","uso":"60 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"367","titulo":"DIS.-D1-23/28/32/35","desc":"Módulo de 4 campanas tipo A","uso":"90 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"368","titulo":"DIS.-D1-23/28/32/35","desc":"Módulo de 4 campanas tipo A","uso":"120 s (2 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"369","titulo":"DIS.-D1-23/28/32/35","desc":"Módulo de 4 campanas tipo A","uso":"180 s (3 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"370","titulo":"DIS.-D1-23/28/32/35","desc":"Módulo de 4 campanas tipo A","uso":"300 s (5 min · procesiones)","grupo":"Distesas (volteo continuo)"},
+            {"num":"371","titulo":"DIS.-27/29/32/D1-25","desc":"Módulo de 4 campanas tipo B","uso":"60 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"372","titulo":"DIS.-27/29/32/D1-25","desc":"Módulo de 4 campanas tipo B","uso":"90 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"373","titulo":"DIS.-27/29/32/D1-25","desc":"Módulo de 4 campanas tipo B","uso":"120 s (2 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"374","titulo":"DIS.-27/29/32/D1-25","desc":"Módulo de 4 campanas tipo B","uso":"180 s (3 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"375","titulo":"DIS.-27/29/32/D1-25","desc":"Módulo de 4 campanas tipo B","uso":"300 s (5 min · procesiones)","grupo":"Distesas (volteo continuo)"},
+            {"num":"376","titulo":"DIS.-D1-25/29","desc":"Módulo de 2 campanas de volteo","uso":"60 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"377","titulo":"DIS.-D1-25/29","desc":"Módulo de 2 campanas de volteo","uso":"90 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"378","titulo":"DIS.-D1-25/29","desc":"Módulo de 2 campanas de volteo","uso":"120 s (2 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"379","titulo":"DIS.-D1-25/29","desc":"Módulo de 2 campanas de volteo","uso":"180 s (3 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"380","titulo":"DIS.-D1-25/29","desc":"Módulo de 2 campanas de volteo","uso":"300 s (5 min · procesiones)","grupo":"Distesas (volteo continuo)"},
+            {"num":"381","titulo":"DIS.-D1-24/27/29/32","desc":"Módulo de 4 campanas tipo C","uso":"60 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"382","titulo":"DIS.-D1-24/27/29/32","desc":"Módulo de 4 campanas tipo C","uso":"90 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"383","titulo":"DIS.-D1-24/27/29/32","desc":"Módulo de 4 campanas tipo C","uso":"120 s (2 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"384","titulo":"DIS.-D1-24/27/29/32","desc":"Módulo de 4 campanas tipo C","uso":"180 s (3 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"385","titulo":"DIS.-D1-24/27/29/32","desc":"Módulo de 4 campanas tipo C","uso":"300 s (5 min · procesiones)","grupo":"Distesas (volteo continuo)"},
+            {"num":"386","titulo":"DIS.-24/28/31","desc":"Módulo de 3 campanas tipo C","uso":"60 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"387","titulo":"DIS.-24/28/31","desc":"Módulo de 3 campanas tipo C","uso":"90 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"388","titulo":"DIS.-24/28/31","desc":"Módulo de 3 campanas tipo C","uso":"120 s (2 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"389","titulo":"DIS.-24/28/31","desc":"Módulo de 3 campanas tipo C","uso":"180 s (3 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"390","titulo":"DIS.-24/28/31","desc":"Módulo de 3 campanas tipo C","uso":"300 s (5 min · procesiones)","grupo":"Distesas (volteo continuo)"},
+            {"num":"391","titulo":"DIS.D1-24/28/24","desc":"Módulo de 3 campanas con retorno","uso":"60 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"392","titulo":"DIS.D1-24/28/24","desc":"Módulo de 3 campanas con retorno","uso":"90 s","grupo":"Distesas (volteo continuo)"},
+            {"num":"393","titulo":"DIS.D1-24/28/24","desc":"Módulo de 3 campanas con retorno","uso":"120 s (2 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"394","titulo":"DIS.D1-24/28/24","desc":"Módulo de 3 campanas con retorno","uso":"180 s (3 min)","grupo":"Distesas (volteo continuo)"},
+            {"num":"395","titulo":"DIS.D1-24/28/24","desc":"Módulo de 3 campanas con retorno","uso":"300 s (5 min · procesiones)","grupo":"Distesas (volteo continuo)"},
+            {"num":"499","titulo":"ON R1","desc":"Activación / cierre del relé de salida 1","uso":"Encender focos, amplificadores o motores externos","grupo":"Control del relé de salida"},
+            {"num":"500","titulo":"OFF R1","desc":"Desactivación / apertura del relé de salida 1","uso":"Apagar el equipo auxiliar","grupo":"Control del relé de salida"}
+        ];
+
+        // Completar el catálogo del buscador con los toques del equipo (266–500) desde la hoja original.
+        // Las 8 distesas que el catálogo traía como "módulo" (356, 361…, 391) se reemplazan por
+        // sus 40 códigos individuales (una entrada por duración).
+        const CATEGORIA_TOQUES = {
+            'Reloj automatizado tipo "Big Ben"': 'Reloj',
+            'Ángelus y señales tradicionales': 'Ángelus',
+            'Exequias y toques fúnebres': 'Fúnebres',
+            'Volteos, repiques festivos y carillones': 'Volteos',
+            'Distesas (volteo continuo)': 'Distesas',
+            'Control del relé de salida': 'Relés'
+        };
+        const CATEGORIAS_TOQUES = Object.values(CATEGORIA_TOQUES);
+        (function completarCatalogoConToques() {
+            for (let i = melodias.length - 1; i >= 0; i--) {
+                const n = parseInt(melodias[i].num, 10);
+                if (n >= 352 && n <= 395) melodias.splice(i, 1);
+            }
+            const yaEnCatalogo = new Set(melodias.map(m => m.num));
+            codigosOriginales
+                .filter(c => CATEGORIA_TOQUES[c.grupo] && !yaEnCatalogo.has(c.num))
+                .forEach(c => melodias.push({
+                    num: c.num,
+                    titulo: c.titulo,
+                    desc: c.desc,
+                    tiempo: c.uso,
+                    cat: CATEGORIA_TOQUES[c.grupo]
+                }));
+            melodias.sort((a, b) => parseInt(a.num, 10) - parseInt(b.num, 10));
+        })();
+
+        // Clasificación católica de cada código.
+        // Criterio: "Sí" = canto litúrgico, devocional o de la tradición católica (incluye himnos de origen
+        // protestante que están en el repertorio católico, villancicos y toques de campana de uso eclesial).
+        // "No" = obra profana, señal civil o control técnico del equipo.
+        const NO_CATOLICAS = {
+            '76': 'Marcha nupcial de concierto, obra profana (se usa en bodas)',
+            '121': 'Himno a la alegría (Beethoven), obra profana',
+            '266': 'Reloj civil (Big Ben)', '267': 'Reloj civil (Big Ben)', '268': 'Reloj civil (Big Ben)', '269': 'Reloj civil (Big Ben)',
+            '270': 'Reloj civil (Big Ben)', '271': 'Reloj civil (Big Ben)', '272': 'Reloj civil (Big Ben)', '273': 'Reloj civil (Big Ben)',
+            '274': 'Reloj civil (Big Ben)', '275': 'Reloj civil (Big Ben)', '276': 'Reloj civil (Big Ben)', '277': 'Reloj civil (Big Ben)',
+            '278–281': 'Reloj civil (Big Ben)',
+            '323': 'Carillón sin contenido religioso identificado', '324': 'Carillón sin contenido religioso identificado', '325': 'Carillón sin contenido religioso identificado',
+            '333': 'Pulso de control de una campana', '334': 'Pulso de control de una campana', '335': 'Pulso de control de una campana', '336': 'Pulso de control de una campana',
+            '337': 'Pulso de control de dos campanas', '338': 'Pulso de control de dos campanas', '339': 'Pulso de control de dos campanas',
+            '499': 'Control técnico (relé)', '500': 'Control técnico (relé)'
+        };
+        function clasificacionCatolica(num) {
+            const motivo = NO_CATOLICAS[num];
+            return motivo ? { catolica: false, motivo } : { catolica: true, motivo: 'Litúrgica, devocional o de tradición católica' };
+        }
+        function badgeCatolica(num) {
+            const c = clasificacionCatolica(num);
+            return c.catolica
+                ? `<span class="inline-flex items-center gap-1 whitespace-nowrap px-2 py-0.5 text-xs font-medium rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30" title="${escaparHtml(c.motivo)}">✝ Sí</span>`
+                : `<span class="inline-flex items-center gap-1 whitespace-nowrap px-2 py-0.5 text-xs font-medium rounded-full bg-gray-950 text-gray-400 border border-gray-600" title="${escaparHtml(c.motivo)}">✕ No</span>`;
+        }
+
+        // Coincidencia de número: exacta/parcial ("28" → 282) o dentro de un rango "298–301"
+        function coincideNumero(num, q) {
+            if (removerAcentos(num).includes(q)) return true;
+            if (!/^\d+$/.test(q) || !num.includes('–')) return false;
+            const [ini, fin] = num.split('–').map(x => parseInt(x, 10));
+            const n = parseInt(q, 10);
+            return n >= ini && n <= fin;
+        }
+
         // Calendario Litúrgico 2026 de Chile consolidado y enriquecido
         const calendarioLiturgico = [
             { fecha: "2026-01-01", festividad: "Santa María, Madre de Dios", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Navidad", colorLiturgico: "blanco", idMelodia: "62", notas: "AVE MARIA DI SCHUBERT" },
             { fecha: "2026-01-04", festividad: "La Epifanía del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Navidad", colorLiturgico: "blanco", idMelodia: "75", notas: "ADESTE FIDELES" },
-            { fecha: "2026-01-22", festividad: "Beata Laura Vicuña", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "233", notas: "Melodía de Santos - Uso facultativo" },
-            { fecha: "2026-02-11", festividad: "Nuestra Señora de Lourdes", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "59", notas: "AVE MARIA DI LOURDES" },
-            { fecha: "2026-02-18", festividad: "Miércoles de Ceniza (Inicio Cuaresma)", tipoCeleb: "Conmemoración", tiempoLiturgico: "Cuaresma", colorLiturgico: "morado", idMelodia: "137", notas: "ATTENDE DOMINE" },
+            { fecha: "2026-01-22", festividad: "Beata Laura Vicuña", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "233", notas: "S. GIOVANNI BOSCO" },
+            { fecha: "2026-02-11", festividad: "Nuestra Señora de Lourdes", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "59", notas: "AVE MARIA DI LOURDES RIDOTTA" },
+            { fecha: "2026-02-18", festividad: "Miércoles de Ceniza (Inicio Cuaresma)", tipoCeleb: "Conmemoración", tiempoLiturgico: "Cuaresma", colorLiturgico: "morado", idMelodia: "135", notas: "ATTENDE DOMINE (Quaresimale-Gregoriano)" },
             { fecha: "2026-03-19", festividad: "San José, Esposo de la B.V.M.", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Cuaresma", colorLiturgico: "blanco", idMelodia: "229", notas: "S. GIUSEPPE" },
             { fecha: "2026-03-25", festividad: "La Anunciación del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Cuaresma", colorLiturgico: "blanco", idMelodia: "105", notas: "EL ANGEL GABRIEL" },
             { fecha: "2026-03-29", festividad: "Domingo de Ramos", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Cuaresma / Semana Santa", colorLiturgico: "rojo", idMelodia: "71", notas: "OSANNA FIGLIO DI DAVIDE" },
-            { fecha: "2026-04-02", festividad: "Jueves Santo en la Cena del Señor", tipoCeleb: "Triduo Pascual", tiempoLiturgico: "Triduo Pascual", colorLiturgico: "blanco", idMelodia: "162", notas: "TANTUM ERGO GREGORIANO" },
-            { fecha: "2026-04-03", festividad: "Viernes Santo en la Pasión del Señor", tipoCeleb: "Triduo Pascual", tiempoLiturgico: "Triduo Pascual", colorLiturgico: "rojo", idMelodia: "138", notas: "STABAT MATER DOLOROSA" },
-            { fecha: "2026-04-05", festividad: "Domingo de Pascua de Resurrección", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "blanco", idMelodia: "53 / 92", notas: "RISUCITO / REGINA COELI" },
+            { fecha: "2026-04-02", festividad: "Jueves Santo en la Cena del Señor", tipoCeleb: "Triduo Pascual", tiempoLiturgico: "Triduo Pascual", colorLiturgico: "blanco", idMelodia: "162", notas: "TANTUM ERGO (Gregoriano)" },
+            { fecha: "2026-04-03", festividad: "Viernes Santo en la Pasión del Señor", tipoCeleb: "Triduo Pascual", tiempoLiturgico: "Triduo Pascual", colorLiturgico: "rojo", idMelodia: "136", notas: "STABAT MATER DOLOROSA (B.V.Addolorata)" },
+            { fecha: "2026-04-05", festividad: "Domingo de Pascua de Resurrección", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "blanco", idMelodia: "53 / 92", notas: "RISUSCITI / REG COELI" },
             { fecha: "2026-05-13", festividad: "Nuestra Señora de Fátima", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Pascua", colorLiturgico: "blanco", idMelodia: "64", notas: "AVE MARIA DI FATIMA" },
-            { fecha: "2026-05-17", festividad: "La Ascensión del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "blanco", idMelodia: "148 / 54", notas: "Cristo è Risorto / Cristo Risusciti" },
-            { fecha: "2026-05-24", festividad: "Domingo de Pentecostés", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "rojo", idMelodia: "153", notas: "VENI CREATORE GREGORIANO" },
-            { fecha: "2026-05-31", festividad: "La Santísima Trinidad", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "156", notas: "TE LODIAMO TRINITA'" },
-            { fecha: "2026-06-07", festividad: "Corpus Christi", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "94 / 161", notas: "PANGE LINGUA / ADORO TE DEVOTE" },
+            { fecha: "2026-05-17", festividad: "La Ascensión del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "blanco", idMelodia: "149 / 54", notas: "CRISTO E' RISORTO (G.F.Handel) / CRISTO RISUSCITI" },
+            { fecha: "2026-05-24", festividad: "Domingo de Pentecostés", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Pascua", colorLiturgico: "rojo", idMelodia: "153", notas: "VENI CREATORE (Gregoriano)" },
+            { fecha: "2026-05-31", festividad: "La Santísima Trinidad", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "156", notas: "TE LODIAMO TRINITA' (Vienna 1776)" },
+            { fecha: "2026-06-07", festividad: "Corpus Christi", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "94 / 161", notas: "PANGE LINGUA / ADORO TE DEVOTE (Gregoriano)" },
             { fecha: "2026-06-12", festividad: "Sagrado Corazón de Jesús", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "176", notas: "SS. CUORI" },
             { fecha: "2026-06-29", festividad: "Santos Pedro y Pablo", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "rojo", idMelodia: "114", notas: "PESCADOR DE HOMBRES" },
             { fecha: "2026-07-13", festividad: "Santa Teresa de Los Andes (Patrona)", tipoCeleb: "Fiesta (F)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "119", notas: "JUNTOS COMO HERMANOS" },
             { fecha: "2026-07-16", festividad: "Virgen del Carmen, Reina de Chile", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "117", notas: "VIRGEN DEL CARMEN" },
-            { fecha: "2026-08-15", festividad: "La Asunción de la Virgen María", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "196", notas: "AVE MARIS STELLA" },
+            { fecha: "2026-08-15", festividad: "La Asunción de la Virgen María", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "196", notas: "AVE MARIS STELLA (gregoriano)" },
             { fecha: "2026-08-18", festividad: "San Alberto Hurtado", tipoCeleb: "Memoria (m)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "102", notas: "CANTO PER CRISTO" },
-            { fecha: "2026-09-18", festividad: "Fiestas Patrias de Chile (Día 1)", tipoCeleb: "Civil / Nacional", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "117", notas: "VIRGEN DEL CARMEN" },
-            { fecha: "2026-09-19", festividad: "Fiestas Patrias de Chile (Día 2)", tipoCeleb: "Civil / Nacional", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "117", notas: "VIRGEN DEL CARMEN" },
             { fecha: "2026-11-01", festividad: "Todos los Santos", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "78", notas: "LA PACE DEI SANTI" },
-            { fecha: "2026-11-02", festividad: "Todos los Fieles Difuntos", tipoCeleb: "Conmemoración", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "morado", idMelodia: "237", notas: "REQUIEM GREGORIANO" },
+            { fecha: "2026-11-02", festividad: "Todos los Fieles Difuntos", tipoCeleb: "Conmemoración", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "morado", idMelodia: "238", notas: "REQUIEM (Gregoriano) / L'ETERNO RIPOSO" },
             { fecha: "2026-11-22", festividad: "Cristo Rey del Universo", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Tiempo Ordinario", colorLiturgico: "blanco", idMelodia: "50", notas: "CHRISTUS VINCIT" },
-            { fecha: "2026-11-29", festividad: "I Domingo de Adviento", tipoCeleb: "Domingo de Adviento", tiempoLiturgico: "Adviento", colorLiturgico: "morado", idMelodia: "123", notas: "IL SIGNORE E' VICINO" },
-            { fecha: "2026-12-08", festividad: "La Inmaculada Concepción", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Adviento", colorLiturgico: "blanco", idMelodia: "190 / 218", notas: "IMMACOLATA / TOTA PULCHRA" },
-            { fecha: "2026-12-25", festividad: "La Natividad del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Navidad", colorLiturgico: "blanco", idMelodia: "74 / 88", notas: "ASTRO DEL CIEL / NOEL NOEL" }
+            { fecha: "2026-11-29", festividad: "I Domingo de Adviento", tipoCeleb: "Domingo de Adviento", tiempoLiturgico: "Adviento", colorLiturgico: "morado", idMelodia: "123", notas: "IL SIGNORE E' VICINO (Avvento - Galliano)" },
+            { fecha: "2026-12-08", festividad: "La Inmaculada Concepción", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Adviento", colorLiturgico: "blanco", idMelodia: "190 / 218", notas: "IMMACOLATA / TOTA PULCHRA (Gregoriano)" },
+            { fecha: "2026-12-25", festividad: "La Natividad del Señor", tipoCeleb: "Solemnidad (S)", tiempoLiturgico: "Navidad", colorLiturgico: "blanco", idMelodia: "74 / 88", notas: "ASTRO CIEL / NOEL NOEL" }
         ];
 
         // Rellenar dinámicamente el día y mes para búsquedas feriales
@@ -2167,12 +3086,11 @@
 
             // 1. Coincidencias en melodías
             const melodiasCoincidentes = melodias.filter(m => {
-                const numNorm = removerAcentos(m.num);
                 const tituloNorm = removerAcentos(m.titulo || m.status);
                 const descNorm = removerAcentos(m.desc);
                 const tiempoNorm = removerAcentos(m.tiempo);
                 const catNorm = removerAcentos(m.cat);
-                return numNorm.includes(q) || tituloNorm.includes(q) || descNorm.includes(q) || tiempoNorm.includes(q) || catNorm.includes(q);
+                return coincideNumero(m.num, q) || tituloNorm.includes(q) || descNorm.includes(q) || tiempoNorm.includes(q) || catNorm.includes(q);
             });
 
             // 2. Coincidencias en calendario litúrgico
@@ -2601,7 +3519,10 @@
 
                 // 2. Filtrado por categoría de melodía
                 if (categoriaFiltrada !== 'TODOS') {
-                    if (categoriaFiltrada === 'Navidad') {
+                    if (CATEGORIAS_TOQUES.includes(categoriaFiltrada)) {
+                        // Los toques del equipo no están asignados a fechas del calendario
+                        return false;
+                    } else if (categoriaFiltrada === 'Navidad') {
                         const esNavidad = item.tiempoLiturgico === 'Navidad' || item.tiempoLiturgico === 'Adviento' || item.festividad.toLowerCase().includes('navidad') || item.festividad.toLowerCase().includes('nochebuena') || item.festividad.toLowerCase().includes('adviento') || item.festividad.toLowerCase().includes('epifanía');
                         if (!esNavidad) return false;
                     } else if (categoriaFiltrada === 'Pascua') {
@@ -2611,7 +3532,9 @@
                         const esMaria = item.festividad.toLowerCase().includes('virgen') || item.festividad.toLowerCase().includes('maría') || item.festividad.toLowerCase().includes('lourdes') || item.festividad.toLowerCase().includes('fátima') || item.festividad.toLowerCase().includes('inmaculada') || item.festividad.toLowerCase().includes('anunciación') || item.festividad.toLowerCase().includes('teresa de los andes');
                         if (!esMaria) return false;
                     } else if (categoriaFiltrada === 'Aleluya') {
-                        const esAleluya = item.idMelodia.includes('82') || item.idMelodia.includes('83') || item.idMelodia.includes('120') || item.idMelodia.includes('145') || item.idMelodia.includes('147') || item.idMelodia.includes('150') || item.festividad.toLowerCase().includes('resurrección');
+                        // Comparar IDs completos (p. ej. "53 / 92" → ["53","92"]) para que '82' no coincida con 182 o 282
+                        const idsDia = item.idMelodia.split('/').map(s => s.trim());
+                        const esAleluya = ['82', '83', '120', '145', '147', '150'].some(id => idsDia.includes(id)) || item.festividad.toLowerCase().includes('resurrección');
                         if (!esAleluya) return false;
                     } else if (categoriaFiltrada === 'Ordinario') {
                         const esOrdinario = item.tiempoLiturgico === 'Tiempo Ordinario';
@@ -2785,8 +3708,6 @@
                     tipoBadgeClass = "bg-blue-500/10 text-blue-400 border border-blue-500/30";
                 } else if (item.tipoCeleb.includes('Memoria')) {
                     tipoBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/30";
-                } else if (item.tipoCeleb.includes('Civil')) {
-                    tipoBadgeClass = "bg-cyan-500/10 text-cyan-400 border border-cyan-500/30";
                 } else if (item.tipoCeleb.includes('Conmemoración')) {
                     tipoBadgeClass = "bg-stone-500/10 text-stone-400 border border-stone-500/30";
                 } else if (item.tipoCeleb.includes('Triduo')) {
@@ -2809,16 +3730,16 @@
                             <span class="text-[10px] text-gray-500 font-mono">${formatearFechaCorta(item.fecha)}</span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 font-semibold text-gray-200">
+                    <td class="px-6 py-4 font-semibold text-gray-200 min-w-[200px]">
                         ${estiloCelebracion.emoji} ${item.festividad}
                     </td>
                     <td class="px-6 py-4">
-                        <span class="tipo-badge px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer hover:bg-opacity-20 transition-all ${tipoBadgeClass}" title="Filtrar tipo similar">
+                        <span class="tipo-badge inline-flex items-center whitespace-nowrap px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer hover:bg-opacity-20 transition-all ${tipoBadgeClass}" title="Filtrar tipo similar">
                             ${item.tipoCeleb}
                         </span>
                     </td>
                     <td class="px-6 py-4">
-                        <span class="tiempo-badge px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer hover:bg-opacity-20 transition-all ${estiloTiempo.badgeClass}" title="Filtrar tiempo similar">
+                        <span class="tiempo-badge inline-flex items-center gap-1 whitespace-nowrap px-2.5 py-1 text-xs font-medium rounded-full cursor-pointer hover:bg-opacity-20 transition-all ${estiloTiempo.badgeClass}" title="Filtrar tiempo similar">
                             ${estiloTiempo.emoji} ${item.tiempoLiturgico}
                         </span>
                     </td>
@@ -2862,12 +3783,11 @@
                     if (!coincideCat) return false;
                 }
                 if (busquedaVal) {
-                    const numNorm = removerAcentos(m.num);
                     const tituloNorm = removerAcentos(m.titulo || m.status);
                     const descNorm = removerAcentos(m.desc);
                     const tiempoNorm = removerAcentos(m.tiempo);
                     const catNorm = removerAcentos(m.cat);
-                    const coincideTexto = numNorm.includes(busquedaVal) ||
+                    const coincideTexto = coincideNumero(m.num, busquedaVal) ||
                                           tituloNorm.includes(busquedaVal) ||
                                           descNorm.includes(busquedaVal) ||
                                           tiempoNorm.includes(busquedaVal) ||
@@ -2886,7 +3806,7 @@
             if (melodiasFiltradas.length === 0) {
                 tablaCuerpo.innerHTML = `
                     <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">
+                        <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">
                             No se encontraron melodías que coincidan con la búsqueda o filtro seleccionado.
                         </td>
                     </tr>
@@ -2929,9 +3849,10 @@
                 fila.innerHTML = `
                     <td class="px-6 py-4 font-mono font-bold text-amber-400 text-sm">${m.num}</td>
                     <td class="px-6 py-4 font-semibold text-gray-200">${m.titulo || m.status}</td>
+                    <td class="px-6 py-4">${badgeCatolica(m.num)}</td>
                     <td class="px-6 py-4 text-xs text-gray-400 font-mono">${m.desc}</td>
                     <td class="px-6 py-4">
-                        <span class="px-2.5 py-1 text-xs font-medium rounded-full bg-gray-950 text-gray-300 border border-gray-700 whitespace-nowrap">
+                        <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium rounded-full bg-gray-950 text-gray-300 border border-gray-700 whitespace-nowrap">
                             ${m.tiempo}
                         </span>
                     </td>
@@ -3057,12 +3978,29 @@
             }
         }
 
+        // Almacenamiento seguro: algunos visores (vistas previas, data:, modo privado) bloquean localStorage.
+        // En ese caso la bitácora funciona en memoria durante la sesión en vez de detener el script.
+        const almacen = (() => {
+            try {
+                const prueba = "__belltron_prueba__";
+                localStorage.setItem(prueba, "1");
+                localStorage.removeItem(prueba);
+                return localStorage;
+            } catch (e) {
+                const memoria = new Map();
+                return {
+                    getItem: k => (memoria.has(k) ? memoria.get(k) : null),
+                    setItem: (k, v) => memoria.set(k, String(v)),
+                    removeItem: k => memoria.delete(k)
+                };
+            }
+        })();
         // Lógica de Bitácora / Registros en localStorage
         const STORAGE_KEY = 'belltron_bitacora_logs';
 
         function inicializarBitacora() {
             // Si no hay nada en localStorage, precargamos los 3 presets y el registro del usuario
-            if (!localStorage.getItem(STORAGE_KEY)) {
+            if (!almacen.getItem(STORAGE_KEY)) {
                 const logsIniciales = [
                     {
                         id: "preset-pascua",
@@ -3093,7 +4031,7 @@
                         texto: "En esta pascua usamos las melodías 92, 150 y 53 para los horarios de llamado de domingo correspondientes a 12:00, 12:15 y 12:30 respectivamente."
                     }
                 ];
-                localStorage.setItem(STORAGE_KEY, JSON.stringify(logsIniciales));
+                almacen.setItem(STORAGE_KEY, JSON.stringify(logsIniciales));
             }
             renderizarRegistros();
 
@@ -3107,7 +4045,7 @@
 
         function obtenerTotalLogs() {
             try {
-                const logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                const logs = JSON.parse(almacen.getItem(STORAGE_KEY)) || [];
                 return logs.length;
             } catch (e) {
                 return 0;
@@ -3118,7 +4056,7 @@
             listaRegistros.innerHTML = '';
             let logs = [];
             try {
-                logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                logs = JSON.parse(almacen.getItem(STORAGE_KEY)) || [];
             } catch (e) {
                 logs = [];
             }
@@ -3182,7 +4120,7 @@
         window.cargarEditarLog = function(id) {
             let logs = [];
             try {
-                logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                logs = JSON.parse(almacen.getItem(STORAGE_KEY)) || [];
             } catch (e) {
                 logs = [];
             }
@@ -3240,7 +4178,7 @@
 
             let logs = [];
             try {
-                logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                logs = JSON.parse(almacen.getItem(STORAGE_KEY)) || [];
             } catch (e) {
                 logs = [];
             }
@@ -3271,7 +4209,7 @@
                 logs.push(nuevoLog);
             }
 
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+            almacen.setItem(STORAGE_KEY, JSON.stringify(logs));
             resetearFormularioEditor();
             renderizarRegistros();
             
@@ -3286,13 +4224,13 @@
             
             let logs = [];
             try {
-                logs = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                logs = JSON.parse(almacen.getItem(STORAGE_KEY)) || [];
             } catch (e) {
                 logs = [];
             }
 
             logs = logs.filter(log => log.id !== id);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+            almacen.setItem(STORAGE_KEY, JSON.stringify(logs));
 
             // Si se estaba editando justo el registro que se eliminó, cancelamos la edición
             if (idEditando === id) {
@@ -3309,7 +4247,7 @@
         // Borrar todos los logs
         btnBorrarTodosLogs.addEventListener('click', () => {
             if (!confirm('¿Estás seguro de que deseas vaciar por completo la lista? Se perderán todos los programas y registros.')) return;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+            almacen.setItem(STORAGE_KEY, JSON.stringify([]));
             resetearFormularioEditor();
             renderizarRegistros();
 
@@ -3332,6 +4270,131 @@
                 }
             }
         }
+
+        // ===================== Sección Códigos Originales =====================
+        const codigosBusqueda = document.getElementById('codigos-busqueda');
+        const codigosGrupo = document.getElementById('codigos-grupo');
+        const codigosCuerpo = document.getElementById('codigos-cuerpo');
+        const codigosContador = document.getElementById('codigos-contador');
+
+        [...new Set(codigosOriginales.map(c => c.grupo))].forEach(g => {
+            const opt = document.createElement('option');
+            opt.value = g;
+            opt.textContent = g;
+            codigosGrupo.appendChild(opt);
+        });
+
+        function renderizarCodigosOriginales() {
+            const q = removerAcentos(codigosBusqueda.value.trim());
+            const grupoSel = codigosGrupo.value;
+            const filtrados = codigosOriginales.filter(c => {
+                if (grupoSel && c.grupo !== grupoSel) return false;
+                if (!q) return true;
+                // Número: coincidencia exacta o dentro de un rango "298–301"
+                if (/^\d+$/.test(q)) {
+                    const [ini, fin] = c.num.split('–').map(n => parseInt(n, 10));
+                    const n = parseInt(q, 10);
+                    if (n === ini || (fin && n >= ini && n <= fin)) return true;
+                }
+                return removerAcentos(`${c.titulo} ${c.desc} ${c.uso}`).includes(q);
+            });
+
+            let html = '';
+            let grupoActual = null;
+            filtrados.forEach(c => {
+                if (c.grupo !== grupoActual) {
+                    grupoActual = c.grupo;
+                    html += `<tr class="bg-gray-900/50"><td colspan="5" class="px-4 py-2 text-xs font-semibold uppercase tracking-wide text-amber-400">${escaparHtml(c.grupo)}</td></tr>`;
+                }
+                const atenuado = c.vacio ? 'text-gray-600 italic' : '';
+                html += `<tr class="border-t border-gray-700/50 hover:bg-gray-700/30 ${atenuado}">
+                    <td class="px-4 py-2 font-mono font-bold ${c.vacio ? '' : 'text-amber-300'} whitespace-nowrap">${escaparHtml(c.num)}</td>
+                    <td class="px-4 py-2 font-mono text-xs ${c.vacio ? '' : 'text-gray-200'}">${escaparHtml(c.titulo)}</td>
+                    <td class="px-4 py-2 ${c.vacio ? '' : 'text-gray-300'}">${escaparHtml(c.desc)}</td>
+                    <td class="px-4 py-2 text-xs ${c.vacio ? '' : 'text-gray-400'}">${escaparHtml(c.uso)}</td>
+                    <td class="px-4 py-2">${c.vacio ? '—' : badgeCatolica(c.num)}</td>
+                </tr>`;
+            });
+            codigosCuerpo.innerHTML = html || '<tr><td colspan="5" class="px-4 py-6 text-center text-gray-500">No hay códigos que coincidan.</td></tr>';
+            codigosContador.textContent = `${filtrados.length} de ${codigosOriginales.length} códigos`;
+        }
+
+        // Sección Cambios: códigos de la hoja que el catálogo del buscador no incluye (se calcula en vivo)
+        (function () {
+            const enCatalogo = new Set(melodias.map(m => m.num));
+            const faltan = codigosOriginales.filter(c => !c.vacio && !enCatalogo.has(c.num));
+            // Agrupar números consecutivos en rangos ("266–355")
+            const nums = [];
+            faltan.forEach(c => {
+                const [ini, fin] = c.num.split('–').map(n => parseInt(n, 10));
+                for (let n = ini; n <= (fin || ini); n++) nums.push(n);
+            });
+            nums.sort((a, b) => a - b);
+            const rangos = [];
+            nums.forEach(n => {
+                const ult = rangos[rangos.length - 1];
+                if (ult && n === ult[1] + 1) ult[1] = n; else rangos.push([n, n]);
+            });
+            document.getElementById('cambios-faltantes').textContent = nums.length
+                ? rangos.map(([a, b]) => a === b ? `${a}` : `${a}–${b}`).join(', ') + ` (${nums.length} códigos). Se pueden consultar en Códigos originales.`
+                : 'Ninguno: el buscador incluye todos los códigos registrados en la hoja.';
+        })();
+
+        // ===================== Navegación interna =====================
+        // Los enlaces "#seccion" se resuelven con JS: así funcionan también en vistas previas
+        // (archivo local, data:, iframes) y la sección no queda tapada por el encabezado fijo.
+        const encabezado = document.querySelector('header');
+        const navLinks = [...document.querySelectorAll('#nav-principal .nav-link')];
+        const CLASES_ACTIVO = ['text-amber-400', 'bg-amber-500/10', 'border-amber-500/30'];
+
+        function irASeccion(id, suave = true) {
+            const destino = document.getElementById(id);
+            if (!destino) return false;
+            const y = destino.getBoundingClientRect().top + window.scrollY - encabezado.offsetHeight - 12;
+            window.scrollTo({ top: Math.max(0, y), behavior: suave ? 'smooth' : 'auto' });
+            try { history.replaceState(null, '', '#' + id); } catch (e) { /* vista previa sin historial */ }
+            return true;
+        }
+
+        document.addEventListener('click', (e) => {
+            const enlace = e.target.closest('a[href^="#"]');
+            if (!enlace) return;
+            const id = enlace.getAttribute('href').slice(1);
+            if (id && irASeccion(id)) e.preventDefault();
+        });
+
+        // Resaltar en el menú la sección visible
+        function actualizarNavActivo() {
+            const limite = encabezado.offsetHeight + 40;
+            let activa = navLinks[0];
+            navLinks.forEach(link => {
+                const sec = document.getElementById(link.dataset.seccion);
+                if (sec && sec.getBoundingClientRect().top <= limite) activa = link;
+            });
+            // Al llegar al final de la página, marcar la última sección
+            if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) activa = navLinks[navLinks.length - 1];
+            navLinks.forEach(link => {
+                const on = link === activa;
+                CLASES_ACTIVO.forEach(c => link.classList.toggle(c, on));
+                link.classList.toggle('text-gray-300', !on);
+                link.classList.toggle('border-transparent', !on);
+                if (on) link.setAttribute('aria-current', 'location'); else link.removeAttribute('aria-current');
+            });
+        }
+        window.addEventListener('scroll', actualizarNavActivo, { passive: true });
+        window.addEventListener('resize', actualizarNavActivo);
+        // Recalcular cuando cambia el alto del contenido (pestañas, filtros) sin que haya scroll
+        if (window.ResizeObserver) new ResizeObserver(() => actualizarNavActivo()).observe(document.querySelector('main'));
+        actualizarNavActivo();
+
+        // Si la página se abre con "#seccion", ajustar la posición bajo el encabezado
+        if (location.hash.length > 1) {
+            window.addEventListener('load', () => irASeccion(decodeURIComponent(location.hash.slice(1)), false));
+        }
+
+        codigosBusqueda.addEventListener('input', renderizarCodigosOriginales);
+        codigosGrupo.addEventListener('change', renderizarCodigosOriginales);
+        renderizarCodigosOriginales();
     </script>
 </body>
 
