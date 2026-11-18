@@ -64,9 +64,8 @@ Llamado Solemnidades	ID 360 o ID 370: Distesa 300s	Máxima solemnidad (5 minutos
 
 ### ⚙️ Reglas de Programación Dominical y Horarios Especiales
 
-* **Llamados del domingo (desde nov 2026):** antes de la misa solo campanadas: **12:15 → 1 campanada** (código **333**, TOCCO UNA CAMPANA) y **12:30 → 3 campanadas** (código **283**, 3 TOCCHI DI III).
-* **Mediodía:** todos los días, también domingo, **1 campanada a las 12:00** (código **333**).
-* **Programación en el equipo:** B + 1111 + 1 + 1 (Normal): `OK 333 OK OK 12 00 OK` (todos los días); `OK 333 OK →×1 OK 12 15 OK` (DOM); `OK 283 OK →×1 OK 12 30 OK` (DOM). Antes, borrar los llamados anteriores con B + 1111 + 2 + 1 y la tecla E.
+* **Llamados del domingo (acordado 18-11-2026):** el mismo Ángelus 3-3-3 del más grave al más agudo: **12:00 → 285** (grave) · **12:15 → 290** (medio, campana 28) · **12:29 → 293** (agudo, campana 31). Misa a las 12:30. De lunes a sábado no suena nada.
+* **Programación en el equipo:** en B + 1111 + 2 + 1 (Verifica · Normal): dejar 285 DOM 12:00; modificar con A la 285 DOM 12:15 → 290; modificar la 114 DOM 12:30 → 293 y minutos 29; borrar con E la entrada de Día semana mes (285 DOM 12:00). Ver "Plan de restauración" en la web.
 * **Llamado en Tiempo Ordinario (regla anterior):** antes se usaban los códigos **285** (Angelus 3-3-3) o **282** (33 Tocchi di III); reemplazado por el esquema de campanadas.
 * **Llamado en Pentecostés (regla anterior, opcional):** se cambiaban los llamados de las 12:15 y 12:30 por el **ID 153** (Veni Creatore Gregoriano). Si se mantiene, programarlo como festividad (Pascua + 49 días).
 * **Prueba de Funcionamiento (Monitoreo):** En caso de requerir pruebas de programación o si hay problemas con la emisión de sonido, se recomienda probar moviendo el interruptor de salida física del equipo (switch) a la posición **Inside** (interno / monitoreo local).
